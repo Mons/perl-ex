@@ -1,0 +1,13 @@
+
+== NAME ==
+
+ex::lib - The same as `lib`, but makes relative path absolute.
+
+
+== SYNOPSIS ==
+
+
+{{{
+    use ex::lib qw(./mylibs1 ../mylibs2);
+    use ex::lib 'mylibs';
+}}}
