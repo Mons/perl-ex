@@ -1,0 +1,358 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ex::runtime - A set of most used functions</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:Gentoo@undef.domain" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>ex::runtime - A set of most used functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use ex::runtime; # default - full set
+        use ex::runtime qw( ... );</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>ex::runtime</code> - It's simple</p>
+<p><code>TODO</code>: write description :)</p>
+<dl>
+<dt><strong><a name="item_weaken">weaken REF</a></strong>
+
+<dd>
+<p>Make a weakref.
+Simply an alias to <code>Scalar::Util::weaken</code> (Until we have own XS)</p>
+</dd>
+</li>
+<dt><strong><a name="item_is_weak">is_weak EXPR</a></strong>
+
+<dd>
+<p>If EXPR is a scalar which is a weak reference the result is true.
+Simply an alias to <code>Scalar::Util::isweak</code></p>
+</dd>
+</li>
+<dt><strong><a name="item_like_num">like_num EXPR</a></strong>
+
+<dt><strong>like_num</strong>
+
+<dd>
+<p>Returns true if perl thinks EXPR is a number.
+Simply an alias to <code>Scalar::Util::looks_like_number</code></p>
+</dd>
+</li>
+<dt><strong><a name="item_one">one BLOCK LIST</a></strong>
+
+<dt><strong><a name="item_none">none BLOCK LIST</a></strong>
+
+<dt><strong><a name="item_any">any BLOCK LIST</a></strong>
+
+<dt><strong><a name="item_all">all BLOCK LIST</a></strong>
+
+<dd>
+<p><code>grep</code>'s a list using block and then test it's size.
+Meaning:</p>
+</dd>
+<dd>
+<pre>
+        one  == 1
+        none == 0
+        any  &gt;  0
+        all  == size
+Usage:</pre>
+</dd>
+<dd>
+<pre>
+        one { $_==1 } 3,4,5 ); # false, have no &quot;1&quot;
+        one { $_==1 } 1,2,3 ); # true, have only one &quot;1&quot;
+        one { $_==1 } 1,1,3 ); # false, have two &quot;1&quot;</pre>
+</dd>
+</li>
+<dt><strong><a name="item_is">is EXPR</a></strong>
+
+<dd>
+<p>Checks $_ for equality with EXPR
+Function understands context and use <code>==</code> or <code>eq</code></p>
+</dd>
+<dd>
+<pre>
+        print &quot;Variable is 1&quot; if is 1;</pre>
+</dd>
+</li>
+<dt><strong><a name="item_even">even EXPR</a></strong>
+
+<dt><strong>even</strong>
+
+<dt><strong><a name="item_odd">odd EXPR</a></strong>
+
+<dt><strong>odd</strong>
+
+<dd>
+<p>Checks the EXPR for even/odd</p>
+</dd>
+</li>
+<dt><strong><a name="item_max">max LIST</a></strong>
+
+<dd>
+<p>Returns the entry in the list with the highest value.
+If the list is empty then <code>undef</code> is returned.
+Also understand string context</p>
+</dd>
+<dd>
+<pre>
+    $foo = max 1..10                # 10
+    $foo = max 3,9,12               # 12
+    $foo = max 'a'..'z'             # 'z'</pre>
+</dd>
+</li>
+<dt><strong><a name="item_min">min LIST</a></strong>
+
+<dd>
+<p>Similar to <a href="#item_max"><code>max</code></a> but returns the entry in the list with the lowest
+value. Usage is the same</p>
+</dd>
+<dd>
+<pre>
+    $foo = min 1..10                # 1
+    $foo = min 3,9,12               # 3
+    $foo = min 'a'..'z'             # 'z'</pre>
+</dd>
+</li>
+<dt><strong><a name="item_by">by SCALAR LIST</a></strong>
+
+<dd>
+<p>Slices array by N items</p>
+</dd>
+<dd>
+<pre>
+        by(2,qw(a b c d)) =&gt; [a b],[c d];
+        by(3,qw(a b c d)) =&gt; [a b c],[d];
+        
+=cut</pre>
+</dd>
+<dd>
+<p>sub <a href="#item_by"><code>by($@)</code></a> {
+	map{ [ splice @_,1,$_[0] ] } !($#_%$_[0]) .. $#_/$_[0]
+}</p>
+</dd>
+</li>
+<dt><strong><a name="item_uniq">uniq LIST</a></strong>
+
+<dd>
+<p>Make list unique.</p>
+</dd>
+<dd>
+<pre>
+        @list = uniq qw(d a b c d);       # =&gt; qw(d a b c)</pre>
+</dd>
+</li>
+<dt><strong><a name="item_uniqs">uniqs LIST</a></strong>
+
+<dd>
+<p>The same as &lt;uniq&gt;, only for sorted, but  with low memory cost</p>
+</dd>
+<dd>
+<pre>
+        @list = uniqs sort qw(d a b c d);  # =&gt; qw(a b c d)
+        @list = uniqs qw(a b b c c c d e); # =&gt; qw(a b c d e)</pre>
+</dd>
+</li>
+<dt><strong><a name="item_cutoff">cutoff N, LIST</a></strong>
+
+<dd>
+<p>Where N is index and LIST is list of N ARRAYREFs
+Makes a cutoff from N arrays by index</p>
+</dd>
+<dd>
+<pre>
+        cutoff 1, [1,2,3,4,5], [5,4,3,2,1]; =&gt; [2,4]</pre>
+</dd>
+</li>
+<dt><strong><a name="item_zip">zip LIST</a></strong>
+
+<dd>
+<p>Where LIST is list of ARRAYREFs
+Makes a list of sets, each set containing elements of all lists occuring at the same position</p>
+</dd>
+<dd>
+<pre>
+        zip [1,2,3], [5,4,3], ['a','b','c']; =&gt; [ [1,5,a], [2,4,b], [3,3,c] ];</pre>
+</dd>
+</li>
+<dt><strong><a name="item_zipw">zipw BLOCK LIST</a></strong>
+
+<dd>
+<p>Makes a list.
+Its elements are calculated from the function and the elements of input lists occuring at the same position
+(LIST is list of ARRAYREFs)</p>
+</dd>
+<dd>
+<pre>
+        zipw { $a + $b } [1,2,3], [2,3,4]; =&gt; [ 3,5,7 ];</pre>
+</dd>
+</li>
+<dt><strong><a name="item_zipsum">zipsum LIST</a></strong>
+
+<dt><strong><a name="item_zipmult">zipmult LIST</a></strong>
+
+<dt><strong><a name="item_zipcat">zipcat LIST</a></strong>
+
+<dd>
+<p>Useful aliases to zipw:</p>
+</dd>
+<dd>
+<pre>
+        zipsum  =&gt; zip { $a + $b }
+        zipmult =&gt; zip { $a * $b }
+        zipcat  =&gt; zip { $a . $b }</pre>
+</dd>
+</li>
+<dt><strong><a name="item_kv2h">kv2h KEYS, VALUES</a></strong>
+
+<dd>
+<p>Convert 2 arrayrefs with keys and values to hashref
+Arguments are keys and values respective</p>
+</dd>
+<dd>
+<pre>
+        $hash =  kv2h [1,2], [3, 4]; =&gt; { 1=&gt;3,2=&gt;4 }</pre>
+</dd>
+</li>
+<dt><strong><a name="item_slurp">slurp EXPR</a></strong>
+
+<dt><strong>slurp EXPR, REF</strong>
+
+<dt><strong>slurp EXPR, REF, FLAG</strong>
+
+<dd>
+<p>Reads all file content. Usage:</p>
+</dd>
+<dd>
+<pre>
+        $lines = slurp('file');              # same as open($f,...); local $/; &lt;$f&gt;;
+        $lines = slurp('file',undef,'utf8'); # same as open($f,'&lt;:utf8',...); local $/; &lt;$f&gt;;
+        $lines = slurp('file',[]);           # save as open($f,...); [ map { chomp } &lt;$f&gt; ];
+        @lines = slurp('file');              # same as open($f,...); &lt;$f&gt;;</pre>
+</dd>
+</li>
+<dt><strong><a name="item_trim">trim</a></strong>
+
+<dt><strong>trim LIST</strong>
+
+<dd>
+<p>Trim whitespace from string</p>
+</dd>
+<dd>
+<pre>
+        trim;             # affects $_
+        trim @list;       # affects @list
+        $n = trim;        # makes a copy of $_
+        @n = trim @list;  # makes a copy of @list</pre>
+</dd>
+</li>
+<dt><strong><a name="item_say">say</a></strong>
+
+<dd>
+<p>Well known to Perl6 lovers ;)
+Same as print, but with trailing \n;</p>
+</dd>
+<dd>
+<pre>
+        say &quot;test&quot;;        # equivalent to print &quot;test&quot;,&quot;\n&quot;;
+        say STDOUT &quot;test&quot;; # equivalent to print STDOUT &quot;test&quot;,&quot;\n&quot;;</pre>
+</dd>
+</li>
+<dt><strong><a name="item_gather_block__2f_take_expr">gather BLOCK / take EXPR</a></strong>
+
+<dd>
+<p>Also well known Perl6 feature
+<code>gather</code> calls a given block and collects all data, that <code>take</code> takes, and return to requestor
+Next example:</p>
+</dd>
+<dd>
+<pre>
+        say gather {
+                for (1..5) {
+                        take if odd;
+                }
+        };</pre>
+</dd>
+<dd>
+<p>Is equivalent to:</p>
+</dd>
+<dd>
+<pre>
+        my @gather;
+        for (1..5) {
+                push @gather, $_ if $_ % 2
+        }
+        print @gather,&quot;\n&quot;;</pre>
+</dd>
+</li>
+<dt><strong><a name="item_xx_mode">XX MODE</a></strong>
+
+<dt><strong><a name="item_xx_mode_2c_expr">XX MODE, EXPR</a></strong>
+
+<dd>
+<p>Implements emulation of stackable -X
+Sample usage:</p>
+</dd>
+<dd>
+<pre>
+        XX('ef',$0); # same as ( -e $0 and -f $0 )
+        XX('ef');    # same as ( -e and -f )</pre>
+</dd>
+</li>
+<dt><strong><a name="item_sizeof">sizeof REF</a></strong>
+
+<dd>
+<p>!NOT IMPLEMENTED YET!
+Measure the memory size of variable</p>
+</dd>
+<dd>
+<pre>
+        my $bytes = sizeof(\%hash);</pre>
+</dd>
+<pre>
+                        local $_ = shift;
+                        if ( ref eq 'HASH' ) {
+                        
+                        }
+                        elsif (ref eq 'ARRAY' )
+
+</pre>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Mons Anderson &lt;<a href="mailto:inthrax@gmail.com">inthrax@gmail.com</a>&gt;
+
+</p>
+
+</body>
+
+</html>
