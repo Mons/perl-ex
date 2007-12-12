@@ -453,16 +453,30 @@ Measure the memory size of variable
 		*sizeof = sub ($) {
 			carp "No XS version. Using dummy function.";
 			return 'inf';
+
 =rem to be written
+
 			local $_ = shift;
 			if ( ref eq 'HASH' ) {
 			
 			}
 			elsif (ref eq 'ARRAY' )
+
 =cut
+
 		};
 	}
 }
 
 1;
+
+__END__
+
+=back
+
+=head1 AUTHOR
+
+Mons Anderson <inthrax@gmail.com>
+
+=cut
 
