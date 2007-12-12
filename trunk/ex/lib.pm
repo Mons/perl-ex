@@ -1,8 +1,31 @@
+# ex::lib
+#
+# Copyright (c) 2007 Mons Anderson <inthrax@gmail.com>. All rights reserved
+# This program is free software; you can redistribute it and/or
+# modify it under the same terms as Perl itself.
 package ex::lib;
 
+=head1 NAME
+
+ex::lib - The same as C<lib>, but makes relative path absolute.
+
+=head1 SYNOPSIS
+
+    use ex::lib qw(./mylibs1 ../mylibs2);
+    use ex::lib 'mylibs';
+
+=over 4
+
+=cut
+
 use strict;
+
 BEGIN {
+	# use constants is heavy :(
 	sub DEBUG () { 0 };
+	
+	# Load Cwd, if exists.
+	# There may be an XS version
 	eval { require Cwd; };
 	if ($@) {
 		*abs_path = \&_perl_abs_path;
@@ -16,7 +39,9 @@ sub _croak { require Carp; Carp::croak(@_) }
 
 sub import {
 	shift;
-    local $@;
+    local $@; # Don't poison $@
+	
+	# Prepare absolute base bath
 	my ($pkg,$file) = (caller(0))[0,1];
     ( my $p = $pkg  ) =~ s{::}{/}g;
     ( my $f = $file ) =~ s/\Q$p.pm\E$//i;
@@ -25,7 +50,9 @@ sub import {
 		$f = abs_path('./'.$f) if defined &abs_path;
 	}
     $f .= '/' if $f and $f !~ m{/$};
-	_croak("Bad usage. use ex::lib 'PATH'") unless @_;
+	
+	
+	_croak("Bad usage. use ".__PACKAGE__." PATH") unless @_;
 	for (@_) {
 		my $lib = $_;
 		$lib =~ s{^\./}{};
@@ -37,6 +64,7 @@ sub import {
 	    eval qq{use lib '$lib'};
 	    _croak($@) if $@;
 	}
+	return;
 }
 
 
