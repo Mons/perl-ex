@@ -70,3 +70,13 @@ sub import {
 }
 
 1;
+__END__
+
+=back
+
+=head1 AUTHOR
+
+Mons Anderson <inthrax@gmail.com>
+
+=cut
+
