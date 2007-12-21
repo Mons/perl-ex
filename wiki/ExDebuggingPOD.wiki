@@ -1,4 +1,3 @@
-
 == NAME ==
 
 ex::debugging - Simple debugging in your code with compile-time constants
@@ -70,7 +69,6 @@ Also this module provides well known constant DEBUG, which will work even at com
         # will be threated as C<warn "Something"> when DEBUG in effect
         # and as nothing when DEBUG is not in effect
 }}}
-our %PREFIX = ( 2 => 'DD', 1 => 'II', 0 => 'LL', -1 => 'WW', -2 => 'EE', );
 
 
 == EXPORTS ==
