@@ -62,6 +62,8 @@ use ex::provide
 		XX
 		
 		sizeof
+		
+		mkpath
 	),
 	@FROM_LIST,
 	@FROM_SCALAR,
@@ -444,7 +446,7 @@ Measure the memory size of variable
 
 {
 	sub sizeof($);
-	require Devel::Size;
+	eval{ require Devel::Size; }
 	unless ($@) {
 		*sizeof = sub ($) {
 			Devel::Size::total_size($_[0]) - Devel::Size::size($_[0]);
@@ -466,6 +468,20 @@ Measure the memory size of variable
 
 		};
 	}
+}
+
+sub mkpath ($) {
+	my $path = shift;
+	my $rel;
+	my $rc = 1;
+	my @parts = split '/',$path;
+	while ( @parts ) {
+		$rel .= ( defined $rel ? '/' : '' ) . shift @parts;
+		if ( $rel && ! -d $rel){
+			$rc = mkdir $rel or last;
+		};
+	}
+	return $rc;
 }
 
 1;
