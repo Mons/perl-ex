@@ -446,7 +446,7 @@ Measure the memory size of variable
 
 {
 	sub sizeof($);
-	eval{ require Devel::Size; }
+	eval{ require Devel::Size; };
 	unless ($@) {
 		*sizeof = sub ($) {
 			Devel::Size::total_size($_[0]) - Devel::Size::size($_[0]);
