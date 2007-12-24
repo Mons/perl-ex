@@ -14,8 +14,6 @@ ex::lib - The same as C<lib>, but makes relative path absolute.
     use ex::lib qw(./mylibs1 ../mylibs2);
     use ex::lib 'mylibs';
 
-=over 4
-
 =cut
 
 use strict;

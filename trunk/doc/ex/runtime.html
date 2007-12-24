@@ -325,24 +325,39 @@ Sample usage:</p>
         XX('ef');    # same as ( -e and -f )</pre>
 </dd>
 </li>
-<dt><strong><a name="item_sizeof">sizeof REF</a></strong>
+<dt><strong><a name="item_sizeof">sizeof EXPR</a></strong>
 
 <dd>
-<p>!NOT IMPLEMENTED YET!
-Measure the memory size of variable</p>
+<p>Returns the ``size'' of EXPR.
+For array or array reference - the count of elements
+For hash or hash reference - the count of keys
+For string or string reference - the length in bytes not regarding the utf8 settings and flags
+For nubmer or reference to number - always 1
+For undef or reference to undef - undef
+For glob or globref - undef</p>
 </dd>
 <dd>
 <pre>
-        my $bytes = sizeof(\%hash);</pre>
+        my $size = sizeof %hash;
+        my $size = sizeof @array;
+        my $size = sizeof $string;
+        my $size = sizeof $hashref;
+        my $size = sizeof %{{ inline =&gt; 'hash' }};</pre>
 </dd>
+</li>
+<dt><strong><a name="item_mkpath">mkpath EXPR</a></strong>
+
+<dd>
+<p>Recursively creates path, given by EXPR
+
+</p>
+</dd>
+<dd>
 <pre>
-                        local $_ = shift;
-                        if ( ref eq 'HASH' ) {
-                        
-                        }
-                        elsif (ref eq 'ARRAY' )
+        mkpath '/a/b/c' or die &quot;Cant create path: $!&quot;
 
 </pre>
+</dd>
 </li>
 </dl>
 <p>
