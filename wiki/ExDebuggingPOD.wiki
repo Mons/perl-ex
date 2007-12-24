@@ -7,8 +7,9 @@ ex::debugging - Simple debugging in your code with compile-time constants
 
 
 {{{
-        use ex::debugging DEBUGLEVEL;
-        use ex::debugging; # defaults to DEBUGLEVEL 1;
+        use ex::debugging +DEBUGLEVEL;
+        use ex::debugging -DEBUGLEVEL;
+        use ex::debugging; # defaults to DEBUGLEVEL +1;
         no ex::debugging;
         
 }}}
@@ -49,7 +50,7 @@ The sub will be get from stack, untill it differs from __ANON__. So you'll se (i
 
 === OO style ===
 
-Uses autocreated function `d` to access the debugging object. It defines 5 methods: `debug`, `info`, `log`, `warn`, `error` with the levels 2..-2 respective.
+Uses autocreated function `d` to access the debugging object. It defines 5 methods: `debug`, `info`, `log`, `warn`, `error` with the levels 2..-2 respective. Also there are a definition of `assert`
 
 
 {{{
@@ -70,6 +71,16 @@ Also this module provides well known constant DEBUG, which will work even at com
         # and as nothing when DEBUG is not in effect
 }}}
 
+== PERFOMANCE ==
+
+Default routines give very small overhead, much smaller than call to empty subroutine, but the fastest way with no overhead at all is the old well known if DEBUG. Sad but true
+
+
+{{{
+        debug+0 => 'fastest debug' if DEBUG;
+        assert+0 => 1==2, 'fastest assert' if DEBUG;
+        d->assert(1==2,'fastest assert') if DEBUG;
+}}}
 
 == EXPORTS ==
 
@@ -94,7 +105,12 @@ When `use debugging` is in effect `debug+0 =` ...> converts to `debug( +0, ... )
 
 Without a sign '''the syntax is erroneous''' when no debugging: `0 0, ...`
 
-If somebody knows, how to hack this, let me know.
+If somebody knows, how to hack this (without source filters ;), let me know.
+
+
+=== COLLISIONS ===
+
+This package can't be used together with Carp::Assert.
 
 
 == AUTHOR ==
