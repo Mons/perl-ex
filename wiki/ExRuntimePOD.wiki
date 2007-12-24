@@ -1,4 +1,3 @@
-
 == NAME ==
 
 ex::runtime - A set of most used functions
@@ -145,18 +144,19 @@ Is equivalent to:
         XX('ef',$0); # same as ( -e $0 and -f $0 )
         XX('ef');    # same as ( -e and -f )
 }}}
- sizeof REF:: !NOT IMPLEMENTED YET! Measure the memory size of variable
+ sizeof EXPR:: Returns the "size" of EXPR. For array or array reference - the count of elements For hash or hash reference - the count of keys For string or string reference - the length in bytes not regarding the utf8 settings and flags For nubmer or reference to number - always 1 For undef or reference to undef - undef For glob or globref - undef
 
 {{{
-        my $bytes = sizeof(\%hash);
+        my $size = sizeof %hash;
+        my $size = sizeof @array;
+        my $size = sizeof $string;
+        my $size = sizeof $hashref;
+        my $size = sizeof %{{ inline => 'hash' }};
 }}}
+ mkpath EXPR:: Recursively creates path, given by EXPR
 
 {{{
-                        local $_ = shift;
-                        if ( ref eq 'HASH' ) {
-                        
-                        }
-                        elsif (ref eq 'ARRAY' )
+        mkpath '/a/b/c' or die "Cant create path: $!"
 }}}
 
 
