@@ -185,19 +185,39 @@ is	do{ local $_ = " \ta \t";trim; $_ }, 'a'                  => 'trim 1';
 	}
 }
 
+{
+	use strict;
+	my %hash = (1=>2);
+	my $hash = {1=>2,2=>1};
+	my @array = (1..3);
+	my $array = [1..4];
+	my $string = 'x'x5;
+	my $rstr = \$string;
+	my $number = 1234;
+	my $rnum = 1234;
+	my $undef = undef;
+	my $rundef = \$undef;
+	my $es = '';
+	my $code = sub {};
+
+	is +(sizeof(%hash)),1        => 'sizeof %';
+	is +(sizeof($hash)),2        => 'sizeof {}';
+	is +(sizeof(@array)),3       => 'sizeof @';
+	is +(sizeof($array)),4       => 'sizeof []';
+	is +(sizeof($string)),5      => 'sizeof "xxxxx"';
+	is +(sizeof($rstr)),5        => 'sizeof \"xxxxx"';
+	is +(sizeof($number)),1      => 'sizeof 1';
+	is +(sizeof($rnum)),1        => 'sizeof \1';
+	is +(sizeof($undef)),$undef  => 'sizeof undef';
+	is +(sizeof($rundef)),$undef => 'sizeof \undef';
+	is +(sizeof($es)),0          => 'sizeof ""';
+	is +(sizeof($code)),$undef   => 'sizeof sub{}';
+	is +(sizeof %{{test=>1}}),1  => 'sizeof %{{ ... }}';;
+}
+
 # Complex usage
 
 ok( ( one { iss 10 } ,3,5,7,10 ), 'one+is');
-
-TODO:{
-	local $TODO = 'sizeof not implemented yet';
-	local *sizeof = sub{} unless defined &sizeof;
-	is (sizeof({}),4,'sizeof({})');
-	is (sizeof(\''),4,'sizeof("")');
-	is (sizeof(\'x'),4,'sizeof("x")');
-	cmp_ok (sizeof({}),'>',4,'sizeof({})');
-	cmp_ok (sizeof(''),'>',4,'sizeof({})');
-}
 
 
 __DATA__
