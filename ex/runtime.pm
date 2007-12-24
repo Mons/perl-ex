@@ -435,40 +435,59 @@ sub XX {
 	return eval( '!!(' . join(' and ',map { '-'.$_.(@_==2 ? " \$_[1]" : '')  } split //,$_[0]).')' );
 }
 
-=item sizeof REF
+=item sizeof EXPR
 
-!NOT IMPLEMENTED YET!
-Measure the memory size of variable
+Returns the "size" of EXPR.
+For array or array reference - the count of elements
+For hash or hash reference - the count of keys
+For string or string reference - the length in bytes not regarding the utf8 settings and flags
+For nubmer or reference to number - always 1
+For undef or reference to undef - undef
+For glob or globref - undef
 
-	my $bytes = sizeof(\%hash);
+	my $size = sizeof %hash;
+	my $size = sizeof @array;
+	my $size = sizeof $string;
+	my $size = sizeof $hashref;
+	my $size = sizeof %{{ inline => 'hash' }};
 
 =cut
 
 {
-	sub sizeof($);
-	eval{ require Devel::Size; };
-	unless ($@) {
-		*sizeof = sub ($) {
-			Devel::Size::total_size($_[0]) - Devel::Size::size($_[0]);
-		};
-	}else{
-		*sizeof = sub ($) {
-			carp "No XS version. Using dummy function.";
-			return 'inf';
-
-=rem to be written
-
-			local $_ = shift;
-			if ( ref eq 'HASH' ) {
-			
+	sub sizeof(\[$@%&*]){
+		my $var = shift;
+		$var = $$var if ref $var eq 'REF';
+		for (ref $var) {
+			if (0) {}
+			elsif (is 'HASH'  ) { return scalar keys %$var }
+			elsif (is 'ARRAY' ) { return scalar @$var }
+			elsif (is 'SCALAR') {
+				if (defined $$var) {
+					if (like_num $$var) {
+						return 1;
+					}
+					else{
+						use bytes;
+						return length($$var);
+					}
+				}else{
+					return undef;
+				}
 			}
-			elsif (ref eq 'ARRAY' )
-
-=cut
-
-		};
+			elsif (is 'GLOB'  ) { return undef }
+			elsif (is 'CODE'  ) { return undef }
+			else { croak "Wrong type?! WTF: $_" }
+		}
 	}
 }
+
+=item mkpath EXPR
+
+Recursively creates path, given by EXPR
+
+	mkpath '/a/b/c' or die "Cant create path: $!"
+
+=cut
 
 sub mkpath ($) {
 	my $path = shift;

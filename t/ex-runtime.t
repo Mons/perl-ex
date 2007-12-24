@@ -17,9 +17,9 @@ BEGIN {
 	}
 };
 
-for ( @ex::runtime::EXPORT ) {
+for ( grep {!/^(?:take)$/}@ex::runtime::EXPORT ) {
 	no strict 'refs';
-	ok(defined \&{$_} ? 1 : 0,'have sub '.$_);
+	ok(defined &{$_} ? 1 : 0,'have sub '.$_);
 }
 
 ok!	( one { $_==1 } 3,4,5 ) => 'one 0';
@@ -184,6 +184,10 @@ is	do{ local $_ = " \ta \t";trim; $_ }, 'a'                  => 'trim 1';
 		ok(1,'tainted');
 	}
 }
+
+# Complex usage
+
+ok( ( one { iss 10 } ,3,5,7,10 ), 'one+is');
 
 TODO:{
 	local $TODO = 'sizeof not implemented yet';

@@ -24,12 +24,14 @@
 		<li><a href="#old_style">Old style</a></li>
 	</ul>
 
+	<li><a href="#perfomance">PERFOMANCE</a></li>
 	<li><a href="#exports">EXPORTS</a></li>
 	<li><a href="#caveats">CAVEATS</a></li>
 	<ul>
 
 		<li><a href="#not_scoped">NOT SCOPED</a></li>
 		<li><a href="#requirements_of_sign">REQUIREMENTS OF SIGN</a></li>
+		<li><a href="#collisions">COLLISIONS</a></li>
 	</ul>
 
 	<li><a href="#author">AUTHOR</a></li>
@@ -46,8 +48,9 @@
 <hr />
 <h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
-        use ex::debugging DEBUGLEVEL;
-        use ex::debugging; # defaults to DEBUGLEVEL 1;
+        use ex::debugging +DEBUGLEVEL;
+        use ex::debugging -DEBUGLEVEL;
+        use ex::debugging; # defaults to DEBUGLEVEL +1;
         no ex::debugging;
         
 Please, note, this will not work (because of explicit empty list doesn't call C&lt;import&gt;):</pre>
@@ -86,7 +89,8 @@ So you'll se (if not called from main::) the first named sub.</p>
 </p>
 <h2><a name="oo_style">OO style</a></h2>
 <p>Uses autocreated function <code>d</code> to access the debugging object.
-It defines 5 methods: <code>debug</code>, <code>info</code>, <code>log</code>, <code>warn</code>, <code>error</code> with the levels 2..-2 respective.</p>
+It defines 5 methods: <code>debug</code>, <code>info</code>, <code>log</code>, <code>warn</code>, <code>error</code> with the levels 2..-2 respective.
+Also there are a definition of <code>assert</code></p>
 <pre>
         d-&gt;debug('my test: %s',$var); # equivalent to debug+2 =&gt; 'my test: %s', $var;
         d-&gt;warn('something wrong with me'); # equivalent to debug-1 =&gt; '...';</pre>
@@ -99,13 +103,16 @@ It defines 5 methods: <code>debug</code>, <code>info</code>, <code>log</code>, <
         warn &quot;Something&quot; if DEBUG;
         # will be threated as C&lt;warn &quot;Something&quot;&gt; when DEBUG in effect
         # and as nothing when DEBUG is not in effect</pre>
-<p>our %PREFIX = (
-	2  =&gt; 'DD',
-	1  =&gt; 'II',
-	0  =&gt; 'LL',
-	-1 =&gt; 'WW',
-	-2 =&gt; 'EE',
-);</p>
+<p>
+</p>
+<hr />
+<h1><a name="perfomance">PERFOMANCE</a></h1>
+<p>Default routines give very small overhead, much smaller than call to empty subroutine, but the fastest
+way with no overhead at all is the old well known if DEBUG. Sad but true</p>
+<pre>
+        debug+0 =&gt; 'fastest debug' if DEBUG;
+        assert+0 =&gt; 1==2, 'fastest assert' if DEBUG;
+        d-&gt;assert(1==2,'fastest assert') if DEBUG;</pre>
 <p>
 </p>
 <hr />
@@ -129,12 +136,18 @@ The multiple use of this pragma is discouraged.</p>
 <p>So the statement <code>debug+0 =</code> ...&gt; converts to <code>0+0, ...</code> (May be checked using <code>B::Deparse</code>)</p>
 <p>When <code>use debugging</code> is in effect <code>debug+0 =</code> ...&gt; converts to <code>debug( +0, ... )</code></p>
 <p>Without a sign <strong>the syntax is erroneous</strong> when no debugging: <code>0 0, ...</code></p>
-<p>If somebody knows, how to hack this, let me know.</p>
+<p>If somebody knows, how to hack this (without source filters ;), let me know.</p>
+<p>
+</p>
+<h2><a name="collisions">COLLISIONS</a></h2>
+<p>This package can't be used together with Carp::Assert.</p>
 <p>
 </p>
 <hr />
 <h1><a name="author">AUTHOR</a></h1>
-<p>Mons Anderson &lt;<a href="mailto:inthrax@gmail.com">inthrax@gmail.com</a>&gt;</p>
+<p>Mons Anderson &lt;<a href="mailto:inthrax@gmail.com">inthrax@gmail.com</a>&gt;
+
+</p>
 
 </body>
 

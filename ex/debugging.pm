@@ -11,8 +11,9 @@ ex::debugging - Simple debugging in your code with compile-time constants
 
 =head1 SYNOPSIS
 
-	use ex::debugging DEBUGLEVEL;
-	use ex::debugging; # defaults to DEBUGLEVEL 1;
+	use ex::debugging +DEBUGLEVEL;
+	use ex::debugging -DEBUGLEVEL;
+	use ex::debugging; # defaults to DEBUGLEVEL +1;
 	no ex::debugging;
 	
 Please, note, this will not work (because of explicit empty list doesn't call C<import>):
@@ -56,6 +57,7 @@ So you'll se (if not called from main::) the first named sub.
 
 Uses autocreated function C<d> to access the debugging object.
 It defines 5 methods: C<debug>, C<info>, C<log>, C<warn>, C<error> with the levels 2..-2 respective.
+Also there are a definition of C<assert>
 
 	d->debug('my test: %s',$var); # equivalent to debug+2 => 'my test: %s', $var;
 	d->warn('something wrong with me'); # equivalent to debug-1 => '...';
@@ -95,18 +97,7 @@ sub info :method { local $_[0] =  1;goto &__debug__ }
 sub log  :method { local $_[0] =  0;goto &__debug__ }
 sub warn :method { local $_[0] = -1;goto &__debug__ }
 sub error:method { local $_[0] = -2;goto &__debug__ }
-
-=rem
-
-our %PREFIX = (
-	2  => 'DD',
-	1  => 'II',
-	0  => 'LL',
-	-1 => 'WW',
-	-2 => 'EE',
-);
-
-=cut
+sub assert:method{ local $_[0] =  0;goto &__assert__ }
 
 our %PREFIX = (
 	2  => '  .',
@@ -121,6 +112,23 @@ sub delivery__($$$$$) {
 	print STDERR (
 		($PREFIX{$lvl}||'   ')."[$pk:$ln:$sub] $msg\n"
 	);
+}
+
+sub __assert__ {
+	my ($lvl,$test,$name,@args) = @_;
+	return if $test;
+	my ($pk,$ln) = ( (caller(0))[0,2,3] );
+	my $i = my $ix = 1;
+	my $sub;
+	$sub = (caller($i++))[3] while $i==$ix or substr($sub,length($sub)-8,8) eq '__ANON__';
+	$sub =~ s{^\Q$pk\::\E}{};
+	local $@;
+	$pk =~ s/.*::(\w+)$/$1/o;
+	$name =~ s/[\r?\n]+$//o;
+	my $msg = sprintf "Assertion ($name) failed", @args;
+	delivery__($pk,$ln,$sub,$lvl,$msg);
+	
+	
 }
 
 sub __debug__ {
@@ -154,11 +162,16 @@ sub enable {
 			return if $_[0] and $_[0] > $level;
 			goto &__debug__;
 		};
+		*{$clr.'::assert'} = sub($$;@){
+			return if $_[0] and $_[0] > $level;
+			goto &__assert__;
+		};
 		my $i = instance();
 		*{$clr.'::d'} = sub(){ $i };
 	}else{
 		*{$clr.'::DEBUG'} = sub(){0};
 		*{$clr.'::debug'} = sub(){0};
+		*{$clr.'::assert'} = sub(){0};
 		my $i = ex::debugging::empty->new();
 		*{$clr.'::d'}     = sub(){$i};
 	}
@@ -206,6 +219,15 @@ sub import {
 1;
 __END__
 
+=head1 PERFOMANCE
+
+Default routines give very small overhead, much smaller than call to empty subroutine, but the fastest
+way with no overhead at all is the old well known if DEBUG. Sad but true
+
+	debug+0 => 'fastest debug' if DEBUG;
+	assert+0 => 1==2, 'fastest assert' if DEBUG;
+	d->assert(1==2,'fastest assert') if DEBUG;
+
 =head1 EXPORTS
 
 This package implicitly exports to the caller's namespace next subroutines: C<DEBUG>, C<debug>, C<d>
@@ -229,7 +251,11 @@ When C<use debugging> is in effect C<debug+0 => ...> converts to C<debug( +0, ..
 
 Without a sign B<the syntax is erroneous> when no debugging: C<0 0, ...>
 
-If somebody knows, how to hack this, let me know.
+If somebody knows, how to hack this (without source filters ;), let me know.
+
+=head2 COLLISIONS
+
+This package can't be used together with Carp::Assert.
 
 =head1 AUTHOR
 
