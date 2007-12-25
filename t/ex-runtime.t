@@ -80,10 +80,12 @@ ok!	( odd 2)  =>'odd 2';
 is	( do{ min 2..5 },      2  => 'min 2..5'  );
 is	( do{ min 1,3,5 },     1  => 'min 1,3,5' );
 is	( do{ min 'a'..'z' }, 'a' => 'min a..z'  );
+is	( do{ min 2,15 },      2  => 'min 2,15'  );
 
 is	( do{ max 2..5 },      5  => 'max 2..5'  );
 is	( do{ max 1,3,5 },     5  => 'max 1,3,5' );
 is	( do{ max 'a'..'z' }, 'z' => 'max a..z'  );
+is	( do{ max 2,15 },      15 => 'max 2,15'  );
 
 is_deeply [by(2,qw(a b c d))] => [[qw(a b)],[qw(c d)]] => 'by 2';
 is_deeply [by(3,qw(a b c d))] => [[qw(a b c)],[qw(d)]] => 'by 3';
