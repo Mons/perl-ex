@@ -182,8 +182,11 @@ value. Usage is the same
 
 =cut
 
-sub max (@) { ( sort @_ )[-1] }
-sub min (@) { ( sort @_ )[ 0] }
+{
+no warnings 'numeric';
+sub max (@) { ( sort { $a <=> $b || $a cmp $b } @_ )[-1] }
+sub min (@) { ( sort { $a <=> $b || $a cmp $b } @_ )[0] }
+}
 
 =item by SCALAR LIST
 
