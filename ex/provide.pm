@@ -56,7 +56,7 @@ sub import {
 	if ( @_ > 1 and @_ % 2 == 0 ) {
 		$args = [ @_ ];
 	}elsif ( @_ == 1 ){
-		$args = [ @{ @_[0] } ];
+		$args = [ @{ $_[0] } ];
 	}else{
 		Carp::croak "Bad usage of " .  __PACKAGE__;
 	}
