@@ -8,6 +8,8 @@ use Test::More qw(no_plan);
 use t::TieStderr;
 tie *STDERR,'t::TieStderr';
 
+our $W = 0; our $WW = '';
+BEGIN{$SIG{__WARN__} = sub { $W = 1; ( $WW = shift ) =~ s/\n//; };}
 BEGIN { ok( eval q{ no ex::debugging;1 }, 'no ex::debugging' ) };
 
 
@@ -52,3 +54,5 @@ like(<STDERR>,qr/\[main:\d+:\] error/,"D error good");
 sub test1 { shift->(); }; test1(sub { debug+0 => 'test'; }); my $ln = __LINE__;
 is(<STDERR>,'',"L sub absent");
 
+is($W,0,'no warn');
+is($WW,'','no string warn');

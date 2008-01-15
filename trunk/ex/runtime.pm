@@ -222,6 +222,7 @@ sub uniq (@) {
 }
 
 sub uniqs (@) {
+	no warnings qw(uninitialized);
 	my $z;
 	grep { $z eq $_ ? 0 : ($z=$_) } @_
 }

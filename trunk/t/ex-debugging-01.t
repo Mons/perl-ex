@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 use strict;
 
@@ -7,6 +7,9 @@ use Data::Dumper;
 use Test::More qw(no_plan);
 use t::TieStderr;
 tie *STDERR,'t::TieStderr';
+
+our $W = 0; our $WW = '';
+BEGIN{$SIG{__WARN__} = sub { $W = 1; ( $WW = shift ) =~ s/\n//; };}
 
 BEGIN { use_ok('ex::debugging') };
 
@@ -52,3 +55,6 @@ like(<STDERR>,qr/\[main:\d+:\] error/,"D error good");
 sub test1 { shift->(); }; test1(sub { debug+0 => 'test'; }); my $ln = __LINE__;
 
 like(<STDERR>,qr/\Q[main:$ln:test1] test\E/,"L 0 good");
+
+is($W,0,'no warn');
+is($WW,'','no string warn');

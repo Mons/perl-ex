@@ -219,7 +219,7 @@ is	do{ local $_ = " \ta \t";trim; $_ }, 'a'                  => 'trim 1';
 
 # Complex usage
 
-ok( ( one { iss 10 } ,3,5,7,10 ), 'one+is');
+ok( ( one { iss 10 } 3,5,7,10 ), 'one+is');
 
 
 __DATA__
