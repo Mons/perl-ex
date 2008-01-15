@@ -107,14 +107,18 @@ our %PREFIX = (
 	-2 => '***',
 );
 
-sub delivery__($$$$$) {
-	my ($pk,$ln,$sub,$lvl,$msg) = @_;
+sub delivery__($$$$$;@) {
+	my ($pk,$ln,$sub,$lvl,$msg,@args) = @_;
 	print STDERR (
-		($PREFIX{$lvl}||'   ')."[$pk:$ln:$sub] $msg\n"
+		($PREFIX{$lvl}||'   ')
+			.sprintf("[%s:%s:%s] ",map{ defined $_ ? $_ : '' }$pk,$ln,$sub)
+			.sprintf(defined $msg ? $msg : '',map{ defined $_ ? $_ : '<undef>' } @args)
+		."\n"
 	);
 }
 
 sub __assert__ {
+	no warnings qw(uninitialized);
 	my ($lvl,$test,$name,@args) = @_;
 	return if $test;
 	my ($pk,$ln) = ( (caller(0))[0,2,3] );
@@ -132,6 +136,7 @@ sub __assert__ {
 }
 
 sub __debug__ {
+	no warnings qw(uninitialized);
 	my ($lvl,$msg,@args) = @_;
 #	my $i = 0;
 #	my ($pk,$ln) = ( (caller($i))[0], (caller($i))[2] );
@@ -146,7 +151,7 @@ sub __debug__ {
 	local $@;
 	$pk =~ s/.*::(\w+)$/$1/o;
 	$msg =~ s/[\r?\n]+$//o;
-	delivery__($pk,$ln,$sub,$lvl,sprintf($msg,@args));
+	delivery__($pk,$ln,$sub,$lvl,$msg,@args);
 	#warn sprintf "~[$pk:$ln:$lvl] ".('>'x$lvl)." $msg\n",@args;
 }
 
