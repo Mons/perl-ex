@@ -3,6 +3,7 @@
 
 use strict;
 use warnings;
+use lib qw(. ..);
 use Test::More tests => 12;
 
 our $p;
@@ -15,7 +16,7 @@ BEGIN {
 	use_ok($p);
 };
 
-ok($p->isa('Exporter'), 'isa exporter');
+ok($p->can('import'), 'can import');
 ok($p->can('a'));
 ok($p->can('b'));
 ok($p->can('c'));
