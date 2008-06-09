@@ -49,7 +49,7 @@ use ex::provide
 		min max
 		
 		by uniq uniqs
-		cutoff zip zipw zipsum zipmult zipcat kv2h hash
+		cutoff zip zipw zipsum zipmult zipcat kv2h hash unzip
 		
 		slurp trim
 		
@@ -57,14 +57,13 @@ use ex::provide
 		
 		gather take
 		
-		say
-		
 		XX
 		
 		sizeof
 		
 		mkpath
 	),
+	$] >= 5.01 ? () : qw(say),
 	@FROM_LIST,
 	@FROM_SCALAR,
 	],
@@ -183,7 +182,7 @@ value. Usage is the same
 =cut
 
 {
-no warnings 'numeric';
+no warnings qw(numeric);
 sub max (@) { ( sort { $a <=> $b || $a cmp $b } @_ )[-1] }
 sub min (@) { ( sort { $a <=> $b || $a cmp $b } @_ )[0] }
 }
@@ -239,6 +238,28 @@ Makes a cutoff from N arrays by index
 
 sub cutoff($@) {
 	map { $_->[ $_[ $[ ] ] } @_[(1+$[)..$#_]
+}
+
+=item unzip BLOCK LIST
+
+Like C<grep BLOCK LIST> but returns two arrayrefs.
+First contains values passed by grep and second don't
+
+	unzip { $_ % 2 } 1..10; => ( [1,3,5,7,9],[2,4,6,8,10] );
+
+=cut
+
+sub unzip (&@) {
+	my $code = shift;
+	my (@a,@b);
+	for (@_){
+		if ($code->()) {
+			push @a,$_;
+		}else{
+			push @b,$_;
+		}
+	};
+	return \@a,\@b;
 }
 
 =item zip LIST
@@ -399,13 +420,19 @@ Is equivalent to:
 
 =cut
 
-sub say(@) {
-	print @_,"\n";
+sub say {
+	local $\="\n";
+	print @_ ? @_ : $_;
 }
 
-*IO::Handle::say = sub {
-    shift->print(@_,"\n");
-};
+BEGIN {
+	unless (defined &{'IO::Handle::say'}) {
+		*IO::Handle::say = sub {
+			local $\="\n";
+			shift->(print @_ ? @_ : $_);
+		};
+	}
+}
 
 {
 	no strict 'refs';

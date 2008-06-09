@@ -3,12 +3,11 @@
 use strict;
 use warnings;
 use Test::More 'no_plan';
-use lib '..';
+use lib qw(. .. t);
 our $p;
 BEGIN {
 	$p = 'ex::runtime';
 	#undef *is;
-	use lib 't';
 	{
 		local *is;
 		use_ok($p);
@@ -17,7 +16,7 @@ BEGIN {
 	}
 };
 
-for ( grep {!/^(?:take)$/}@ex::runtime::EXPORT ) {
+for ( grep { defined &{ 'ex::runtime::'.$_ } && !/^(?:take|import|_.*)$/} keys %ex::runtime:: ) {
 	no strict 'refs';
 	ok(defined &{$_} ? 1 : 0,'have sub '.$_);
 }
@@ -98,6 +97,9 @@ is_deeply [cutoff 1,[1,2,3],[4,5,6] ] => [2,5]          => 'cutoff 1';
 is_deeply [cutoff 1,[1],[4,5,6] ] => [undef,5]          => 'cutoff 2';
 is_deeply [cutoff 1,[1,2,3],[4,5,6],[] ] => [2,5,undef] => 'cutoff 3';
 is_deeply [cutoff 3,[1,2,3],[4,5,6],[] ] => [(undef)x3] => 'cutoff 4';
+
+is_deeply [unzip { $_ % 2 } 1..10] => [[1,3,5,7,9],[2,4,6,8,10]] => 'unzip 1';
+is_deeply [unzip { $_ == 1 } 1..3] => [[1],[2,3]]                => 'unzip 2';
 
 is_deeply [ zip [1,2],[3,4] ]   => [ [1,3],[2,4] ]          => 'zip 1';
 my @x = ([1,2],[3,4]);
