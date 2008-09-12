@@ -22,7 +22,16 @@ sub import {
 		$_[0] = join '/', split '::',$_[0].'.pm' if index($_[0],':') > -1;
 		$_[0] = $_[0].'.pm' if $_[0] =~ /^\w+$/;
 		my $file = $_[0];
-		#warn "require $file\n" if $file =~ /\w+/;
+		#warn "require $file to ".caller()."\n" if $file =~ /\w+/;
+		if (caller ne 'main' and substr($file,0,1) eq '/') {
+			my $caller = join '/', split '::', scalar caller;
+			if ( -e $file ) {
+				warn "Ambiguous require of $file with $caller$file resolved in use of existing file $file\n";
+			}else{
+				$file = $caller . $file;
+			}
+		}
+		#warn "require $file to ".caller()."\n" if $file =~ /\w+/;
 
 		# perform what was originally expected
 		goto &$old if $old;
