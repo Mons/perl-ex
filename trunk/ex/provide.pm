@@ -59,17 +59,33 @@ sub exporter {
 	return sub {
 		my $me  = shift;
 		my $pkg = caller;
-		my @e = @_ ? @_ : @{ $export->{auto} };
+		my @minus = map { local $_ = $_;s{^-}{} ? $_ : () } @_;
+		my @plus = map { local $_ = $_;s{^-}{} ? () : $_ } @_;
+		my %skip = map { $_ => 1 } @minus;
+		my @e = @plus ? @plus : @{ $export->{auto} };
+		my @list;
 		for (@e) {
 			if (s/^://) {
 				if ($_ eq 'all') {
-					*{$pkg.'::'.$_} = \&{$me.'::'.$_} for keys %{ $export->{all} };
+					push @list, keys %{ $export->{all} }
 				}else{
 					Carp::croak "Package doesn't export tag :$_" unless exists $export->{tags}{$_};
-					*{$pkg.'::'.$_} = \&{$me.'::'.$_} for @{ $export->{tags}{$_} };
+					push @list,@{ $export->{tags}{$_} };
 				}
 			}else{
 				Carp::croak "Package doesn't export function :$_" unless exists $export->{all}{$_};
+				push @list, $_;
+			}
+		}
+		{
+			local $SIG{__WARN__} = sub {
+				my $msg = shift;
+				$msg =~ s{ at .+? line .+?$}{}s;
+				Carp::carp $msg." while exporting $_ from $me to $pkg";
+			};
+			for (@list) {
+				#warn("skip '$me\::$_' for $pkg"),
+				next if $skip{$_};
 				*{$pkg.'::'.$_} = \&{$me.'::'.$_};
 			}
 		}
