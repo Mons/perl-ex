@@ -1,4 +1,4 @@
-package t::TieStderr;
+package TieStderr;
 
 use strict;
 use base qw(Tie::Handle);

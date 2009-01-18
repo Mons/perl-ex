@@ -3,7 +3,8 @@
 
 use strict;
 use warnings;
-use ex::lib '../lib';
+use Data::Dumper;
+use ex::lib qw(../lib .);
 use Test::More tests => 12;
 
 our $p;
