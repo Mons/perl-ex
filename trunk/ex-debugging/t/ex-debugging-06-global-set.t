@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use lib qw(. .. t);
+use ex::lib qw(../lib .);
 use Test::More qw(no_plan);
 use TestDebugging;
 

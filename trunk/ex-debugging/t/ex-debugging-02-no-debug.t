@@ -2,12 +2,12 @@
 
 use strict;
 use warnings;
-use lib qw(. .. t);
+use ex::lib qw(../lib .);
 
 use Test::More qw(no_plan);
 use Test::More::Warn;
-use t::TieStderr;
-tie *STDERR,'t::TieStderr';
+use TieStderr;
+tie *STDERR,'TieStderr';
 
 no ex::debugging;
 ok( !DEBUG, 'isnt DEBUG' );
