@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use lib qw(. ..);
+use ex::lib '../lib';
 use Test::More tests => 12;
 
 our $p;
