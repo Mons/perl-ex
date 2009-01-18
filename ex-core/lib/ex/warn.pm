@@ -67,6 +67,14 @@ sub ex::warn (@) {
 
 sub import {
 	shift;
+	if (@_ == 1) {
+		no strict 'refs';
+		*{caller().'::'.$_[0]} = \&ex::warn;
+		return;
+	}
+	elsif (@_) {
+		die "Unsupported arguments to ex::warn: (@_) at ".join(' line ',(caller)[1,2]).'.';
+	}
 	return if $done;
 	$old = \&CORE::GLOBAL::warn if defined &CORE::GLOBAL::warn and exists &CORE::GLOBAL::warn;
 

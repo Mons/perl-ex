@@ -1,0 +1,1 @@
+$ perl -e '$_ = $ARGV[0]; while (-e and -l) { $_ = readlink;}; print "$_\n"' symfile
