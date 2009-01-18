@@ -1,11 +1,12 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 use strict;
-use lib qw(./lib ../lib ../../lib . .. );
+use FindBin;
+use lib '.',"$FindBin::Bin/../lib";
 use Test::More tests => 4;
 
 use ex::lib ();
-is( $INC[0], './lib', "before import: $INC[0]" );
+is( $INC[0], ".", "before import: $INC[0]" );
 ex::lib->import( '.' );
 like( $INC[0], qr{^/}, "after import: $INC[0]" );
 

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More 'no_plan';
-use lib qw(. .. t);
+use ex::lib qw(../lib .);
 our $p;
 BEGIN {
 	$p = 'ex::runtime';
@@ -11,7 +11,7 @@ BEGIN {
 	{
 		local *is;
 		use_ok($p);
-		# Rename is as iss because of a collision
+		# Rename is as iss because of a collision with Test::More::is
 		*iss =  sub ($) { goto &ex::runtime::is };
 	}
 };
