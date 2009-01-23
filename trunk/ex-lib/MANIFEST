@@ -1,0 +1,10 @@
+Changes
+lib/ex/lib.pm
+Makefile.PL
+MANIFEST
+META.yml			Module meta-data (added by MakeMaker)
+README
+t/00-load.t
+t/ex-lib-01-check.t
+t/pod-coverage.t
+t/pod.t
