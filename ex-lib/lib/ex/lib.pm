@@ -1,6 +1,6 @@
 # ex::lib
 #
-# Copyright (c) 200[78] Mons Anderson <mons@cpan.org>. All rights reserved
+# Copyright (c) 200[789] Mons Anderson <mons@cpan.org>. All rights reserved
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 package ex::lib;
@@ -11,7 +11,7 @@ ex::lib - The same as C<lib>, but makes relative path absolute.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 
@@ -23,18 +23,37 @@ Simple use like C<use lib ...>:
 =head1 THE GOAL
 
 The main reason of this library is transformate relative paths to absolute at the C<BEGIN> stage, and push transformed to C<@INC>.
-This is useful, when you running under C<mod_perl>, use something like C<Apache::StatINC>, and your application may change working directory.
-When using common C<lib>, relative paths stays relative to curernt working directory, So in case of chdir C<StatINC> fails to reload module.
+Relative path basis is not the current working directory, but the location of file, where the statement is.
+When using common C<lib>, relative paths stays relative to curernt working directory, 
+
+	# For ex:
+	# script: /opt/scripts/my.pl
+	use ex::lib '../lib';
+
+	# We run `/opt/scripts/my.pl` having cwd /home/mons
+	# The @INC will contain '/opt/lib';
+
+	# We run `./my.pl` having cwd /opt
+	# The @INC will contain '/opt/lib';
+
+	# We run `../my.pl` having cwd /opt/lib
+	# The @INC will contain '/opt/lib';
+
+Also this module is very useful when writing tests, when you want to load strictly the module from ../lib, respecting the test file.
+
+	# t/00-test.t
+	use ex::lib '../lib';
+
+Also this is useful, when you running under C<mod_perl>, use something like C<Apache::StatINC>, and your application may change working directory.
+So in case of chdir C<StatINC> fails to reload module if the @INC contain relative paths.
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<< <bug-ex-lib@rt.cpan.org> >>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ex-lib>. I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+None known
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2007-2008 Mons Anderson, all rights reserved.
+Copyright 2007-2009 Mons Anderson.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -47,7 +66,7 @@ Mons Anderson, C<< <mons@cpan.org> >>
 
 use strict;
 use lib ();
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 BEGIN {
 	# use constants is heavy :(
@@ -71,11 +90,11 @@ sub mkapath($) {
 	
 	# Prepare absolute base bath
 	my ($pkg,$file) = (caller($depth))[0,1];
-	warn "file = $file\n" if DEBUG;
+	warn "file = $file " if DEBUG;
 	#( my $p = $pkg  ) =~ s{::}{/}g;
 	#( my $f = $file ) =~ s/\Q$p.pm\E$//i;
 	( my $f = abs_path($file) ) =~ s{[^/]+$}{}i;
-	warn "source dir = $f\n" if DEBUG;
+	warn "source dir = $f " if DEBUG;
 	$f;
 }
 
@@ -85,19 +104,16 @@ sub import {
 	
 	_croak("Bad usage. use ".__PACKAGE__." PATH") unless @_;
 	my $prefix = mkapath(1);
-	
+	@_ = @_;
 	for (@_) {
+		ref and next;
 		my $lib = $_;
-		$lib =~ s{^\./}{};
-		$lib = abs_path("$prefix$lib");
-		#$lib =~ s{\'}{\\'}g;
-		
-		warn "use explicit lib: '$lib'\n" if DEBUG;
-		_croak("Bad path specification") unless $lib;
-		lib->import($lib);
-		#eval qq{use lib ''};
-		#_croak($@) if $@;
+		s{^\./}{};
+		$_ = abs_path("$prefix$_") or _croak("Bad path specification");
 	}
+	warn "use explicit lib: '@_'\n" if DEBUG;
+	unshift @_, 'lib';
+	goto &lib::import;
 	return;
 }
 
