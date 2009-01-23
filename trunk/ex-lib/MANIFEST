@@ -1,10 +1,12 @@
 Changes
+ex-lib-0.02/META.yml
+ex-lib-0.02/t/01-check.t
 lib/ex/lib.pm
 Makefile.PL
 MANIFEST
 META.yml			Module meta-data (added by MakeMaker)
 README
 t/00-load.t
-t/ex-lib-01-check.t
+t/01-check.t
 t/pod-coverage.t
 t/pod.t
