@@ -2,7 +2,7 @@ package lvalue;
 
 use warnings;
 use strict;
-use ex::provide [qw(get set)];
+#use ex::provide [qw(get set)];
 use Carp;
 
 sub import {
