@@ -66,11 +66,11 @@ Mons Anderson, C<< <mons@cpan.org> >>
 
 use strict;
 use lib ();
-our $VERSION = 0.02;
+$ex::lib::VERSION = 0.03;
 
 BEGIN {
 	# use constants is heavy :(
-	sub DEBUG () { 0 };
+	sub DEBUG () { 1 };
 	
 	# Load Cwd, if exists.
 	# There may be an XS version
@@ -90,12 +90,29 @@ sub mkapath($) {
 	
 	# Prepare absolute base bath
 	my ($pkg,$file) = (caller($depth))[0,1];
-	warn "file = $file " if DEBUG;
+	warn "file = $file " if DEBUG > 1;
+	$file =~ s{[^/]+$}{}s;
+	$file = '.' unless length $file;
+	warn "base path = $file" if DEBUG > 1;
 	#( my $p = $pkg  ) =~ s{::}{/}g;
 	#( my $f = $file ) =~ s/\Q$p.pm\E$//i;
-	( my $f = abs_path($file) ) =~ s{[^/]+$}{}i;
-	warn "source dir = $f " if DEBUG;
+	my $f = abs_path($file) . '/';
+	warn "source dir = $f " if DEBUG > 1;
 	$f;
+}
+
+sub transform {
+	local $@; # Don't poison $@
+	my $prefix;
+	map {
+		ref || m{^/} ? $_ : do {
+			my $lib = $_;
+			s{^\./+}{};
+			$_ = abs_path( ( $prefix ||= mkapath(2) ) . $_ ) or _croak("Bad path specification: $lib");
+			warn "$lib => $_" if DEBUG > 1;
+			$_;
+		}
+	} @_;
 }
 
 sub import {
@@ -103,17 +120,20 @@ sub import {
 	local $@; # Don't poison $@
 	
 	_croak("Bad usage. use ".__PACKAGE__." PATH") unless @_;
-	my $prefix = mkapath(1);
-	@_ = @_;
-	for (@_) {
-		ref and next;
-		my $lib = $_;
-		s{^\./}{};
-		$_ = abs_path("$prefix$_") or _croak("Bad path specification");
-	}
-	warn "use explicit lib: '@_'\n" if DEBUG;
-	unshift @_, 'lib';
+
+	@_ = ( lib => transform @_ = @_ );
+	warn "use @_\n" if DEBUG > 0;
 	goto &lib::import;
+	return;
+}
+
+sub unimport {
+	shift;
+	local $@; # Don't poison $@
+	_croak("Bad usage. use ".__PACKAGE__." PATH") unless @_;
+	@_ = ( lib => transform @_ = @_ );
+	warn "no @_\n" if DEBUG > 0;
+	goto &lib::unimport;
 	return;
 }
 

@@ -1,16 +1,12 @@
 use inc::Module::Install;
 
-name     'ex-lib';
-all_from 'lib/ex/lib.pm';
+name     'lvalue';
+all_from 'lib/lvalue.pm';
 author   'Mons Anderson <mons@cpan.org>';
 
 build_requires 'Test::More';
 
 auto_install;
-
-#port_maintainer 'mons@cpan.org';
-#port_category 'devel';
-#support_freebsd;
 
 WriteAll;
 
