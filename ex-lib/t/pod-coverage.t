@@ -1,7 +1,6 @@
-#!/usr/bin/perl -Tw
+#!/usr/bin/perl -w
 
 use strict;
 use Test::More tests => 1;
 
-diag "No POD tests required - no export";
 ok (1, "No POD tests required - no export");

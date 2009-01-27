@@ -1,4 +1,5 @@
 Changes
+ex-lib-0.02.tar.gz
 ex-lib-0.02/META.yml
 ex-lib-0.02/t/01-check.t
 lib/ex/lib.pm
@@ -8,5 +9,6 @@ META.yml			Module meta-data (added by MakeMaker)
 README
 t/00-load.t
 t/01-check.t
+t/02-reflib.t
 t/pod-coverage.t
 t/pod.t
