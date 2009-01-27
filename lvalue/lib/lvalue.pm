@@ -2,7 +2,18 @@ package lvalue;
 
 use warnings;
 use strict;
+use ex::provide [qw(get set)];
+use Carp;
 
+sub import {
+	my $pkg = shift;
+	my $pk = caller;
+	no strict 'refs';
+	for (@_ ? @_ : qw(get set)) {
+		defined &$_ or croak "$_ is not exported by $pk";
+		*{ $pk . '::' . $_ } = \&$_;
+	}
+}
 =head1 NAME
 
 lvalue - use lvalue with style
@@ -17,10 +28,6 @@ our $VERSION = '0.01';
 
 
 =head1 SYNOPSIS
-
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
 
 	use lvalue;
 
@@ -136,7 +143,7 @@ sub get {
 
 sub TIESCALAR {
 	my ($pkg,$get,$set) = @_;
-	my $caller = (caller(1))[3];
+	my $caller = (caller(2))[3];
 	subname $caller.':get',$get if $get;
 	subname $caller.':set',$set if $set;
 	$get or $set or croak "Neither set nor get passed";
