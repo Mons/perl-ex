@@ -1,5 +1,7 @@
-#!perl -T
+#!/usr/bin/perl
 
+use strict;
+use ex::lib '../lib';
 use Test::More tests => 1;
 
 BEGIN {
