@@ -11,7 +11,7 @@ ex::lib - The same as C<lib>, but makes relative path absolute.
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =head1 SYNOPSIS
 
@@ -108,7 +108,6 @@ sub transform {
 		ref || m{^/} ? $_ : do {
 			my $lib = $_;
 			s{^\./+}{};
-			-e $lib or _croak("Path `$lib' doesn't exists");
 			local $!;
 			my $abs = ( $prefix ||= mkapath(2) ) . $_;
 			$_ = abs_path( $abs ) or _croak("Bad path specification: `$lib' => `$abs'" . ($! ? " ($!)" : ''));

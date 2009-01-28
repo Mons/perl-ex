@@ -8,9 +8,5 @@ build_requires 'Test::More';
 
 auto_install;
 
-#port_maintainer 'mons@cpan.org';
-#port_category 'devel';
-#support_freebsd;
-
 WriteAll;
 
