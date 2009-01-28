@@ -1,0 +1,57 @@
+NAME
+    XML::Parser::Style::EasyTree - Parse xml to simple tree
+
+VERSION
+    Version 0.01
+
+SYNOPSIS
+        use XML::Parser;
+        my $p = XML::Parser->new( Style => 'EasyTree' );
+
+EXAMPLE
+        <root>
+
+        </root>
+
+    will be
+
+        # ...
+
+SPECIAL VARIABLES
+    $ATTR_PREFIX [ = '-' ]
+        Allow to set prefix for name of attribute nodes;
+
+            <item attr="value" />
+            # will be
+            item => { -attr => 'value' };
+
+    $TEXT_NODE_KEY [ = '#text' ]
+        Allow to set name for text nodes
+
+            <item><sub attr="t"></sub>Text value</item>
+            # will be
+            item => { sub => { -attr => "t" }, #text => 'Text value' };
+
+    %FORCE_ARRAY
+        Allow to force nodes to be threated always as arrays.
+
+            # $FORCE_ARRAY{sub} = 1;
+            <item><sub attr="t"></sub>Text value</item>
+            # will be
+            item => { sub => [ { -attr => "t" } ], #text => 'Text value' };
+
+    %FORCE_HASH
+        Allow to force nodes to be threated always as hashes.
+
+AUTHOR
+    Mons Anderson, "<mons at cpan.org>"
+
+BUGS
+    None known
+
+COPYRIGHT & LICENSE
+    Copyright 2009 Mons Anderson
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
