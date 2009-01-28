@@ -1,56 +1,60 @@
 NAME
-    lvalue - use lvalue with style
+    lvalue - use lvalue subroutines with ease
 
 VERSION
     Version 0.01
 
 SYNOPSIS
-            use lvalue;
+    Simply put get and set blocks at the end of your lvalue sub. Please
+    note, no comma or semicolon between statements are allowed (in case of
+    semicolon only last statement will be take an action)
 
-            sub mysub : lvalue {
-                    get {
-                            return 'result for get';
-                    }
-                    set {
-                            my $set_value = shift;
-                            # ...
-                    }
+        use lvalue;
+
+        sub mysub : lvalue {
+            get {
+                return 'result for get';
             }
-
-            mysub() = 'test'; # will invoke set block with argument 'test';
-            print mysub(); # will invoke get block without arguments. result will be returned to print;
-
-            sub readonly : lvalue {
-                    get {
-                            return 'readonly value';
-                    }
+            set {
+                my $set_value = shift;
+                # ...
             }
-            
+        }
+
+        mysub() = 'test'; # will invoke set block with argument 'test';
+        print mysub(); # will invoke get block without arguments. result will be returned to print;
+
+        sub readonly : lvalue {
+            get {
+                return 'readonly value';
+            }
+        }
+
         print readonly();  # ok
-            readonly = 'test'; # fails
+        readonly = 'test'; # fails
 
-            sub writeonly : lvalue {
-                    set {
-                            my $set_value = shift;
-                            # ...
-                    }
+        sub writeonly : lvalue {
+            set {
+                my $set_value = shift;
+                # ...
             }
-            
+        }
+
         writeonly = 'test'; # ok
-            print writeonly();  # fails
+        print writeonly();  # fails
 
 EXPORT
     There are 2 export functions: "set" and "get". If you don't want to use
     export, you may use full names
 
-            sub mysub : lvalue {
-                    lvalue::get {
-                            
-                }
-                    lvalue::set {
-                            my $set_value = shift;
-                    }
+        sub mysub : lvalue {
+            lvalue::get {
+                return 'something';
             }
+            lvalue::set {
+                my $set_value = shift;
+            }
+        }
 
 FUNCTIONS
   set

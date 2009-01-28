@@ -16,7 +16,7 @@ sub import {
 }
 =head1 NAME
 
-lvalue - use lvalue with style
+lvalue - use lvalue subroutines with ease
 
 =head1 VERSION
 
@@ -28,6 +28,9 @@ our $VERSION = '0.01';
 
 
 =head1 SYNOPSIS
+
+Simply put get and set blocks at the end of your lvalue sub.
+Please note, no comma or semicolon between statements are allowed (in case of semicolon only last statement will be take an action)
 
 	use lvalue;
 
@@ -69,7 +72,7 @@ There are 2 export functions: C<set> and C<get>. If you don't want to use export
 
 	sub mysub : lvalue {
 		lvalue::get {
-			
+			return 'something';
 		}
 		lvalue::set {
 			my $set_value = shift;
