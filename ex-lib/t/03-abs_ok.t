@@ -3,7 +3,7 @@
 use strict;
 use FindBin;
 use lib '.',"$FindBin::Bin/../lib";
-use Test::More tests => 1;
+use Test::More tests => 7;
 use ex::lib
 	'///opt/perl/lib',
 	'//opt/perl/lib',
@@ -24,3 +24,4 @@ is($chk[3], $FindBin::Bin,     '.// => .');
 is($chk[3], $FindBin::Bin,     './ => .');
 is($chk[3], $FindBin::Bin,     '. => .');
 
+exit 0;

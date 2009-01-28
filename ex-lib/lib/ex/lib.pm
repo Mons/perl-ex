@@ -70,7 +70,7 @@ $ex::lib::VERSION = 0.03;
 
 BEGIN {
 	# use constants is heavy :(
-	sub DEBUG () { 1 };
+	sub DEBUG () { 0 };
 	
 	# Load Cwd, if exists.
 	# There may be an XS version
@@ -108,7 +108,10 @@ sub transform {
 		ref || m{^/} ? $_ : do {
 			my $lib = $_;
 			s{^\./+}{};
-			$_ = abs_path( ( $prefix ||= mkapath(2) ) . $_ ) or _croak("Bad path specification: $lib");
+			-e $lib or _croak("Path `$lib' doesn't exists");
+			local $!;
+			my $abs = ( $prefix ||= mkapath(2) ) . $_;
+			$_ = abs_path( $abs ) or _croak("Bad path specification: `$lib' => `$abs'" . ($! ? " ($!)" : ''));
 			warn "$lib => $_" if DEBUG > 1;
 			$_;
 		}
