@@ -1,5 +1,5 @@
 ---
-abstract: 'use lvalue with style'
+abstract: 'use lvalue subroutines with ease'
 author:
   - 'Mons Anderson <mons@cpan.org>'
 build_requires:

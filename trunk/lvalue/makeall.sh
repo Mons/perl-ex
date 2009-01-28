@@ -2,6 +2,7 @@
 
 rm -rf MANIFEST.bak MANIFEST Makefile.old && \
 pod2text lib/lvalue.pm > README && \
+perl -i -lpne 's{^\s+$}{};s{^    ((?: {8})+)}{" "x(4+length($1)/2)}se;' README && \
 perl Makefile.PL && \
 rm *.tar.gz && \
 make manifest && \
