@@ -3,7 +3,7 @@
 use strict;
 use FindBin;
 use lib '.',"$FindBin::Bin/../lib";
-use Test::More tests => 11;
+use Test::More tests => 8;
 
 my @ORIG;
 BEGIN { @ORIG = @INC }
@@ -22,25 +22,13 @@ diaginc();
 
 is( $INC[0], ".", "before import: $INC[0]" );
 ex::lib->import( '.' );
-like( $INC[0], qr{^/}, "after import: $INC[0]" );
-
 diag "Bin = `$FindBin::Bin' ;. is `$INC[0]'";
+is( $FindBin::Bin, $INC[0], '. => $FindBin::Bin' );
 
 diaginc();
 
-SKIP: {
-	is( $FindBin::Bin, $INC[0], '. => $FindBin::Bin' );
-	skip("Cwd.pm required to check cwd", 1)
-		unless eval "use Cwd (); 1";
-	( my $file = __FILE__ ) =~ s{/[^/]+$}{}s;
-	my $cwd = Cwd::abs_path($file);
-	like( $cwd, qr/^\Q$INC[0]\E/, '. => cwd' );
-}
-
 ex::lib->unimport( '.' );
 ok(!ex, 'no ex inc');
-
-like(ex::lib::mkapath(0), qr{^/}, 'path is absolute');
 
 diaginc();
 
