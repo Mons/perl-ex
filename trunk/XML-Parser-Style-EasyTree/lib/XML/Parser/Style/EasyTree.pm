@@ -36,7 +36,7 @@ will be
 
 =over 4
 
-=item $ATTR_PREFIX [ = '-' ]
+=item $TEXT{ATTR} [ = '-' ]
 
 Allow to set prefix for name of attribute nodes;
 
@@ -44,7 +44,12 @@ Allow to set prefix for name of attribute nodes;
 	# will be
 	item => { -attr => 'value' };
 
-=item $TEXT_NODE_KEY [ = '#text' ]
+	# with
+	$TEXT{ATTR} = '+';
+	# will be
+	item => { '+attr' => 'value' };
+	
+=item $TEXT{NODE} [ = '#text' ]
 
 Allow to set name for text nodes
 
@@ -52,23 +57,62 @@ Allow to set name for text nodes
 	# will be
 	item => { sub => { -attr => "t" }, #text => 'Text value' };
 
+	# with
+	$TEXT{NODE} = '';
+	# will be
+	item => { sub => { -attr => "t" }, '' => 'Text value' };
+
 =item %FORCE_ARRAY
 
-Allow to force single nodes to be represented always as arrays.
+Allow to force nodes to be represented always as arrays. If name is empty string, then ot means ALL
 
-	# $FORCE_ARRAY{sub} = 1;
 	<item><sub attr="t"></sub>Text value</item>
+
+	# will be
+	item => { sub => { -attr => "t" }, #text => 'Text value' };
+
+	# with
+	$FORCE_ARRAY{sub} = 1;
 	# will be
 	item => { sub => [ { -attr => "t" } ], #text => 'Text value' };
 
+	# with
+	$FORCE_ARRAY{''} = 1;
+	# will be
+	item => [ { sub => [ { -attr => "t" } ], #text => 'Text value' } ];
+
 =item %FORCE_HASH
 
-Allow to force text-only nodes to be represented always as hashes.
+Allow to force text-only nodes to be represented always as hashes. If name is empty string, then ot means ALL
 
-	# $FORCE_HASH{sub} = 1;
-	<item><sub>Text value</sub></item>
+	<item><sub>Text value</sub><any>Text value</any></item>
+
 	# will be
-	item => { sub => { #text => 'Text value' } };
+	item => { sub => 'Text value', any => 'Text value' };
+
+	# with
+	$FORCE_HASH{sub} = 1;
+	# will be
+	item => { sub => { #text => 'Text value' }, any => 'Text value' };
+
+	# with
+	$FORCE_HASH{''} = 1;
+	# will be
+	item => { sub => { #text => 'Text value' }, any => { #text => 'Text value' } };
+
+=item @STRIP_KEY
+
+Allow to strip something from tag names by regular expressions
+
+	<a:item><b:sub>Text value</b:sub></a:item>
+
+	# will be
+	'a:item' => { 'b:sub' => 'Text value' };
+
+	# with
+	@STRIP_KEY = (qr/^[^:]+:/);
+	# will be
+	'item' => { 'sub' => 'Text value' };
 
 =back
 
@@ -87,13 +131,12 @@ our %TEXT = (
 	NODE => '#text',
 );
 
-our $STRIP_KEY;
+our @STRIP_KEY;
 
-our $FORCE_ARRAY_ALL   = 0;
-our %FORCE_ARRAY;
+# '' means all since this can't be a name of tag
 
-our $FORCE_HASH_ALL   = 0;
-our %FORCE_HASH;
+our %FORCE_ARRAY = ( '' => 0 );
+our %FORCE_HASH = ( '' => 0 );
 
 
 sub Init {
@@ -115,7 +158,7 @@ sub Start {
     
 	#if ($enc) { @_ = @_; $_ = $enc->encode($_) for @_ };
 	my $tag = shift;
-    $tag =~ s{$STRIP_KEY}{} if $STRIP_KEY;
+    $tag =~ s{$_}{} for @STRIP_KEY;
 	warn "++"x(++$t->{depth}) . $tag if DEBUG;
 				
 	my $node = {
@@ -146,7 +189,7 @@ sub End  {
     
     #if ($enc) { @_ = @_; $_ = $enc->encode($_) for @_ };
     my $name = shift;
-    $name =~ s{$STRIP_KEY}{} if $STRIP_KEY;
+    $name =~ s{$_}{} for @STRIP_KEY;
     
     #my $node = pop @stack;
     my $text = $t->{context}{text};
@@ -155,9 +198,9 @@ sub End  {
     my $tree = $t->{context}{tree};
 
     my $haschild = scalar keys %$tree;
-    if ( ! $FORCE_ARRAY_ALL ) {
+    if ( ! $FORCE_ARRAY{''} ) {
         foreach my $key ( keys %$tree ) {
-			warn "$key for $name\n";
+			#warn "$key for $name\n";
             next if $FORCE_ARRAY{$key};
             next if ( 1 < scalar @{ $tree->{$key} } );
             $tree->{$key} = shift @{ $tree->{$key} };
@@ -192,7 +235,9 @@ sub End  {
     #warn "parent for $name = $context->{parent}\n";
     my $elem = $t->{context}{attrs};
     my $hasattr = scalar keys %$elem if ref $elem;
-    my $forcehash = $FORCE_HASH_ALL || ( $t->{context}{parent}{name} && $FORCE_HASH{$t->{context}{parent}{name}} );
+#    my $forcehash = $FORCE_HASH_ALL || ( $t->{context}{parent}{name} && $FORCE_HASH{$t->{context}{parent}{name}} ) || 0;
+    my $forcehash = $FORCE_HASH{''} || ( $name && $FORCE_HASH{$name} ) || 0;
+	#warn "$t->{context}{parent}{name} => $name forcehash = $forcehash\n";
     $t->{context} = $t->{context}{parent};
     
     #warn "$context->{name} have ".Dumper ($elem);
@@ -209,7 +254,7 @@ sub End  {
     else {
         if ( $hasattr ) {
             # some attributes and text node
-			warn "${name}: some attributes and text node";
+			#warn "${name}: some attributes and text node";
             $elem->{$TEXT{NODE}} = $child;
         }
         elsif ( $forcehash ) {
@@ -258,7 +303,7 @@ sub Final {
     my $xp = shift;
     my $tree = $xp->{FunTree}{context}{tree};
     delete $xp->{FunTree};
-    if ( ! $FORCE_ARRAY_ALL ) {
+    if ( ! $FORCE_ARRAY{''} ) {
         foreach my $key ( keys %$tree ) {
             next if $FORCE_ARRAY{$key};
             next if ( 1 < scalar @{ $tree->{$key} } );
@@ -276,7 +321,7 @@ sub Final {
 
 =head1 AUTHOR
 
-Mons Anderson, C<< <mons at cpan.org> >>
+Mons Anderson, <mons at cpan.org>
 
 =head1 BUGS
 
