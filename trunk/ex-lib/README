@@ -2,13 +2,13 @@ NAME
     ex::lib - The same as "lib", but makes relative path absolute.
 
 VERSION
-    Version 0.03
+    Version 0.04
 
 SYNOPSIS
     Simple use like "use lib ...":
 
-            use ex::lib qw(./mylibs1 ../mylibs2);
-            use ex::lib 'mylibs';
+        use ex::lib qw(./mylibs1 ../mylibs2);
+        use ex::lib 'mylibs';
 
 THE GOAL
     The main reason of this library is transformate relative paths to
@@ -17,24 +17,24 @@ THE GOAL
     file, where the statement is. When using common "lib", relative paths
     stays relative to curernt working directory,
 
-            # For ex:
-            # script: /opt/scripts/my.pl
-            use ex::lib '../lib';
+        # For ex:
+        # script: /opt/scripts/my.pl
+        use ex::lib '../lib';
 
-            # We run `/opt/scripts/my.pl` having cwd /home/mons
-            # The @INC will contain '/opt/lib';
+        # We run `/opt/scripts/my.pl` having cwd /home/mons
+        # The @INC will contain '/opt/lib';
 
-            # We run `./my.pl` having cwd /opt
-            # The @INC will contain '/opt/lib';
+        # We run `./my.pl` having cwd /opt
+        # The @INC will contain '/opt/lib';
 
-            # We run `../my.pl` having cwd /opt/lib
-            # The @INC will contain '/opt/lib';
+        # We run `../my.pl` having cwd /opt/lib
+        # The @INC will contain '/opt/lib';
 
     Also this module is very useful when writing tests, when you want to
     load strictly the module from ../lib, respecting the test file.
 
-            # t/00-test.t
-            use ex::lib '../lib';
+        # t/00-test.t
+        use ex::lib '../lib';
 
     Also this is useful, when you running under "mod_perl", use something
     like "Apache::StatINC", and your application may change working
@@ -51,5 +51,5 @@ COPYRIGHT & LICENSE
     under the same terms as Perl itself.
 
 AUTHOR
-    Mons Anderson, "<mons@cpan.org>"
+    Mons Anderson, <mons@cpan.org>
 
