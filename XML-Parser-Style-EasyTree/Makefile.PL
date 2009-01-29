@@ -7,7 +7,7 @@ author   'Mons Anderson <mons@cpan.org>';
 build_requires 'Test::More';
 build_requires 'ex::lib';
 
-requires 'Scalar::Util'
+requires 'Scalar::Util';
 
 auto_install;
 

@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 
 MODULE=lib/XML/Parser/Style/EasyTree.pm
+perl=perl
+echo "perl=$perl"
 
 rm -rf MANIFEST.bak MANIFEST Makefile.old && \
+echo > '_.tar.gz' && \
 pod2text $MODULE > README && \
-perl -i -lpne 's{^\s+$}{};s{^    ((?: {8})+)}{" "x(4+length($1)/2)}se;' README && \
-perl Makefile.PL && \
+$perl -i -lpne 's{^\s+$}{};s{^    ((?: {8})+)}{" "x(4+length($1)/2)}se;' README && \
+$perl Makefile.PL && \
 rm *.tar.gz && \
 make manifest && \
-perl -i -lne 'print unless /(?:\.tar\.gz$|^dist)/' MANIFEST && \
+$perl -i -lne 'print unless /(?:\.tar\.gz$|^dist)/' MANIFEST && \
 make clean && \
-perl Makefile.PL && \
+$perl Makefile.PL && \
 make && \
 make test && \
 make disttest && \

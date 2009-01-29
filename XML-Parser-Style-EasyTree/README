@@ -18,33 +18,83 @@ EXAMPLE
         # ...
 
 SPECIAL VARIABLES
-    $ATTR_PREFIX [ = '-' ]
+    $TEXT{ATTR} [ = '-' ]
         Allow to set prefix for name of attribute nodes;
 
             <item attr="value" />
             # will be
             item => { -attr => 'value' };
 
-    $TEXT_NODE_KEY [ = '#text' ]
+            # with
+            $TEXT{ATTR} = '+';
+            # will be
+            item => { '+attr' => 'value' };
+
+    $TEXT{NODE} [ = '#text' ]
         Allow to set name for text nodes
 
             <item><sub attr="t"></sub>Text value</item>
             # will be
             item => { sub => { -attr => "t" }, #text => 'Text value' };
 
-    %FORCE_ARRAY
-        Allow to force nodes to be threated always as arrays.
+            # with
+            $TEXT{NODE} = '';
+            # will be
+            item => { sub => { -attr => "t" }, '' => 'Text value' };
 
-            # $FORCE_ARRAY{sub} = 1;
+    %FORCE_ARRAY
+        Allow to force nodes to be represented always as arrays. If name is
+        empty string, then ot means ALL
+
             <item><sub attr="t"></sub>Text value</item>
+
+            # will be
+            item => { sub => { -attr => "t" }, #text => 'Text value' };
+
+            # with
+            $FORCE_ARRAY{sub} = 1;
             # will be
             item => { sub => [ { -attr => "t" } ], #text => 'Text value' };
 
+            # with
+            $FORCE_ARRAY{''} = 1;
+            # will be
+            item => [ { sub => [ { -attr => "t" } ], #text => 'Text value' } ];
+
     %FORCE_HASH
-        Allow to force nodes to be threated always as hashes.
+        Allow to force text-only nodes to be represented always as hashes.
+        If name is empty string, then ot means ALL
+
+            <item><sub>Text value</sub><any>Text value</any></item>
+
+            # will be
+            item => { sub => 'Text value', any => 'Text value' };
+
+            # with
+            $FORCE_HASH{sub} = 1;
+            # will be
+            item => { sub => { #text => 'Text value' }, any => 'Text value' };
+
+            # with
+            $FORCE_HASH{''} = 1;
+            # will be
+            item => { sub => { #text => 'Text value' }, any => { #text => 'Text value' } };
+
+    @STRIP_KEY
+        Allow to strip something from tag names by regular expressions
+
+            <a:item><b:sub>Text value</b:sub></a:item>
+
+            # will be
+            'a:item' => { 'b:sub' => 'Text value' };
+
+            # with
+            @STRIP_KEY = (qr/^[^:]+:/);
+            # will be
+            'item' => { 'sub' => 'Text value' };
 
 AUTHOR
-    Mons Anderson, "<mons at cpan.org>"
+    Mons Anderson, <mons at cpan.org>
 
 BUGS
     None known
