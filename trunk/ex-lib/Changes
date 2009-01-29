@@ -1,5 +1,15 @@
 Revision history for ex-lib
 
+0.04    2009-01-29
+        Fixes for win32
+        Add strict dependency on Cwd
+
+0.03    2009-01-28
+        Fixes for perl < 5.8
+
+0.02    2009-01-23
+        Minor fixes
+
 0.01    2008-09-09
         First version, released on an unsuspecting world.
 
