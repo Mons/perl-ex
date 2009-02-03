@@ -10,4 +10,4 @@ eval "use Test::Pod $min_tp";
 $@ and plan skip_all => "Test::Pod $min_tp required for testing POD";
 plan tests => 1;
 
-pod_file_ok($INC{ 'ex/lib.pm' });
+pod_file_ok($INC{ 'lvalue.pm' });
