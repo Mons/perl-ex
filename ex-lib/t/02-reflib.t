@@ -2,7 +2,8 @@
 
 use strict;
 use FindBin;
-use lib '.',"$FindBin::Bin/../lib";
+use overload (); # Test::More uses overload in runtime. With modified INC it may fail
+use lib "$FindBin::Bin/../lib";
 use Test::More tests => 1;
 use ex::lib sub {};
 
