@@ -2,9 +2,9 @@
 
 MODULE=lib/XML/Parser/Style/EasyTree.pm
 perl=perl
-echo "perl=$perl"
+$perl -v
 
-rm -rf MANIFEST.bak MANIFEST Makefile.old && \
+rm -rf MANIFEST.bak MANIFEST Makefile.old META.yml && \
 echo > '_.tar.gz' && \
 pod2text $MODULE > README && \
 $perl -i -lpne 's{^\s+$}{};s{^    ((?: {8})+)}{" "x(4+length($1)/2)}se;' README && \
