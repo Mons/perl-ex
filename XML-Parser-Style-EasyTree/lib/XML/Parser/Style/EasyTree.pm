@@ -10,11 +10,11 @@ XML::Parser::Style::EasyTree - Parse xml to simple tree
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
@@ -61,6 +61,19 @@ Allow to set name for text nodes
 	$TEXT{NODE} = '';
 	# will be
 	item => { sub => { -attr => "t" }, '' => 'Text value' };
+
+=item $TEXT{JOIN} [ = '' ]
+
+Allow to set join separator for text node, splitted by subnodes
+
+	<item>Test1<sub />Test2</item>
+	# will be
+	item => { sub => '', #text => 'Test1Test2' };
+
+	# with
+	$TEXT{JOIN} = '+';
+	# will be
+	item => { sub => '', #text => 'Test1+Test2' };
 
 =item %FORCE_ARRAY
 
@@ -129,6 +142,7 @@ our $TEXT_NODE_KEY     = '#text';
 our %TEXT = (
 	ATTR => '-',
 	NODE => '#text',
+	JOIN => '',
 );
 
 our @STRIP_KEY;
@@ -165,6 +179,7 @@ sub Start {
         name  => $tag,
         tree  => undef,
 		text  => [],
+		textflag => 0,
     };
     Scalar::Util::weaken($node->{parent} = $t->{context});
     if (@_) {
@@ -177,6 +192,8 @@ sub Start {
         #warn "Need something to do with attrs on $tag\n";
     };
     $t->{opentag} = 1;
+	push @{ $t->{context}{text} }, $TEXT{JOIN} if $t->{context}{textflag} and length $TEXT{JOIN};
+	$t->{context}{textflag} = 0;
     
     push @stack, $t->{context} = $node;
 }
@@ -214,7 +231,7 @@ sub End  {
         }
         else {
             # some text node splitted
-            $text = join( ' ', @$text );
+            $text = join( '', @$text );
         }
         if ( $haschild ) {
             # some child nodes and also text node
@@ -291,7 +308,10 @@ sub Char {
     #if ($t->{opentag}) {
 	$text =~ s{(?:^[\t\s\r\n]+|[\t\s\r\n]+$)}{}sg;
 	#warn "text '$text' for $t->{context}{name} to haven @{ $t->{context}{text} }";
-    push @{ $t->{context}{text} }, $text if length $text;
+	if ( length $text ){
+		push @{ $t->{context}{text} }, $text;
+		$t->{context}{textflag} = 1;
+	};
     #}else{
 		#warn "dropping text '$text': no open node" if length $text;
 	#}
