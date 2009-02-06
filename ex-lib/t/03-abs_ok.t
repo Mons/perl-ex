@@ -17,7 +17,7 @@ use ex::lib
 	'./',
 	'.',
 ;
-BEGIN { @chk = splice @INC, 0 , 0+@inc-@INC } # Don't left anything testing in lib
+BEGIN { @chk = splice @INC, 0 , 0+@INC-@inc } # Don't left anything testing in lib
 
 is($chk[0], '///opt/perl/lib', 'absolute path stay unchanged');
 is($chk[1], '//opt/perl/lib',  'absolute path stay unchanged');
