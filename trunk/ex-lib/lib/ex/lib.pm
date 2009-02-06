@@ -68,7 +68,7 @@ use lib ();
 use Cwd 3.29 qw(abs_path);
 $ex::lib::VERSION = 0.04;
 
-sub DEBUG () { 2 }; # use constants is heavy
+sub DEBUG () { 0 }; # use constants is heavy
 
 sub _carp  { require Carp; Carp::carp(@_)  }
 sub _croak { require Carp; Carp::croak(@_) }
