@@ -67,6 +67,11 @@ use strict;
 use lib ();
 use Cwd 3.29 qw(abs_path);
 $ex::lib::VERSION = 0.04;
+# TODO: check, fix, extend patterns
+$ex::lib::sep = {
+	( map { $_ => qr{[^\\/]+$}o } qw(mswin32 netware symbian dos) ),
+	( map { $_ => qr{[^:]+:?$}o } qw(macos) ),
+}->{lc$^O} || qr{[^/]+$}o;
 
 sub DEBUG () { 0 }; # use constants is heavy
 
@@ -79,7 +84,7 @@ sub mkapath($) {
 	# Prepare absolute base bath
 	my ($pkg,$file) = (caller($depth))[0,1];
 	warn "file = $file " if DEBUG > 1;
-	$file =~ s{[^/]+$}{}s;
+	$file =~ s/${ex::lib::sep}//s;
 	$file = '.' unless length $file;
 	warn "base path = $file" if DEBUG > 1;
 	my $f = abs_path($file) . '/';
