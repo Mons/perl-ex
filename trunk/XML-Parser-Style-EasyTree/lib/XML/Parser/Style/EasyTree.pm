@@ -14,7 +14,7 @@ Version 0.02
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 =head1 SYNOPSIS
@@ -24,13 +24,35 @@ our $VERSION = '0.02';
 
 =head1 EXAMPLE
 
-	<root>
-		
+	<root at="key">
+		<nest>
+			first
+			<v>a</v>
+			mid
+			<v at="a">b</v>
+			<vv></vv>
+			last
+		</nest>
 	</root>
 
 will be
 
-	# ...
+	{
+		root => {
+			'-at' => 'key',
+			nest => {
+				'#text' => 'firstmidlast',
+				vv => '',
+				v => [
+					'a',
+					{
+						'-at' => 'a',
+						'#text' => 'b'
+					}
+				]
+			}
+		}
+	}
 
 =head1 SPECIAL VARIABLES
 
@@ -131,10 +153,7 @@ Allow to strip something from tag names by regular expressions
 
 =cut
 
-sub DEBUG { 0 };
-
-our @stack;
-our %tree;
+sub DEBUG () { 0 };
 
 our $ATTR_PREFIX       = '-';
 our $TEXT_NODE_KEY     = '#text';
@@ -154,187 +173,185 @@ our %FORCE_HASH = ( '' => 0 );
 
 
 sub Init {
-    my $xp = shift;
-    my $t = $xp->{FunTree} ||= {};
-    $t->{stack} = [];
-    $t->{tree} = {};
-    $t->{context} = { tree => {}, text => [] };
-    $t->{opentag} = undef;
+	my $xp = shift;
+	my $t = $xp->{FunTree} ||= {};
+	$t->{stack} = [];
+	$t->{tree} = {};
+	$t->{context} = { tree => {}, text => [] };
+	$t->{opentag} = undef;
 	$t->{depth} = 0 if DEBUG;
-    return;
+	return;
 }
 
 sub Start {
-    my $xp = shift;
-    my $t = $xp->{FunTree};
-    local *stack    = $t->{stack};
-    local *tree     = $t->{tree};
-    
+	my $xp = shift;
+	my $t = $xp->{FunTree};
+	
 	#if ($enc) { @_ = @_; $_ = $enc->encode($_) for @_ };
 	my $tag = shift;
-    $tag =~ s{$_}{} for @STRIP_KEY;
+	$tag =~ s{$_}{} for @STRIP_KEY;
 	warn "++"x(++$t->{depth}) . $tag if DEBUG;
 				
 	my $node = {
-        name  => $tag,
-        tree  => undef,
+		name  => $tag,
+		tree  => undef,
 		text  => [],
 		textflag => 0,
-    };
-    Scalar::Util::weaken($node->{parent} = $t->{context});
-    if (@_) {
-        my %attr;
-        while (my ($k,$v) = splice @_,0,2) {
-            $attr{ $TEXT{ATTR}.$k } = $v;
-        }
-        #$flat[$#flat]{attributes} = \%attr;
-        $node->{attrs} = \%attr;
-        #warn "Need something to do with attrs on $tag\n";
-    };
-    $t->{opentag} = 1;
-	push @{ $t->{context}{text} }, $TEXT{JOIN} if $t->{context}{textflag} and length $TEXT{JOIN};
+	};
+	Scalar::Util::weaken($node->{parent} = $t->{context});
+	if (@_) {
+		my %attr;
+		while (my ($k,$v) = splice @_,0,2) {
+			$attr{ $TEXT{ATTR}.$k } = $v;
+		}
+		#$flat[$#flat]{attributes} = \%attr;
+		$node->{attrs} = \%attr;
+		#warn "Need something to do with attrs on $tag\n";
+	};
+	$t->{opentag} = 1;
+	{
+		if (@{ $t->{context}{text} }) {
+			${ $t->{context}{text} }[ $#{ $t->{context}{text} } ] =~ s{[\t\s\r\n]+$}{}s;
+			# warn "cleaning trailing whitespace on $#{ $t->{context}{text} } :  ${ $t->{context}{text} }[ $#{ $t->{context}{text} } ]";
+			pop (@{ $t->{context}{text} }),redo unless length ${ $t->{context}{text} }[ $#{ $t->{context}{text} } ];
+		}
+	}
+	#push @{ $t->{context}{text} }, $TEXT{JOIN} if $t->{context}{textflag} and length $TEXT{JOIN};
 	$t->{context}{textflag} = 0;
-    
-    push @stack, $t->{context} = $node;
+	
+	push @{ $t->{stack} }, $t->{context} = $node;
 }
 
 sub End  {
-    my $xp = shift;
-    my $t = $xp->{FunTree};
-    local *stack    = $t->{stack};
-    local *tree     = $t->{tree};
-    
-    #if ($enc) { @_ = @_; $_ = $enc->encode($_) for @_ };
-    my $name = shift;
-    $name =~ s{$_}{} for @STRIP_KEY;
-    
-    #my $node = pop @stack;
-    my $text = $t->{context}{text};
-    $t->{opentag} = 0;
-    
-    my $tree = $t->{context}{tree};
+	my $xp = shift;
+	my $t = $xp->{FunTree};
+	
+	#if ($enc) { @_ = @_; $_ = $enc->encode($_) for @_ };
+	my $name = shift;
+	$name =~ s{$_}{} for @STRIP_KEY;
+	
+	#my $node = pop @stack;
+	my $text = $t->{context}{text};
+	$t->{opentag} = 0;
+	
+	my $tree = $t->{context}{tree};
 
-    my $haschild = scalar keys %$tree;
-    if ( ! $FORCE_ARRAY{''} ) {
-        foreach my $key ( keys %$tree ) {
+	my $haschild = scalar keys %$tree;
+	if ( ! $FORCE_ARRAY{''} ) {
+		foreach my $key ( keys %$tree ) {
 			#warn "$key for $name\n";
-            next if $FORCE_ARRAY{$key};
-            next if ( 1 < scalar @{ $tree->{$key} } );
-            $tree->{$key} = shift @{ $tree->{$key} };
-        }
-    }
-    if ( @$text ) {
+			next if $FORCE_ARRAY{$key};
+			next if ( 1 < scalar @{ $tree->{$key} } );
+			$tree->{$key} = shift @{ $tree->{$key} };
+		}
+	}
+	if ( @$text ) {
+		{
+			${ $text }[ $#$text ] =~ s{[\t\s\r\n]+$}{}s;
+			# warn "cleaning trailing whitespace on $#$text :${ $text }[ $#$text ]";
+			pop (@$text),redo unless length ${ $text }[ $#$text ];
+		}
 		#warn "node $name have text '@$text'";
-        if ( @$text == 1 ) {
-            # one text node (normal)
-            $text = shift @$text;
-        }
-        else {
-            # some text node splitted
-            $text = join( '', @$text );
-        }
-        if ( $haschild ) {
-            # some child nodes and also text node
-            $tree->{$TEXT{NODE}} = $text;
-        }
-        else {
-            # only text node without child nodes
-            $tree = $text;
-        }
-    }
-    elsif ( ! $haschild ) {
-        # no child and no text
-        $tree = "";
-    }
-    
-    # Move up!
-    my $child = $tree;
-    #warn "parent for $name = $context->{parent}\n";
-    my $elem = $t->{context}{attrs};
-    my $hasattr = scalar keys %$elem if ref $elem;
+		if ( @$text == 1 ) {
+			# one text node (normal)
+			$text = shift @$text;
+		}
+		else {
+			# some text node splitted
+			$text = join( $TEXT{JOIN}, @$text );
+		}
+		if ( $haschild ) {
+			# some child nodes and also text node
+			$tree->{$TEXT{NODE}} = $text;
+		}
+		else {
+			# only text node without child nodes
+			$tree = $text;
+		}
+	}
+	elsif ( ! $haschild ) {
+		# no child and no text
+		$tree = "";
+	}
+	
+	# Move up!
+	my $child = $tree;
+	#warn "parent for $name = $context->{parent}\n";
+	my $elem = $t->{context}{attrs};
+	my $hasattr = scalar keys %$elem if ref $elem;
 #    my $forcehash = $FORCE_HASH_ALL || ( $t->{context}{parent}{name} && $FORCE_HASH{$t->{context}{parent}{name}} ) || 0;
-    my $forcehash = $FORCE_HASH{''} || ( $name && $FORCE_HASH{$name} ) || 0;
+	my $forcehash = $FORCE_HASH{''} || ( $name && $FORCE_HASH{$name} ) || 0;
 	#warn "$t->{context}{parent}{name} => $name forcehash = $forcehash\n";
-    $t->{context} = $t->{context}{parent};
-    
-    #warn "$context->{name} have ".Dumper ($elem);
-    if ( UNIVERSAL::isa( $child, "HASH" ) ) {
-        if ( $hasattr ) {
-            # some attributes and some child nodes
-            %$elem = ( %$elem, %$child );
-        }
-        else {
-            # some child nodes without attributes
-            $elem = $child;
-        }
-    }
-    else {
-        if ( $hasattr ) {
-            # some attributes and text node
+	$t->{context} = $t->{context}{parent};
+	
+	#warn "$context->{name} have ".Dumper ($elem);
+	if ( ref $child eq "HASH" ) {
+		if ( $hasattr ) {
+			# some attributes and some child nodes
+			%$elem = ( %$elem, %$child );
+		}
+		else {
+			# some child nodes without attributes
+			$elem = $child;
+		}
+	}
+	else {
+		if ( $hasattr ) {
+			# some attributes and text node
 			#warn "${name}: some attributes and text node";
-            $elem->{$TEXT{NODE}} = $child;
-        }
-        elsif ( $forcehash ) {
-            # only text node without attributes
-            $elem = { $TEXT{NODE} => $child };
-        }
-        else {
-            # text node without attributes
-            $elem = $child;
-        }
-    }
-    
+			$elem->{$TEXT{NODE}} = $child;
+		}
+		elsif ( $forcehash ) {
+			# only text node without attributes
+			$elem = { $TEXT{NODE} => $child };
+		}
+		else {
+			# text node without attributes
+			$elem = $child;
+		}
+	}
+	
 	warn "--"x($t->{depth}--) . $name if DEBUG;
-    push @{ $t->{context}{tree}{$name} ||= [] },$elem;
-    $name = $t->{context}{name};
-    $tree = $t->{context}{tree} ||= {};
-    
-    warn "unused args on /$name: @_" if @_;
+	push @{ $t->{context}{tree}{$name} ||= [] },$elem;
+	$name = $t->{context}{name};
+	$tree = $t->{context}{tree} ||= {};
+	
+	warn "unused args on /$name: @_" if @_;
 }
 
 sub Char {
-    my $xp = shift;
-    my $t = $xp->{FunTree};
-    local *stack    = $t->{stack};
-    local *tree     = $t->{tree};
-    #if ($enc) { @_ = @_; $_ = $enc->encode($_) for @_ };
-    my $text = shift;
-    
-    #do {
-    #	local $Data::Dumper::Indent = 0;
-    #	local $Data::Dumper::Terse = 1;
-    #	warn qq{open="$opentag"; text=}.Dumper($text) if $text =~ /\S/;
-    #} if DEBUG_ENCODING;
-    #if ($t->{opentag}) {
-	$text =~ s{(?:^[\t\s\r\n]+|[\t\s\r\n]+$)}{}sg;
-	#warn "text '$text' for $t->{context}{name} to haven @{ $t->{context}{text} }";
+	my $xp = shift;
+	my $t = $xp->{FunTree};
+	#if ($enc) { @_ = @_; $_ = $enc->encode($_) for @_ };
+	my $text = shift;
+	unless ($t->{context}{textflag}) {
+		$text =~ s{^[\t\s\r\n]+}{}s;
+	}
 	if ( length $text ){
-		push @{ $t->{context}{text} }, $text;
+		warn ".."x(1+$t->{depth}) . $text if DEBUG;
+		if ($t->{context}{textflag}) {
+			${ $t->{context}{text} }[ $#{ $t->{context}{text} } ] .= $text;
+		} else {
+			push @{ $t->{context}{text} }, $text;
+		}
 		$t->{context}{textflag} = 1;
 	};
-    #}else{
-		#warn "dropping text '$text': no open node" if length $text;
-	#}
-    #warn "unused args on char: @_" if @_;
-    #warn " @{$ex->{Context}} : char \"$text\" @_\n";
 }
 
 sub Final {
-    my $xp = shift;
-    my $tree = $xp->{FunTree}{context}{tree};
-    delete $xp->{FunTree};
-    if ( ! $FORCE_ARRAY{''} ) {
-        foreach my $key ( keys %$tree ) {
-            next if $FORCE_ARRAY{$key};
-            next if ( 1 < scalar @{ $tree->{$key} } );
-            $tree->{$key} = shift @{ $tree->{$key} };
-        }
-    }
-    return $tree;
+	my $tree = $_[0]{FunTree}{context}{tree};
+	delete $_[0]{FunTree};
+	if ( ! $FORCE_ARRAY{''} ) {
+		foreach my $key ( keys %$tree ) {
+			next if $FORCE_ARRAY{$key};
+			next if ( 1 < scalar @{ $tree->{$key} } );
+			$tree->{$key} = shift @{ $tree->{$key} };
+		}
+	}
+	return $tree;
 }
-        
+		
 #eval { $p->parse($$textref); } or Carp::croak "$$textref, $@\n";
-
 
 1;
 

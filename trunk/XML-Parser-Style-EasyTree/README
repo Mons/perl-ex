@@ -9,13 +9,35 @@ SYNOPSIS
         my $p = XML::Parser->new( Style => 'EasyTree' );
 
 EXAMPLE
-        <root>
-
+        <root at="key">
+            <nest>
+                first
+                <v>a</v>
+                mid
+                <v at="a">b</v>
+                <vv></vv>
+                last
+            </nest>
         </root>
 
     will be
 
-        # ...
+        {
+            root => {
+                '-at' => 'key',
+                nest => {
+                    '#text' => 'firstmidlast',
+                    vv => '',
+                    v => [
+                        'a',
+                        {
+                            '-at' => 'a',
+                            '#text' => 'b'
+                        }
+                    ]
+                }
+            }
+        }
 
 SPECIAL VARIABLES
     $TEXT{ATTR} [ = '-' ]

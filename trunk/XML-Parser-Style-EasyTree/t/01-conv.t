@@ -1,7 +1,7 @@
 #!/use/bin/perl -w
 
 use strict;
-use Test::More tests => 9;
+use Test::More tests => 12;
 use ex::lib '../lib';
 use XML::Parser;
 use Data::Dumper ();
@@ -28,6 +28,23 @@ my $xml1 = q{
 	</root>
 };
 
+my $xml2 = q{
+	<root at="key">
+		<nest>
+			first &amp; mid &amp; last
+		</nest>
+	</root>
+};
+
+my $xml3 = q{
+	<root at="key">
+		<nest>
+			first &amp; <v>x</v> &amp; last
+		</nest>
+	</root>
+};
+
+
 our $parser = XML::Parser->new( Style => 'EasyTree' );
 our $data;
 #my $data;
@@ -37,6 +54,29 @@ our $data;
 	is_deeply
 		$data = $parser->parse($xml1),
 		{root => {'-at' => 'key',nest => {'#text' => 'firstmidlast',vv => '',v => ['a',{'-at' => 'a','#text' => 'b'}]}}},
+		'default'
+	or print dd($data),"\n";
+}
+{
+	is_deeply
+		$data = $parser->parse($xml2),
+		{root => {'-at' => 'key',nest => 'first & mid & last'}},
+		'default'
+	or print dd($data),"\n";
+}
+{
+	local $TX{JOIN} = '+';
+	is_deeply
+		$data = $parser->parse($xml2),
+		{root => {'-at' => 'key',nest => 'first & mid & last'}},
+		'default'
+	or print dd($data),"\n";
+}
+{
+	local $TX{JOIN} = '+';
+	is_deeply
+		$data = $parser->parse($xml3),
+		{root => {'-at' => 'key',nest => { '#text' => 'first &+& last', v => 'x' } }},
 		'default'
 	or print dd($data),"\n";
 }

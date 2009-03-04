@@ -1,5 +1,8 @@
 Revision history for XML-Parser-Style-EasyTree
 
+0.03    2009-03-04
+        Tune perfomance, one more fix joining of text nodes
+
 0.02    2009-02-05
         Fix joining of text nodes
 
