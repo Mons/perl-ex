@@ -1,5 +1,10 @@
 .cvsignore
 Changes
+examples/default.pl
+examples/devel.pl
+examples/production.pl
+examples/tdebug.pm
+examples/tnodebug.pm
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
@@ -20,5 +25,6 @@ META.yml
 README
 t/00-load.t
 t/01-check.t
+t/99-kwalitee.t
 t/pod-coverage.t
 t/pod.t

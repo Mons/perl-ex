@@ -3,16 +3,19 @@
 use strict;
 use warnings;
 use ex::lib '../lib';
-use Test::More tests => 5;
+use Test::More tests => 5+1;
+use Test::NoWarnings;
 
 use constant::abs 't::TEST' => 0;
 BEGIN {
 	local $@;
+	local $SIG{__WARN__} = sub {};
 	eval q{use constant::def undef, 0;};
-	like($@, qr/Constant name .+ is invalid/, 'undef name acts like constant');
+	ok($@, 'undef name acts like constant');
 }
 BEGIN {
 	local $@;
+	local $SIG{__WARN__} = sub {};
 	eval q{use constant::abs 't::ARGV' => 0;};
 	like($@, qr/forced into main::/, 'bad name acts like constant');
 }
