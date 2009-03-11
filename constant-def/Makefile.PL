@@ -5,7 +5,6 @@ author   'Mons Anderson <mons@cpan.org>';
 all_from 'lib/constant/def.pm';
 
 build_requires 'Test::More';
-#build_requires 'Test::NoWarnings';
 build_requires 'ex::lib' => 0.03;
 
 requires 'constant' => 1.05;
