@@ -4,6 +4,7 @@ use strict;
 use ex::lib '../lib';
 use Test::More tests => 2;
 
+
 BEGIN {
 	use_ok( 'constant::def' );
 	use_ok( 'constant::abs' );

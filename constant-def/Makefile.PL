@@ -7,7 +7,7 @@ all_from 'lib/constant/def.pm';
 build_requires 'Test::More';
 build_requires 'ex::lib' => 0.03;
 
-requires 'constant' => 0;
+requires 'constant' => 1.05;
 
 auto_install;
 

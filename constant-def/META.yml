@@ -14,10 +14,11 @@ meta-spec:
 name: constant-def
 no_index:
   directory:
+    - examples
     - inc
     - t
 requires:
-  constant: 0
+  constant: 1.05
 resources:
   license: http://dev.perl.org/licenses/
 version: 0.01
