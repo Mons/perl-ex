@@ -3,9 +3,12 @@
 use strict;
 use warnings;
 use ex::lib '../lib';
-use Test::More tests => 5+1;
-use Test::NoWarnings;
-
+use Test::More;
+BEGIN { 
+	my $tests = 5;
+	eval { require Test::NoWarnings; Test::NoWarnings->import; 1 } and $tests++;
+	plan tests => $tests;
+}
 use constant::abs 't::TEST' => 0;
 BEGIN {
 	local $@;
