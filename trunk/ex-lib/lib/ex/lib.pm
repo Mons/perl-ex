@@ -8,9 +8,13 @@ package ex::lib;
 
 ex::lib - The same as C<lib>, but makes relative path absolute.
 
+=cut
+
+$ex::lib::VERSION = 0.05;
+
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =head1 SYNOPSIS
 
@@ -66,7 +70,6 @@ Mons Anderson, <mons@cpan.org>
 use strict;
 use lib ();
 use Cwd 3.12 qw(abs_path);
-$ex::lib::VERSION = 0.05;
 $ex::lib::sep = {
 	( map { $_ => qr{[^\\/]+$}o } qw(mswin32 netware symbian dos) ),
 	( map { $_ => qr{[^:]+:?$}o } qw(macos) ),
@@ -74,8 +77,8 @@ $ex::lib::sep = {
 
 sub DEBUG () { 0 }; # use constants is heavy
 
-sub _carp  { require Carp; Carp::carp(@_)  }
-sub _croak { require Carp; Carp::croak(@_) }
+sub _carp  { require Carp; goto &Carp::carp  }
+sub _croak { require Carp; goto &Carp::croak }
 
 sub mkapath($) {
 	my $depth = shift;
