@@ -1,10 +1,14 @@
-#!/usr/bin/perl -w
+my $tests;
+BEGIN { $tests = 16; }
 
-use strict;
 use FindBin;
 use overload (); # Test::More uses overload in runtime. With modified INC it may fail
-use lib '.',"$FindBin::Bin/../lib";
-use Test::More tests => 8;
+use lib '.',"$FindBin::Bin/../lib",;
+use Test::More;
+BEGIN { eval { require Test::NoWarnings; Test::NoWarnings->import; 1 } and ++$tests }
+
+plan tests => $tests;
+diag( "Testing ex::lib $ex::lib::VERSION using Cwd $Cwd::VERSION, Perl $], $^X" );
 
 my @ORIG;
 BEGIN { @ORIG = @INC }
@@ -57,7 +61,7 @@ ok(!ex, 'dels paths');
 
 eval {
     require lib;
-    lib->import(@adirs);
+    'lib'->import(@adirs);
 };
 
 SKIP: {
@@ -67,19 +71,46 @@ SKIP: {
 };
 
 eval {
-    lib->unimport(@adirs);
+    'lib'->unimport(@adirs);
 };
 
 ex::lib->import( '.' );
+
+# Reflib
+
+@INC = ();
+ex::lib->import( sub {} );
+my $chk = shift @INC; # When left bad sub in @INC Test::Builder fails
+is(ref $chk, 'CODE', 'code in @INC');
+
+# Abs ok
+
+@INC = ();
+ex::lib->import(
+	'///opt/perl/lib',
+	'//opt/perl/lib',
+	'/opt/perl/lib',
+	'.///',
+	'.//',
+	'./',
+	'.',
+);
+my @chk = @INC; @INC = ();
+
+is($chk[0], '///opt/perl/lib', 'absolute path stay unchanged');
+is($chk[1], '//opt/perl/lib',  'absolute path stay unchanged');
+is($chk[2], '/opt/perl/lib',   'absolute path stay unchanged');
+SKIP: {
+    is($chk[3], $FindBin::Bin,     './// => .');
+    @chk > 4 or skip "Duplicates are collapsed",3;
+    is($chk[4], $FindBin::Bin,     '.// => .');
+    is($chk[5], $FindBin::Bin,     './ => .');
+    is($chk[6], $FindBin::Bin,     '. => .');
+}
+
 
 exit 0;
 
 END{
 	rmdir $_ for @adirs; # clean up
 }
-
-__END__
-diag "Need more tests for mkapath";
-		# .
-		# ./
-		# .//

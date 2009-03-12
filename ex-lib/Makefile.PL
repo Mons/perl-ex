@@ -8,7 +8,7 @@ build_requires 'Test::More';
 
 # From 0.04 strictly rely on Cwd
 #requires Cwd => '3.29';
-requires Cwd => '3.27';
+requires Cwd => '3.26';
 # FreeBDS: devel/p5-PathTools
 
 auto_install;
