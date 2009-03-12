@@ -65,7 +65,7 @@ Mons Anderson, <mons@cpan.org>
 
 use strict;
 use lib ();
-use Cwd 3.26 qw(abs_path);
+use Cwd 3.12 qw(abs_path);
 $ex::lib::VERSION = 0.05;
 $ex::lib::sep = {
 	( map { $_ => qr{[^\\/]+$}o } qw(mswin32 netware symbian dos) ),
@@ -92,7 +92,6 @@ sub mkapath($) {
 }
 
 sub transform {
-	local $@; # Don't poison $@
 	my $prefix;
 	map {
 		ref || m{^/} ? $_ : do {
@@ -109,7 +108,6 @@ sub transform {
 
 sub import {
 	shift;
-	local $@; # Don't poison $@
 	_croak("Bad usage. use ".__PACKAGE__." PATH") unless @_;
 	@_ = ( lib => transform @_ = @_ );
 	warn "use @_\n" if DEBUG > 0;
@@ -119,7 +117,6 @@ sub import {
 
 sub unimport {
 	shift;
-	local $@; # Don't poison $@
 	_croak("Bad usage. use ".__PACKAGE__." PATH") unless @_;
 	@_ = ( lib => transform @_ = @_ );
 	warn "no @_\n" if DEBUG > 0;

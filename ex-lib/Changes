@@ -1,7 +1,9 @@
 Revision history for ex-lib
 
-0.04    2009-03-12
-        Lower dependency on Cwd from 3.29 to 3.26
+0.05    2009-03-12
+        Lower dependency on Cwd from 3.29 to 3.12
+        Add tests for different versions of Cwd
+        Fix $@ bug
 
 0.04    2009-01-29
         Fixes for win32

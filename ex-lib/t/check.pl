@@ -1,27 +1,27 @@
+use strict;
 my $tests;
 BEGIN { $tests = 16; }
-
 use FindBin;
 use overload (); # Test::More uses overload in runtime. With modified INC it may fail
 use lib '.',"$FindBin::Bin/../lib",;
-use Test::More;
 BEGIN { eval { require Test::NoWarnings; Test::NoWarnings->import; 1 } and ++$tests }
-
-plan tests => $tests;
-diag( "Testing ex::lib $ex::lib::VERSION using Cwd $Cwd::VERSION, Perl $], $^X" );
+use Test::More tests => $tests;
 
 my @ORIG;
 BEGIN { @ORIG = @INC }
 our $DIAG = 0;
 
-sub ex () { @INC[0..@INC-@ORIG-1] }
+sub ex { @INC[0..@INC-@ORIG-1] }
 
 sub diaginc {
 	$DIAG or return;
-	diag +( @_ ? ($_[0].': ') : ( 'Add INC: ') ) . join ', ', map "'$_'", ex;
+	diag +( @_ ? ($_[0].': ') : ( 'Add INC: ') ) . join ', ', map "'$_'", ex();
 }
 
 use ex::lib ();
+
+diag( "Testing ex::lib $ex::lib::VERSION using Cwd $Cwd::VERSION, Perl $], $^X" );
+
 
 diaginc();
 
