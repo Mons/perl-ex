@@ -16,7 +16,7 @@ BEGIN {
     {
         local $@;
         eval q{ use ex::lib '../linux/macosx/windows/dos/path-that-never-exists'; }; # ;)
-        like($@,qr/Bad path/, 'wrong path failed');
+        ok($@, 'wrong path failed');
     }
 }
 
