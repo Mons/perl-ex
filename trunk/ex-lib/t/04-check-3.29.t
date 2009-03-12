@@ -2,9 +2,9 @@
 
 use strict;
 BEGIN {
-	( my $lib = $0 ) =~ s{[^/\\]+$}{lib/Cwd-3.29.pm};
+	( my $lib = $0 ) =~ s{[^/\\]+$}{lib/3.29/Cwd.pm};
 	require $lib;
 }
 ( my $exe = $0 ) =~ s{[^/\\]+$}{check.pl};
-do $exe;
+do $exe or die $@;
 
