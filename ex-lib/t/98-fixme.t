@@ -1,7 +1,9 @@
 #!/usr/bin/perl
 
 use strict;
-use ex::lib qw(.. ../lib);
+use FindBin;
+use Cwd;
+use lib "$FindBin::Bin/..","$FindBin::Bin/../lib";
 use Test::More;
 
 my $dist = shift @INC;
