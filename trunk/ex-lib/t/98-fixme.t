@@ -2,7 +2,6 @@
 
 use strict;
 use FindBin;
-use Cwd;
 use lib "$FindBin::Bin/..","$FindBin::Bin/../lib";
 use Test::More;
 
