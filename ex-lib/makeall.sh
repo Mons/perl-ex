@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-MODULE=lib/ex/lib.pm
+MODULE=`perl -ne 'print $1 if m{all_from.+?([\w/.]+)}' Makefile.PL`;
 perl=perl
 $perl -v
 
-rm -rf MANIFEST.bak MANIFEST Makefile.old META.yml && \
+rm -rf MANIFEST.bak MANIFEST Makefile.old && \
 echo > '_.tar.gz' && \
 pod2text $MODULE > README && \
 $perl -i -lpne 's{^\s+$}{};s{^    ((?: {8})+)}{" "x(4+length($1)/2)}se;' README && \
