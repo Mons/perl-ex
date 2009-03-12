@@ -65,9 +65,8 @@ Mons Anderson, <mons@cpan.org>
 
 use strict;
 use lib ();
-use Cwd 3.29 qw(abs_path);
-$ex::lib::VERSION = 0.04;
-# TODO: check, fix, extend patterns
+use Cwd 3.26 qw(abs_path);
+$ex::lib::VERSION = 0.05;
 $ex::lib::sep = {
 	( map { $_ => qr{[^\\/]+$}o } qw(mswin32 netware symbian dos) ),
 	( map { $_ => qr{[^:]+:?$}o } qw(macos) ),
