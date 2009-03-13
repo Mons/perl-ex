@@ -10,11 +10,11 @@ ex::lib - The same as C<lib>, but makes relative path absolute.
 
 =cut
 
-$ex::lib::VERSION = 0.05;
+$ex::lib::VERSION = 0.06;
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =head1 SYNOPSIS
 
@@ -68,6 +68,7 @@ Mons Anderson, <mons@cpan.org>
 =cut
 
 use strict;
+use warnings;
 use lib ();
 use Cwd 3.12 qw(abs_path);
 $ex::lib::sep = {

@@ -2,10 +2,11 @@
 
 use strict;
 use FindBin;
-use lib "$FindBin::Bin/..","$FindBin::Bin/../lib";
 use Test::More;
+use lib "$FindBin::Bin/..","$FindBin::Bin/../lib";
 
 my $dist = shift @INC;
+$ENV{TEST_AUTHOR} or plan skip_all => '$ENV{TEST_AUTHOR} not set';
 eval { require Test::Fixme;Test::Fixme->import() };
 plan( skip_all => 'Test::Fixme not installed; skipping' ) if $@;
 run_tests(
