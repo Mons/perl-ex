@@ -1,5 +1,9 @@
 Revision history for ex-lib
 
+0.06    2009-04-20
+        Allow use with empty list
+        Made kwalitee.t to check $ENV{TEST_AUTHOR}
+        
 0.05    2009-03-12
         Lower dependency on Cwd from 3.29 to 3.12
         Add tests for different versions of Cwd

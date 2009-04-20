@@ -112,7 +112,7 @@ sub transform {
 
 sub import {
 	shift;
-	_croak("Bad usage. use ".__PACKAGE__." PATH") unless @_;
+	return unless @_;
 	@_ = ( lib => transform @_ = @_ );
 	warn "use @_\n" if DEBUG > 0;
 	goto &lib::import;
@@ -121,7 +121,7 @@ sub import {
 
 sub unimport {
 	shift;
-	_croak("Bad usage. use ".__PACKAGE__." PATH") unless @_;
+	return unless @_;
 	@_ = ( lib => transform @_ = @_ );
 	warn "no @_\n" if DEBUG > 0;
 	goto &lib::unimport;

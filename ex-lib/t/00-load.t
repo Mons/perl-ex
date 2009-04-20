@@ -11,7 +11,7 @@ BEGIN {
     {
         local $@;
         eval q{ use ex::lib; };
-        like($@,qr/Bad usage/, 'empty usage failed');
+        ok(!$@, 'empty usage allowed');
     }
     {
         local $@;
