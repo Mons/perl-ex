@@ -29,7 +29,6 @@ t/06-check-3.12.t
 t/98-fixme.t
 t/99-kwalitee.t
 t/check.pl
-t/inc/Module/Install.pm
 t/lib/3.12/Cwd.pm
 t/lib/3.2501/Cwd.pm
 t/lib/3.26/Cwd.pm
