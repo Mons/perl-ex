@@ -1,9 +1,12 @@
-#!perl -T
+#!/usr/bin/perl
 
-use Test::More tests => 1;
+use utf8;
+use strict;
+use warnings;
+use Carp;
+use ex::lib qw(../../lib);
 
-BEGIN {
-	use_ok( 'accessors::fast' );
-}
+use Test::More qw(no_plan);
+use Data::Dumper;
+use_ok 'accessors::fast';
 
-diag( "Testing accessors::fast $accessors::fast::VERSION, Perl $], $^X" );
