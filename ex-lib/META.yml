@@ -1,0 +1,23 @@
+---
+abstract: 'The same as C<lib>, but makes relative path absolute.'
+author:
+  - 'Mons Anderson <mons@cpan.org>'
+build_requires:
+  Test::More: 0
+distribution_type: module
+generated_by: 'Module::Install version 0.80'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: ex-lib
+no_index:
+  directory:
+    - examples
+    - inc
+    - t
+requires:
+  Cwd: 3.12
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.06
