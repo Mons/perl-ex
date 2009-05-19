@@ -10,11 +10,11 @@ ex::lib - The same as C<lib>, but makes relative path absolute.
 
 =cut
 
-$ex::lib::VERSION = 0.06;
+$ex::lib::VERSION = 0.07;
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =head1 SYNOPSIS
 
