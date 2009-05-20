@@ -3,7 +3,6 @@
 use strict;
 no warnings 'once';
 use Test::More;
-#use ex::lib '../lib';
 use FindBin;
 use lib "$FindBin::Bin/..","$FindBin::Bin/../lib";
 BEGIN { $::dist = shift @INC }
