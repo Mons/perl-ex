@@ -8,7 +8,7 @@ use constant::def {
     CONFESS => 0,
     TIE     => 0,
 };
-
+our $VERSION = '0.01';
 our $ME;
 
 BEGIN {
