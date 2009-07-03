@@ -4,6 +4,7 @@ package # no pause
 use strict;
 use Carp ();
 use accessors::fast ();
+our $VERSION = $accessors::fast::VERSION;
 use constant::def {
     DEBUG   => accessors::fast::DEBUG || 0,
     CONFESS => accessors::fast::CONFESS || 0,
@@ -58,8 +59,8 @@ sub EXISTS {
 	return unless exists $_[0]->{f}->{$_[1]};
 	exists $_[0]->{o}->{$_[1]};
 }
-sub FIRSTKEY { my $a = scalar keys %{$_[0]}; each %{$_[0]} }
-sub NEXTKEY  { each %{$_[0]} }
+#sub FIRSTKEY { my $a = scalar keys %{$_[0]}; each %{$_[0]} }
+#sub NEXTKEY  { each %{$_[0]} }
 
 sub FIRSTKEY {
 	warn "firstkey\n" if DEBUG;
