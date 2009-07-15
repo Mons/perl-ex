@@ -1,0 +1,33 @@
+NAME
+    accessors::fast - Wrap fastest Class::Accessor::* into pragma
+
+VERSION
+    Version 0.02
+
+SYNOPSIS
+        package My::Simple::Package;
+        use accessors::fast qw(field1 field2);
+
+        # constructor is private, redefine only init;
+        sub init {
+            my $self = shift;
+            my %args = @_;
+            $self->field1($args{arg1});
+        }
+
+        package main;
+        my $o = My::Simple::Package->new( arg1 => 'some value' );
+        print $o->field1; # some value
+
+BUGS
+    None known
+
+COPYRIGHT & LICENSE
+    Copyright 2009 Mons Anderson.
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
+AUTHOR
+    Mons Anderson, <mons@cpan.org>
+

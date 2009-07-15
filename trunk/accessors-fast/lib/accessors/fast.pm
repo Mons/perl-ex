@@ -1,4 +1,38 @@
+# Copyright (c) 2009 Mons Anderson <mons@cpan.org>. All rights reserved
+# This program is free software; you can redistribute it and/or
+# modify it under the same terms as Perl itself.
 package accessors::fast;
+
+=head1 NAME
+
+accessors::fast - Wrap fastest Class::Accessor::* into pragma
+
+=cut
+
+$accessors::fast::VERSION = '0.02';
+
+=head1 VERSION
+
+Version 0.02
+
+=head1 SYNOPSIS
+
+	package My::Simple::Package;
+	use accessors::fast qw(field1 field2);
+	
+	# constructor is private, redefine only init;
+	sub init {
+		my $self = shift;
+		my %args = @_;
+		$self->field1($args{arg1});
+	}
+	
+	package main;
+	my $o = My::Simple::Package->new( arg1 => 'some value' );
+	print $o->field1; # some value
+	
+
+=cut
 
 use strict;
 use warnings::register;
@@ -8,7 +42,6 @@ use constant::def {
     CONFESS => 0,
     TIE     => 0,
 };
-our $VERSION = '0.01';
 our $ME;
 
 BEGIN {
@@ -100,3 +133,21 @@ sub import {
 }
 
 1;
+__END__
+
+=head1 BUGS
+
+None known
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Mons Anderson.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=head1 AUTHOR
+
+Mons Anderson, <mons@cpan.org>
+
+=cut
