@@ -12,5 +12,5 @@
 #		$ perl ../path/to/ex-lib/examples/mytest.pl
 #		# mytest use OK from /tmp
 
-use ex::lib '.';
+use ex::lib '.'; # But better to use lib::abs '.';
 use mytest;

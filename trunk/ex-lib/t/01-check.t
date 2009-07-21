@@ -1,6 +1,8 @@
+#!/usr/bin/perl -w
+
 use strict;
 my $tests;
-BEGIN { $tests = 16; }
+BEGIN { $tests = 16+7+1; }
 use FindBin;
 use overload (); # Test::More uses overload in runtime. With modified INC it may fail
 use lib '.',"$FindBin::Bin/../lib",;
@@ -107,6 +109,31 @@ SKIP: {
     is($chk[5], $FindBin::Bin,     './ => .');
     is($chk[6], $FindBin::Bin,     '. => .');
 }
+
+ex::lib->import('glob/*/lib');
+@chk = @INC; @INC = ();
+my @have;
+for (@chk) {
+	my $i = m{/glob/t(\d)/lib$} ? $1 : 99;
+	$have[$i] = 1;
+	like($_, qr{/glob/t(\d)/lib$}, 'glob t'.$i);
+	
+	
+}
+is_deeply( \@have,[1,1,1], 'all items present' );
+
+ex::lib->import('glob/x?x/inc');
+@chk = @INC; @INC = ();
+@have = ();
+for (@chk) {
+	my $i = m{/glob/x(.)x/inc$} ? $1 : 99;
+	$have[$i] = 1;
+	like($_, qr{/glob/x(.)x/inc$}, 'glob x'.$i.'x');
+}
+is_deeply( \@have,[1,1], 'all items present' );
+
+is ( ex::lib::path('.'), $FindBin::Bin, 'ex::lib::path' );
+diag "ex::lib::path('.')=".ex::lib::path('.');
 
 
 exit 0;
