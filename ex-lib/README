@@ -1,5 +1,6 @@
 NAME
-    ex::lib - OBSOLETED by lib::abs
+    ex::lib - The same as lib, but makes relative path absolute. (Obsoleted
+    by lib::abs)
 
 VERSION
     Version 0.90
