@@ -6,10 +6,7 @@ author   'Mons Anderson <mons@cpan.org>';
 
 build_requires 'Test::More';
 
-#requires Cwd => '3.25';
-requires Cwd => '3.12';
-
-# FreeBDS: devel/p5-PathTools
+requires 'lib::abs' => '0.90';
 
 auto_install;
 
