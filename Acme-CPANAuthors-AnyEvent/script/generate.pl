@@ -5,22 +5,47 @@ use strict;
 use CPANPLUS::Backend;
 
 use lib::abs '../lib';
+use Acme::CPANAuthors;
 use Acme::CPANAuthors::AnyEvent;
+use R::Dump;
+
+my $authors = Acme::CPANAuthors->new('AnyEvent');
+my %current = %$authors;
+my $current = 0+keys %$authors;
 
 my $cb = CPANPLUS::Backend->new();
 
 my %dist;
 my %author;
 my %authors;
+my %changes;
 
 for my $mod ( $cb->search( type => 'name', allow => [ qr/AnyEvent/ ], verbose => 1 ) ) {
     ( my $distname = $mod->package ) =~ s{[\d_\.-]+\.tar\.gz$}{};
     $dist{$distname}++;
     my $aut = $mod->author->cpanid;
     $author{ $aut } = $mod->author->author;
-    $authors{ $aut };# ||= [];
     push @{ $authors{ $aut }{$distname} }, $mod->name;
 }
+
+for my $aut (keys %authors) {
+	if (exists $current{$aut}) {
+		delete $current{$aut};
+	} else {
+		push @{ $changes{'+'} }, $aut;
+	}
+}
+push @{ $changes{'-'} }, keys %current if %current;
+
+if (%changes) {
+	warn "We have new authors: @{$changes{'+'}}\n" if exists $changes{'+'};
+	warn "We lost authors: @{$changes{'-'}}\n" if exists $changes{'-'};
+} else {
+	warn "Nothing changed";
+	exit;
+}
+
+#0+%authors != 
 
 my $file = do { open my $f, '<', lib::abs::path('.').'/AnyEvent.tt'; local $/; <$f> };
 
