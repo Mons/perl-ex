@@ -7,7 +7,6 @@ use CPANPLUS::Backend;
 use lib::abs '../lib';
 use Acme::CPANAuthors;
 use Acme::CPANAuthors::AnyEvent;
-use R::Dump;
 
 my $authors = Acme::CPANAuthors->new('AnyEvent');
 my %current = %$authors;
