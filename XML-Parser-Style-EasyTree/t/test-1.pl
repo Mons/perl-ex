@@ -1,21 +1,13 @@
-#!/use/bin/perl -w
+our ($parser,%FH,%FA,%TX);
 
 use strict;
-use Test::More tests => 12;
-use ex::lib '../lib';
-use XML::Parser;
 use Data::Dumper ();
-no warnings 'once';
-
 sub DUMP() { 0 }
-sub dd ($) { Data::Dumper->new([$_[0]])->Indent(0)->Terse(1)->Quotekeys(0)->Purity(1)->Dump }
+sub dd ($) { Data::Dumper->new([$_[0]])->Indent(0)->Terse(1)->Quotekeys(0)->Useqq(1)->Purity(1)->Dump }
 
-our (%FH,%FA,%TX);
-*FH  = \%XML::Parser::Style::EasyTree::FORCE_HASH;
-*FA  = \%XML::Parser::Style::EasyTree::FORCE_ARRAY;
-*TX  = \%XML::Parser::Style::EasyTree::TEXT;
+my $data;
 
-my $xml1 = q{
+our $xml1 = q{
 	<root at="key">
 		<nest>
 			first
@@ -28,7 +20,7 @@ my $xml1 = q{
 	</root>
 };
 
-my $xml2 = q{
+our $xml2 = q{
 	<root at="key">
 		<nest>
 			first &amp; mid &amp; last
@@ -36,20 +28,13 @@ my $xml2 = q{
 	</root>
 };
 
-my $xml3 = q{
+our $xml3 = q{
 	<root at="key">
 		<nest>
 			first &amp; <v>x</v> &amp; last
 		</nest>
 	</root>
 };
-
-
-our $parser = XML::Parser->new( Style => 'EasyTree' );
-our $data;
-#my $data;
-#$data = $parser->parse(q{<root></root>});
-#print Dumper $data;
 {
 	is_deeply
 		$data = $parser->parse($xml1),
@@ -144,4 +129,11 @@ our $data;
 		'text join'
 	or print dd($data),"\n";
 }
-exit 0;
+{
+	local $TX{TRIM} = 0;
+	is_deeply
+		$data = $parser->parse($xml1),
+		{root => {'-at' => 'key',nest => {'#text' => "\n\t\t\tfirst\n\t\t\t\n\t\t\tmid\n\t\t\t\n\t\t\t\n\t\t\tlast\n\t\t",vv => '',v => ['a',{'-at' => 'a','#text' => 'b'}]},'#text' => "\n\t\t\n\t"}},
+		'no trim'
+	or print dd($data),"\n";
+}

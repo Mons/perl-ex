@@ -1,14 +1,15 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl -w
 
 use strict;
 use Test::More;
-use ex::lib '../lib';
-use XML::Parser::Style::EasyTree;
+use lib::abs;
 
-# Ensure a recent version of Test::Pod
-my $min_tp = 1.22;
-eval "use Test::Pod $min_tp";
-$@ and plan skip_all => "Test::Pod $min_tp required for testing POD";
-plan tests => 1;
+chdir lib::abs::path '..' or plan skip_all => "Can't chdir to dist: $!";
 
-pod_file_ok($INC{ 'XML/Parser/Style/EasyTree.pm' });
+eval "use Test::Pod 1.22; 1"
+	or plan skip_all => "Test::Pod 1.22 required for testing POD";
+
+all_pod_files_ok();
+
+exit 0;
+require Test::Pod; # ;)
