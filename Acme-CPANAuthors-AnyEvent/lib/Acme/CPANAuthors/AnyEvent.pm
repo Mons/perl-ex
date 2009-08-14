@@ -12,11 +12,11 @@ Acme::CPANAuthors::AnyEvent - We are CPAN Authors of AnyEvent!
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Acme::CPANAuthors::Register(
 	MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;)
@@ -25,6 +25,7 @@ use Acme::CPANAuthors::Register(
 	BLUET      => 'BlueT - Matthew Lien - Che-Ming Lien',
 	ELMEX      => 'Robin Redeker',
 	KARASIK    => 'Dmitry Karasik',
+	MART       => 'Martin Atkins',
 	MELO       => 'Pedro Melo',
 	MIYAGAWA   => 'Tatsuhiko Miyagawa',
 	MONS       => 'Mons Anderson',
@@ -61,7 +62,7 @@ And if you aren't a AnyEvent CPAN author listed here, please send us your ID/nam
 
 =head1 CONTAINED AUTHORS
 
-Now B<13> AnyEvent CPAN authors:
+Now B<14> AnyEvent CPAN authors:
 
     MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;) 
 
@@ -70,6 +71,7 @@ Now B<13> AnyEvent CPAN authors:
     BLUET      => 'BlueT - Matthew Lien - Che-Ming Lien',
     ELMEX      => 'Robin Redeker',
     KARASIK    => 'Dmitry Karasik',
+    MART       => 'Martin Atkins',
     MELO       => 'Pedro Melo',
     MIYAGAWA   => 'Tatsuhiko Miyagawa',
     MONS       => 'Mons Anderson',
@@ -78,7 +80,7 @@ Now B<13> AnyEvent CPAN authors:
     VTI        => 'Viacheslav Tykhanovskyi',
     YANNK      => 'Yann Kerherve',
 
-And we written B<35> distros
+And we written B<37> distros
 
 =head1 SEE ALSO
 
@@ -86,9 +88,9 @@ And we written B<35> distros
 
 =over 4
 
-=item L<Acme::CPANAuthors>
+=item * L<Acme::CPANAuthors>
 
-=item L<Acme::CPANAuthors::Register>
+=item * L<Acme::CPANAuthors::Register>
 
 =back
 
@@ -96,7 +98,7 @@ And we written B<35> distros
 
 =over 4
 
-=item L<AnyEvent>
+=item * L<AnyEvent>
 
 =back
 
