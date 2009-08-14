@@ -1,5 +1,5 @@
 ---
-abstract: '(deprecated by ETree) Parse xml to simple tree'
+abstract: ~
 author:
   - 'Mons Anderson <mons@cpan.org>'
 build_requires:
@@ -25,4 +25,4 @@ requires:
   Scalar::Util: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: undef
+version: 0.04

@@ -24,7 +24,6 @@ All documentation look in L<XML::Parser::Style::ETree>
 =cut
 
 BEGIN{
-	*VERSION       = \$XML::Parser::Style::ETree::VERSION;
 	for(qw(TEXT FORCE_ARRAY FORCE_HASH)) {
 		if (defined *$_{HASH}) {
 			#warn "have own $_";
@@ -44,6 +43,7 @@ BEGIN{
 		}
 	}
 	require XML::Parser::Style::ETree;
+	*VERSION       = \$XML::Parser::Style::ETree::VERSION;
 	*$_ = \&{'XML::Parser::Style::ETree::'.$_}
 		for qw(Init Start End Char Final); 
 }
