@@ -11,7 +11,11 @@ XML::Parser::Style::EasyTree - Parse xml to simple tree
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
+
+=cut
+
+our $VERSION = '0.07';
 
 =head1 PLEASE USE ETREE
 
@@ -49,7 +53,6 @@ BEGIN{
 		}
 	}
 	require XML::Parser::Style::ETree;
-	*VERSION       = \$XML::Parser::Style::ETree::VERSION;
 	*$_ = \&{'XML::Parser::Style::ETree::'.$_}
 		for qw(Init Start End Char Final); 
 }
