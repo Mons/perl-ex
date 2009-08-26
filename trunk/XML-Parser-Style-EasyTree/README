@@ -2,7 +2,7 @@ NAME
     XML::Parser::Style::ETree - Parse xml to simple tree
 
 VERSION
-    Version 0.04
+    Version 0.06
 
 SYNOPSIS
         use XML::Parser;
@@ -146,12 +146,14 @@ SEE ALSO
 
     *   XML::Parser::EasyTree
 
-        Another EasyTree (I didn't found it before commit because of missing
-        '::Style' in it's name)
+        Another EasyTree (I didn't found it before my first commit of this
+        package because of missing '::Style' in it's name)
 
-        But since we are using same name, we're mutual exclusive ;(
+        But since XML::Parser::EasyTree and XML::Parser::Style::EasyTree use
+        same style name, they're mutual exclusive ;(
 
-        Maybe I will choose another name in future
+        So, all the functionality was moved to ETree, and EasyTree was kept
+        as a compatibility wrapper
 
     *   XML::Bare
 

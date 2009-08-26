@@ -1,5 +1,5 @@
 ---
-abstract: ~
+abstract: 'Parse xml to simple tree'
 author:
   - 'Mons Anderson <mons@cpan.org>'
 build_requires:
@@ -25,4 +25,4 @@ requires:
   Scalar::Util: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.04
+version: 0.06

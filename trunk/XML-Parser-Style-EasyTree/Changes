@@ -1,6 +1,13 @@
 Revision history for XML-Parser-Style-EasyTree
 
+0.06    2009-08-26
+        Fix docs, META.yml
+
+0.05    2009-08-14
+        Fix docs
+
 0.04    2009-08-14
+        Move functionality to ETree (to avoid clash with XML::Parser::EasyTree)
         Add $TEXT{TRIM}
         Fix distribution
         Add example

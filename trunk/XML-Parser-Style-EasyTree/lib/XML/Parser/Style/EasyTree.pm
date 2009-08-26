@@ -7,15 +7,21 @@ no  strict;
 
 =head1 NAME
 
-XML::Parser::Style::EasyTree - (deprecated by ETree) Parse xml to simple tree
+XML::Parser::Style::EasyTree - Parse xml to simple tree
 
-=head1 PLEASE USE ETREE INSTEAD
+=head1 VERSION
+
+Version 0.06
+
+=head1 PLEASE USE ETREE
 
 This module intersects with L<XML::Parser::EasyTree> (I didn't found it before commit because of missing '::Style' in it's name)
 
 But since we are using same style name, we're mutual exclusive ;(
 
 It is leaved as a compatibility wrapper to L<XML::Parser::Style::ETree> (If you use it, all your code will keep working)
+
+L<XML::Parser::Style::ETree> is included in this distribution
 
 But I recommend to use C<ETree> instead
 
