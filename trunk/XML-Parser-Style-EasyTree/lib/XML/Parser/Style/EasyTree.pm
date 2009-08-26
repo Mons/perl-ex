@@ -11,11 +11,11 @@ XML::Parser::Style::EasyTree - Parse xml to simple tree
 
 =head1 VERSION
 
-Version 0.07
+Version 0.08
 
 =cut
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 =head1 PLEASE USE ETREE
 
