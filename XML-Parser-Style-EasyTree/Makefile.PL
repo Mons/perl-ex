@@ -14,3 +14,4 @@ requires 'Scalar::Util';
 auto_install;
 
 WriteAll;
+1;
