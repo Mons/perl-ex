@@ -1,5 +1,6 @@
 .cvsignore
 Changes
+cpants.pl
 example/test.pl
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm

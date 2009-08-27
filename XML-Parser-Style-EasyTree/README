@@ -2,7 +2,7 @@ NAME
     XML::Parser::Style::ETree - Parse xml to simple tree
 
 VERSION
-    Version 0.08
+    Version 0.09
 
 SYNOPSIS
         use XML::Parser;

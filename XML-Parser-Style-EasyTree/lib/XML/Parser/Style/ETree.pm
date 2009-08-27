@@ -1,5 +1,6 @@
 package XML::Parser::Style::ETree;
 
+use 5.006002;
 use strict;
 use warnings;
 use Scalar::Util ();
@@ -10,11 +11,11 @@ XML::Parser::Style::ETree - Parse xml to simple tree
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 =head1 SYNOPSIS
 
