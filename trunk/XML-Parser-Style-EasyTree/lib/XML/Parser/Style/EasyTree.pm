@@ -15,7 +15,7 @@ Version 0.08
 
 =cut
 
-our $VERSION = '0.08';
+
 
 =head1 PLEASE USE ETREE
 
@@ -53,6 +53,7 @@ BEGIN{
 		}
 	}
 	require XML::Parser::Style::ETree;
+	$VERSION = $XML::Parser::Style::ETree::VERSION;
 	*$_ = \&{'XML::Parser::Style::ETree::'.$_}
 		for qw(Init Start End Char Final); 
 }
