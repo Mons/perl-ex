@@ -11,3 +11,5 @@ eval "use Test::CheckChanges ;1"
 	or plan skip_all => "Test::CheckChanges  required for testing Changes";
 
 ok_changes();
+exit 0;
+require Test::NoWarnings;

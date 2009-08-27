@@ -11,3 +11,5 @@ eval "use Test::YAML::Meta;1"
 	or plan skip_all => "Test::YAML::Meta required for testing META.yml";
 
 meta_yaml_ok();
+exit 0;
+require Test::NoWarnings;
