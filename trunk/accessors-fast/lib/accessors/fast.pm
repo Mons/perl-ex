@@ -5,7 +5,7 @@ package accessors::fast;
 
 =head1 NAME
 
-accessors::fast - Wrap fastest Class::Accessor::* into pragma
+accessors::fast - Compiletime accessors using Class::Accessor::Fast
 
 =cut
 
