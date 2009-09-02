@@ -1,0 +1,4 @@
+Revision history for Catalyst-Action-Serialize-XML-Hash-LX
+
+0.05    2009-08-29
+        Separated from XML::Hash::LX
