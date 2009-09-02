@@ -2,7 +2,7 @@ NAME
     constant::def - Perl pragma to declare previously undeclared constants
 
 VERSION
-    Version 0.01
+    Version 0.02
 
 SYNOPSIS
     Define compile-time constant only if it wasn't previously defined

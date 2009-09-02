@@ -1,22 +1,20 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl -w
 
 use strict;
 use Test::More;
-use ex::lib '../lib';
-use File::Find;
+use lib::abs "../lib";
+BEGIN {
+	my $lib = lib::abs::path( ".." );
+	chdir $lib or plan skip_all => "Can't chdir to dist $lib";
+}
 
 # Ensure a recent version of Test::Pod
-my $min_tp = 1.22;
-eval "use Test::Pod $min_tp";
-$@ and plan skip_all => "Test::Pod $min_tp required for testing POD";
-my @files;
-eval "use File::Find";
-$@ and plan skip_all => "File::Find required for testing POD";
+eval "use Test::Pod 1.22; 1"
+	or plan skip_all => "Test::Pod 1.22 required for testing POD";
+eval "use File::Find; 1"
+	or plan skip_all => "File::Find required for testing POD";
 
-File::Find::find sub {
-	push @files, $File::Find::name if /\.pm$/;
-}, $INC[0];
+all_pod_files_ok();
 
-plan tests => 0+@files;
-
-pod_file_ok($_) for @files;
+exit 0;
+require Test::NoWarnings;

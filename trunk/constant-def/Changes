@@ -1,5 +1,10 @@
 Revision history for constant-def
 
+0.02    2009-08-28
+        * Fix build_req from ex::lib -> lib::abs
+        * Rename example for cpants
+        * Add kwalitee tests
+
 0.01    2009-03-11
-        First version, released on an unsuspecting world.
+        * First version, released on an unsuspecting world.
 
