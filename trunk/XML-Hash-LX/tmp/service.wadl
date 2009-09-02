@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<application xmlns:jabber="http://rambler.ru/jabber"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns="http://research.sun.com/wadl/2006/10">
+    <grammars>
+        <include href="http://rambler.ru/jabber.xsd"/>
+    </grammars>
+
+    <resources base="http://j.rambler.ru/api/rest">
+        <resource path="users/">
+            <method name="POST">
+                <request>
+                    <param name="login" style="query" type="Login" default=""/>
+                </request>
+                <response>
+                    <representation mediaType="application/xml"
+                                    element="result"/>
+                    <fault status="400" mediaType="application/xml"
+                           element="result"/>
+                </response>
+            </method>
+
+            <resource path="${userId}">
+                <param name="userId" style="template" type="Login"/>
+                <method name="GET">
+                    <response>
+                        <representation mediaType="application/xml"
+                                        element="vCard"/>
+                        <fault status="400" mediaType="application/xml"
+                               element="result"/>
+                    </response>
+                </method>
+                <method name="PUT">
+                    <request>
+                        <param name="user" style="query" type="vCard" default=""/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/xml"
+                                        element="result"/>
+                        <fault status="400" mediaType="application/xml"
+                               element="result"/>
+                    </response>
+                </method>
+                <method name="DELETE">
+                    <response>
+                        <representation mediaType="application/xml"
+                                        element="result"/>
+                        <fault status="400" mediaType="application/xml"
+                               element="result"/>
+                    </response>
+                </method>
+
+                <resource path="roster/">
+                    <method name="GET">
+                        <response>
+                            <representation mediaType="application/xml"
+                                            element="roster"/>
+                            <fault status="400" mediaType="application/xml"
+                                   element="result"/>
+                        </response>
+                    </method>
+                    <method name="POST">
+                        <request>
+                            <param name="contact" style="query" type="Contact" default=""/>
+                        </request>
+                        <response>
+                            <representation mediaType="application/xml"
+                                            element="result"/>
+                            <fault status="400" mediaType="application/xml"
+                                   element="result"/>
+                        </response>
+                    </method>
+
+                    <resource path="${contactId}">
+                        <param name="contactId" style="template" type="Jid"/>
+                        <method name="GET">
+                            <response>
+                                <representation mediaType="application/xml"
+                                                element="contact"/>
+                                <fault status="400" mediaType="application/xml"
+                                       element="result"/>
+                            </response>
+                        </method>
+                        <method name="PUT">
+                            <request>
+                                <param name="contact" style="query" type="Contact" default=""/>
+                            </request>
+                            <response>
+                                <representation mediaType="application/xml"
+                                                element="result"/>
+                                <fault status="400" mediaType="application/xml"
+                                       element="result"/>
+                            </response>
+                        </method>
+                        <method name="DELETE">
+                            <response>
+                                <representation mediaType="application/xml"
+                                                element="result"/>
+                                <fault status="400" mediaType="application/xml"
+                                       element="result"/>
+                            </response>
+                        </method>
+                    </resource>
+                </resource>
+            </resource>
+        </resource>
+    </resources>
+
+</application>

@@ -1,0 +1,1155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns="http://purl.org/rss/1.0/"
+ xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:syn="http://purl.org/rss/1.0/modules/syndication/"
+ xmlns:admin="http://webns.net/mvcb/"
+>
+
+<channel rdf:about="http://search.cpan.org/">
+<title>search.cpan.org</title>
+<link>http://search.cpan.org/</link>
+<description>The CPAN search site</description>
+<dc:date>2009-08-12T07:46+00:00</dc:date>
+<syn:updatePeriod>hourly</syn:updatePeriod>
+<syn:updateFrequency>1</syn:updateFrequency>
+<syn:updateBase>1901-01-01T00:00+00:00</syn:updateBase>
+<items>
+ <rdf:Seq>
+  <rdf:li rdf:resource="http://search.cpan.org/~adamk/DBD-SQLite-1.26_03/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~ewilhelm/Text-Slidez-v0.0.1/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~ewilhelm/Shebangml-v0.0.1/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~ewilhelm/XML-Bits-v0.0.1/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~ewilhelm/Tree-Base-v0.10.2/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~karman/Net-LDAP-Class-0.19/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~oalders/Net-FreshBooks-API-0.06/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~fayland/Book-Chinese-MasterPerlToday-0.01_09/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~rjbs/Email-Stuff-2.100/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~gfuji/Module-Install-XSUtil-0.08/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~msimerson/Provision-Unix-0.65/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~bdfoy/CPAN-PackageDetails-0.20_01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~leocharre/LEOCHARRE-Class2-1.19/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~flora/Devel-Declare-0.005010/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~flora/Catalyst-Devel-1.20/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~cub/Text-SimpleTable-AutoWidth-0.03/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~gshank/HTML-FormHandler-0.27004/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mbarbon/Wx-GLCanvas-0.09/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~maros/DBIx-Class-DeleteAction-1.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~jpierce/RTx-From-0.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~jpierce/RTx-BecomeUser-1.10_2/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~spang/Config-GitLike-1.01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~abigail/variable-2009081101/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~abigail/End-2009081101/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~jquelin/Dist-Zilla-Plugin-CompileTests-0.1.3/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~bricas/HTML-FormFu-Filter-Demoroniser-0.01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~pravus/Proc-Lite-0.02_01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~dcantrell/Sub-WrapPackages-1.3/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~ibmtordb2/DBD-DB2-1.74/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mons/AnyEvent-SMTP-0.03/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~ash/WWW-Mechanize-TreeBuilder-1.10001/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~miki/Lingua-JA-Categorize-0.00005/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~redicaps/Dist-Zilla-Plugin-CopyTo-0.05/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mons/Acme-CPANAuthors-AnyEvent-0.01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mackenna/IPC-MMA-0.56/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~barbie/Data-FormValidator-Filters-Demoroniser-0.02/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~barbie/Text-Demoroniser-0.01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~pshangov/Data-AsObject-0.03/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~lbrocard/Catalyst-Plugin-SimpleAuth-0.33/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~pshangov/Data-AsObject-0.02/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~schwigon/Data-DPath-0.17/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~schwigon/Data-DPath-0.16/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~azawawi/Syntax-Highlight-Perl6-0.69/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~gfuji/macro-0.06/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~shamrock/IPDR-0.15/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~gfuji/Method-Cumulative-0.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~gfuji/XS-MRO-Compat-0.13/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~miki/Lingua-JA-Categorize-0.00004/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~miki/Lingua-JA-TFIDF-0.00004/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~danny/Rose-DBx-Object-Builder-0.06/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mschilli/SWISH-API-Common-0.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~elmex/AnyEvent-Twitter-0.21/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~elmex/AnyEvent-HTTPD-0.82/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~aayars/GlobalDBI-0.21/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~chrisy/Net-Elexol-EtherIO24-0.22/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~flora/CatalystX-REPL-0.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~blabos/Paginator-Lite-0.02/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~zag/Perl6-Pod-0.05/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mackenna/IPC-MMA-0.55/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~fayland/Book-Chinese-MasterPerlToday-0.01_08/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~rjbs/App-Cmd-Plugin-Prompt-1.002/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mikegrb/WebService-Linode-0.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mthurn/WWW-Ebay-0.089/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mthurn/WWW-Search-Ebay-3.014/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mthurn/WWW-Search-Ebay-3.013/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mlehmann/AnyEvent-5.1/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~rjbs/Parse-IRCLog-1.103/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~sartak/IM-Engine-0.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~schwigon/Data-DPath-0.15/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~flora/Test-TempDir-0.05/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~flora/Catalyst-Plugin-Browser-0.06/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mons/AnyEvent-Memcached-0.01_2/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mons/AnyEvent-SMTP-0.02/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~aayars/OP-0.308/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~chrisy/Net-Elexol-EtherIO24-0.21/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~limaone/LaTeX-Table-v0.99_2/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~perler/DBIx-Class-BitField-0.11/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~lembark/Parallel-Depend-4.10/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~barbie/CPAN-Testers-WWW-Reports-Mailer-0.20/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~stbey/Bit-Vector-6.8/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~rglaue/XML-TreePP-XMLPath-0.55/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~damog/File-MimeInfo-Simple-0.1/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~chrisy/Net-Elexol-EtherIO24-0.20/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~rglaue/XML-TreePP-XMLPath-0.54/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~smueller/Module-ScanDeps-0.94/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~jwied/BZ-Client-1.01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~rglaue/XML-TreePP-XMLPath-0.53/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~adamk/YAML-0.70/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~anirvan/Business-LCCN-1.00/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~rjray/App-Changelog2x-0.11/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mons/AnyEvent-Memcached-0.01_1/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~vvelox/Text-Filter-Froggy-0.0.0/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~cvicente/Net-IPTrie-0.5/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~cvicente/Text-DHCPLeases-0.9/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~darold/Apache2-ModProxyPerlHtml-2.6/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~crein/CGI-Session-Driver-layered-0.7/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~roland/jmx4perl-0.35_2/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~fdaly/Test-Deep-0.106/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~pshangov/Data-AsObject-0.01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~dagolden/ExtUtils-ParseXS-2.20_04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mmims/DBIx-Class-InflateColumn-FS-0.01005/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~pravus/Proc-Lite-0.02/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~barbie/Data-FormValidator-Filters-Demoroniser-0.01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~cornelius/Vimana-0.073/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~bricas/Catalyst-Plugin-ConfigLoader-0.26/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~adamk/YAML-0.69_02/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~jettero/Term-ANSIColorx-ColorNicknames-2.7184/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~adamk/Graph-XGMML-0.01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mdom/Term-GnuScreen-0.03/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~bingos/CPANPLUS-Config-BaseEnv-0.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~bingos/CPANPLUS-Config-BaseEnv-0.02/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~ajolma/Tree-R-0.06/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~flora/Acme-CPANAuthors-German-0.03/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~barbie/Data-FormValidator-Constraints-Words-0.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mons/AnyEvent-SMTP-0.01/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~mdom/Term-GnuScreen-0.02/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~vvelox/Text-Thesaurus-Aiksaurus-0.0.0/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~abeltje/Test-Smoke-1.40/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~dylan/Filter-BoxString-0.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~dylan/Filter-Arguments-0.14/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~dylan/WebService-Rakuten-0.04/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~elmex/AnyEvent-IRC-0.81/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~elmex/AnyEvent-Twitter-0.2/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~elmex/AnyEvent-HTTPD-0.81/" />
+  <rdf:li rdf:resource="http://search.cpan.org/~dylan/Lingua-Translate-Google-0.08/" />
+ </rdf:Seq>
+</items>
+<image rdf:resource="http://search.cpan.org/s/img/cpanrdf.jpg" />
+</channel>
+
+<image rdf:about="http://search.cpan.org/s/img/cpanrdf.jpg">
+<title>search.cpan.org</title>
+<url>http://search.cpan.org/s/img/cpanrdf.jpg</url>
+<link>http://search.cpan.org</link>
+</image>
+
+<item rdf:about="http://search.cpan.org/~adamk/DBD-SQLite-1.26_03/">
+<title>DBD-SQLite-1.26_03</title>
+<link>http://search.cpan.org/~adamk/DBD-SQLite-1.26_03/</link>
+<description>Self-contained RDBMS in a DBI Driver </description>
+<dc:creator>Adam Kennedy</dc:creator>
+<dc:date>2009-08-12T06:01+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~ewilhelm/Text-Slidez-v0.0.1/">
+<title>Text-Slidez-v0.0.1</title>
+<link>http://search.cpan.org/~ewilhelm/Text-Slidez-v0.0.1/</link>
+<description>format slideshows into XHTML </description>
+<dc:creator>Eric Wilhelm</dc:creator>
+<dc:date>2009-08-12T05:09+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~ewilhelm/Shebangml-v0.0.1/">
+<title>Shebangml-v0.0.1</title>
+<link>http://search.cpan.org/~ewilhelm/Shebangml-v0.0.1/</link>
+<description>markup with bacon </description>
+<dc:creator>Eric Wilhelm</dc:creator>
+<dc:date>2009-08-12T05:02+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~ewilhelm/XML-Bits-v0.0.1/">
+<title>XML-Bits-v0.0.1</title>
+<link>http://search.cpan.org/~ewilhelm/XML-Bits-v0.0.1/</link>
+<description>a tree of XML nodes </description>
+<dc:creator>Eric Wilhelm</dc:creator>
+<dc:date>2009-08-12T04:34+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~ewilhelm/Tree-Base-v0.10.2/">
+<title>Tree-Base-v0.10.2</title>
+<link>http://search.cpan.org/~ewilhelm/Tree-Base-v0.10.2/</link>
+<description>a base class for trees </description>
+<dc:creator>Eric Wilhelm</dc:creator>
+<dc:date>2009-08-12T04:33+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~karman/Net-LDAP-Class-0.19/">
+<title>Net-LDAP-Class-0.19</title>
+<link>http://search.cpan.org/~karman/Net-LDAP-Class-0.19/</link>
+<description>object-relational mapper for Net::LDAP </description>
+<dc:creator>Peter Karman</dc:creator>
+<dc:date>2009-08-12T04:02+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~oalders/Net-FreshBooks-API-0.06/">
+<title>Net-FreshBooks-API-0.06</title>
+<link>http://search.cpan.org/~oalders/Net-FreshBooks-API-0.06/</link>
+<description>Easy OO access to the FreshBooks.com API </description>
+<dc:creator>Olaf Alders</dc:creator>
+<dc:date>2009-08-12T03:51+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~fayland/Book-Chinese-MasterPerlToday-0.01_09/">
+<title>Book-Chinese-MasterPerlToday-0.01_09</title>
+<link>http://search.cpan.org/~fayland/Book-Chinese-MasterPerlToday-0.01_09/</link>
+<description>free book in Chinese &#x3C;Master Perl Today&#x3E; </description>
+<dc:creator>Fayland &#x6797;</dc:creator>
+<dc:date>2009-08-12T03:09+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~rjbs/Email-Stuff-2.100/">
+<title>Email-Stuff-2.100</title>
+<link>http://search.cpan.org/~rjbs/Email-Stuff-2.100/</link>
+<description>A more casual approach to creating and sending Email:: emails </description>
+<dc:creator>Ricardo SIGNES</dc:creator>
+<dc:date>2009-08-12T02:55+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~gfuji/Module-Install-XSUtil-0.08/">
+<title>Module-Install-XSUtil-0.08</title>
+<link>http://search.cpan.org/~gfuji/Module-Install-XSUtil-0.08/</link>
+<description>Utility functions for XS modules </description>
+<dc:creator>&#x85E4; &#x543E;&#x90CE;</dc:creator>
+<dc:date>2009-08-12T02:38+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~msimerson/Provision-Unix-0.65/">
+<title>Provision-Unix-0.65</title>
+<link>http://search.cpan.org/~msimerson/Provision-Unix-0.65/</link>
+<description>provision accounts on unix systems </description>
+<dc:creator>Matt Simerson</dc:creator>
+<dc:date>2009-08-12T01:32+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~bdfoy/CPAN-PackageDetails-0.20_01/">
+<title>CPAN-PackageDetails-0.20_01</title>
+<link>http://search.cpan.org/~bdfoy/CPAN-PackageDetails-0.20_01/</link>
+<description>Create or read 02packages.details.txt.gz </description>
+<dc:creator>brian d foy</dc:creator>
+<dc:date>2009-08-11T23:15+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~leocharre/LEOCHARRE-Class2-1.19/">
+<title>LEOCHARRE-Class2-1.19</title>
+<link>http://search.cpan.org/~leocharre/LEOCHARRE-Class2-1.19/</link>
+<dc:creator>Leo Charre</dc:creator>
+<dc:date>2009-08-11T21:05+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~flora/Devel-Declare-0.005010/">
+<title>Devel-Declare-0.005010</title>
+<link>http://search.cpan.org/~flora/Devel-Declare-0.005010/</link>
+<description>Adding keywords to perl, in perl </description>
+<dc:creator>Florian Ragwitz</dc:creator>
+<dc:date>2009-08-11T20:51+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~flora/Catalyst-Devel-1.20/">
+<title>Catalyst-Devel-1.20</title>
+<link>http://search.cpan.org/~flora/Catalyst-Devel-1.20/</link>
+<description>Catalyst Development Tools </description>
+<dc:creator>Florian Ragwitz</dc:creator>
+<dc:date>2009-08-11T20:35+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~cub/Text-SimpleTable-AutoWidth-0.03/">
+<title>Text-SimpleTable-AutoWidth-0.03</title>
+<link>http://search.cpan.org/~cub/Text-SimpleTable-AutoWidth-0.03/</link>
+<description>Simple Eyecandy ASCII Tables with auto-width selection </description>
+<dc:creator>Oleg Kostyuk</dc:creator>
+<dc:date>2009-08-11T20:06+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~gshank/HTML-FormHandler-0.27004/">
+<title>HTML-FormHandler-0.27004</title>
+<link>http://search.cpan.org/~gshank/HTML-FormHandler-0.27004/</link>
+<description>form handler written in Moose </description>
+<dc:creator>Gerda Shank</dc:creator>
+<dc:date>2009-08-11T20:05+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mbarbon/Wx-GLCanvas-0.09/">
+<title>Wx-GLCanvas-0.09</title>
+<link>http://search.cpan.org/~mbarbon/Wx-GLCanvas-0.09/</link>
+<description>interface to wxWidgets&#x27; OpenGL canvas </description>
+<dc:creator>Mattia Barbon</dc:creator>
+<dc:date>2009-08-11T19:12+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~maros/DBIx-Class-DeleteAction-1.04/">
+<title>DBIx-Class-DeleteAction-1.04</title>
+<link>http://search.cpan.org/~maros/DBIx-Class-DeleteAction-1.04/</link>
+<description>Define delete triggers </description>
+<dc:creator>Maro&#x161; Koll&#xE1;r</dc:creator>
+<dc:date>2009-08-11T17:34+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~jpierce/RTx-From-0.04/">
+<title>RTx-From-0.04</title>
+<link>http://search.cpan.org/~jpierce/RTx-From-0.04/</link>
+<description>Make it easier to find users and their tickets </description>
+<dc:creator>Jerrad Pierce</dc:creator>
+<dc:date>2009-08-11T16:22+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~jpierce/RTx-BecomeUser-1.10_2/">
+<title>RTx-BecomeUser-1.10_2</title>
+<link>http://search.cpan.org/~jpierce/RTx-BecomeUser-1.10_2/</link>
+<description>Become any user </description>
+<dc:creator>Jerrad Pierce</dc:creator>
+<dc:date>2009-08-11T16:22+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~spang/Config-GitLike-1.01/">
+<title>Config-GitLike-1.01</title>
+<link>http://search.cpan.org/~spang/Config-GitLike-1.01/</link>
+<description>git-compatible config file parsing </description>
+<dc:creator>Christine Spang</dc:creator>
+<dc:date>2009-08-11T16:16+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~abigail/variable-2009081101/">
+<title>variable-2009081101</title>
+<link>http://search.cpan.org/~abigail/variable-2009081101/</link>
+<description>Perl pragma to declare (scalar) variables without a leading $. </description>
+<dc:creator>Abigail</dc:creator>
+<dc:date>2009-08-11T14:41+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~abigail/End-2009081101/">
+<title>End-2009081101</title>
+<link>http://search.cpan.org/~abigail/End-2009081101/</link>
+<description>generalized END {}. </description>
+<dc:creator>Abigail</dc:creator>
+<dc:date>2009-08-11T14:13+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~jquelin/Dist-Zilla-Plugin-CompileTests-0.1.3/">
+<title>Dist-Zilla-Plugin-CompileTests-0.1.3</title>
+<link>http://search.cpan.org/~jquelin/Dist-Zilla-Plugin-CompileTests-0.1.3/</link>
+<description>common tests to check syntax of your modules </description>
+<dc:creator>Jerome Quelin</dc:creator>
+<dc:date>2009-08-11T14:01+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~bricas/HTML-FormFu-Filter-Demoroniser-0.01/">
+<title>HTML-FormFu-Filter-Demoroniser-0.01</title>
+<link>http://search.cpan.org/~bricas/HTML-FormFu-Filter-Demoroniser-0.01/</link>
+<description>Filter Microsoft &#x22;smart&#x22; characters </description>
+<dc:creator>Brian Cassidy</dc:creator>
+<dc:date>2009-08-11T13:24+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~pravus/Proc-Lite-0.02_01/">
+<title>Proc-Lite-0.02_01</title>
+<link>http://search.cpan.org/~pravus/Proc-Lite-0.02_01/</link>
+<description>A lightweight module for running processes synchronously </description>
+<dc:creator>jason hord</dc:creator>
+<dc:date>2009-08-11T13:05+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~dcantrell/Sub-WrapPackages-1.3/">
+<title>Sub-WrapPackages-1.3</title>
+<link>http://search.cpan.org/~dcantrell/Sub-WrapPackages-1.3/</link>
+<description>add pre- and post-execution wrappers around all the subroutines in packages or around individual subs </description>
+<dc:creator>David Cantrell</dc:creator>
+<dc:date>2009-08-11T12:37+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~ibmtordb2/DBD-DB2-1.74/">
+<title>DBD-DB2-1.74</title>
+<link>http://search.cpan.org/~ibmtordb2/DBD-DB2-1.74/</link>
+<description>DataBase Driver for DB2 UDB </description>
+<dc:creator>IBM OpenDev</dc:creator>
+<dc:date>2009-08-11T12:11+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mons/AnyEvent-SMTP-0.03/">
+<title>AnyEvent-SMTP-0.03</title>
+<link>http://search.cpan.org/~mons/AnyEvent-SMTP-0.03/</link>
+<description>SMTP client and server </description>
+<dc:creator>Mons Anderson</dc:creator>
+<dc:date>2009-08-11T11:53+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~ash/WWW-Mechanize-TreeBuilder-1.10001/">
+<title>WWW-Mechanize-TreeBuilder-1.10001</title>
+<link>http://search.cpan.org/~ash/WWW-Mechanize-TreeBuilder-1.10001/</link>
+<dc:creator>Ash Berlin</dc:creator>
+<dc:date>2009-08-11T11:39+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~miki/Lingua-JA-Categorize-0.00005/">
+<title>Lingua-JA-Categorize-0.00005</title>
+<link>http://search.cpan.org/~miki/Lingua-JA-Categorize-0.00005/</link>
+<description>Naive Bayes Classifier for Japanese document. </description>
+<dc:creator>Takeshi Miki</dc:creator>
+<dc:date>2009-08-11T11:33+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~redicaps/Dist-Zilla-Plugin-CopyTo-0.05/">
+<title>Dist-Zilla-Plugin-CopyTo-0.05</title>
+<link>http://search.cpan.org/~redicaps/Dist-Zilla-Plugin-CopyTo-0.05/</link>
+<description>Also COPYTO plugin of Dist::Zilla </description>
+<dc:creator>woshini</dc:creator>
+<dc:date>2009-08-11T11:14+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mons/Acme-CPANAuthors-AnyEvent-0.01/">
+<title>Acme-CPANAuthors-AnyEvent-0.01</title>
+<link>http://search.cpan.org/~mons/Acme-CPANAuthors-AnyEvent-0.01/</link>
+<description>We are CPAN Authors of AnyEvent! </description>
+<dc:creator>Mons Anderson</dc:creator>
+<dc:date>2009-08-11T10:44+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mackenna/IPC-MMA-0.56/">
+<title>IPC-MMA-0.56</title>
+<link>http://search.cpan.org/~mackenna/IPC-MMA-0.56/</link>
+<description>Shared Memory using Ralf Engelschall&#x27;s mm library </description>
+<dc:creator>Craig MacKenna</dc:creator>
+<dc:date>2009-08-11T10:34+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~barbie/Data-FormValidator-Filters-Demoroniser-0.02/">
+<title>Data-FormValidator-Filters-Demoroniser-0.02</title>
+<link>http://search.cpan.org/~barbie/Data-FormValidator-Filters-Demoroniser-0.02/</link>
+<description>A Data::FormValidator filter that allows you to demoronise a string. </description>
+<dc:creator>Barbie</dc:creator>
+<dc:date>2009-08-11T10:20+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~barbie/Text-Demoroniser-0.01/">
+<title>Text-Demoroniser-0.01</title>
+<link>http://search.cpan.org/~barbie/Text-Demoroniser-0.01/</link>
+<description>A text filter that allows you to demoronise a string. </description>
+<dc:creator>Barbie</dc:creator>
+<dc:date>2009-08-11T10:17+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~pshangov/Data-AsObject-0.03/">
+<title>Data-AsObject-0.03</title>
+<link>http://search.cpan.org/~pshangov/Data-AsObject-0.03/</link>
+<description>Easy OO access to complex perl data structures </description>
+<dc:creator>Petar Shangov</dc:creator>
+<dc:date>2009-08-11T10:15+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~lbrocard/Catalyst-Plugin-SimpleAuth-0.33/">
+<title>Catalyst-Plugin-SimpleAuth-0.33</title>
+<link>http://search.cpan.org/~lbrocard/Catalyst-Plugin-SimpleAuth-0.33/</link>
+<description>Simple authentication for Catalyst </description>
+<dc:creator>L&#xE9;on Brocard</dc:creator>
+<dc:date>2009-08-11T09:55+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~pshangov/Data-AsObject-0.02/">
+<title>Data-AsObject-0.02</title>
+<link>http://search.cpan.org/~pshangov/Data-AsObject-0.02/</link>
+<description>Easy OO access to complex perl data structures </description>
+<dc:creator>Petar Shangov</dc:creator>
+<dc:date>2009-08-11T09:39+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~schwigon/Data-DPath-0.17/">
+<title>Data-DPath-0.17</title>
+<link>http://search.cpan.org/~schwigon/Data-DPath-0.17/</link>
+<description>DPath is not XPath! </description>
+<dc:creator>Steffen Schwigon</dc:creator>
+<dc:date>2009-08-11T09:39+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~schwigon/Data-DPath-0.16/">
+<title>Data-DPath-0.16</title>
+<link>http://search.cpan.org/~schwigon/Data-DPath-0.16/</link>
+<description>DPath is not XPath! </description>
+<dc:creator>Steffen Schwigon</dc:creator>
+<dc:date>2009-08-11T08:59+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~azawawi/Syntax-Highlight-Perl6-0.69/">
+<title>Syntax-Highlight-Perl6-0.69</title>
+<link>http://search.cpan.org/~azawawi/Syntax-Highlight-Perl6-0.69/</link>
+<description>Perl 6 Syntax Highlighter </description>
+<dc:creator>&#x623;&#x62D;&#x645;&#x62F; &#x645;&#x62D;&#x645;&#x62F; &#x632;&#x648;&#x627;&#x648;&#x64A; - Ahmad M. Zawawi</dc:creator>
+<dc:date>2009-08-11T08:56+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~gfuji/macro-0.06/">
+<title>macro-0.06</title>
+<link>http://search.cpan.org/~gfuji/macro-0.06/</link>
+<description>An implementation of macro processor </description>
+<dc:creator>&#x85E4; &#x543E;&#x90CE;</dc:creator>
+<dc:date>2009-08-11T08:35+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~shamrock/IPDR-0.15/">
+<title>IPDR-0.15</title>
+<link>http://search.cpan.org/~shamrock/IPDR-0.15/</link>
+<description>IPDR Data Suite </description>
+<dc:creator>Andrew S. Kennedy</dc:creator>
+<dc:date>2009-08-11T08:25+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~gfuji/Method-Cumulative-0.04/">
+<title>Method-Cumulative-0.04</title>
+<link>http://search.cpan.org/~gfuji/Method-Cumulative-0.04/</link>
+<description>Accumulates the effect of methods in a class hierarchy </description>
+<dc:creator>&#x85E4; &#x543E;&#x90CE;</dc:creator>
+<dc:date>2009-08-11T08:15+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~gfuji/XS-MRO-Compat-0.13/">
+<title>XS-MRO-Compat-0.13</title>
+<link>http://search.cpan.org/~gfuji/XS-MRO-Compat-0.13/</link>
+<description>Provides mro functions for XS modules </description>
+<dc:creator>&#x85E4; &#x543E;&#x90CE;</dc:creator>
+<dc:date>2009-08-11T08:11+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~miki/Lingua-JA-Categorize-0.00004/">
+<title>Lingua-JA-Categorize-0.00004</title>
+<link>http://search.cpan.org/~miki/Lingua-JA-Categorize-0.00004/</link>
+<description>Naive Bayes Classifier for Japanese document. </description>
+<dc:creator>Takeshi Miki</dc:creator>
+<dc:date>2009-08-11T07:40+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~miki/Lingua-JA-TFIDF-0.00004/">
+<title>Lingua-JA-TFIDF-0.00004</title>
+<link>http://search.cpan.org/~miki/Lingua-JA-TFIDF-0.00004/</link>
+<description>TF/IDF calculator based on MeCab. </description>
+<dc:creator>Takeshi Miki</dc:creator>
+<dc:date>2009-08-11T07:39+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~danny/Rose-DBx-Object-Builder-0.06/">
+<title>Rose-DBx-Object-Builder-0.06</title>
+<link>http://search.cpan.org/~danny/Rose-DBx-Object-Builder-0.06/</link>
+<description>Database Table Schema Generation for Rose::DB::Object </description>
+<dc:creator>Xufeng Liang</dc:creator>
+<dc:date>2009-08-11T07:07+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mschilli/SWISH-API-Common-0.04/">
+<title>SWISH-API-Common-0.04</title>
+<link>http://search.cpan.org/~mschilli/SWISH-API-Common-0.04/</link>
+<description>SWISH Document Indexing Made Easy </description>
+<dc:creator>Michael Schilli</dc:creator>
+<dc:date>2009-08-11T06:52+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~elmex/AnyEvent-Twitter-0.21/">
+<title>AnyEvent-Twitter-0.21</title>
+<link>http://search.cpan.org/~elmex/AnyEvent-Twitter-0.21/</link>
+<description>Implementation of the Twitter API for AnyEvent </description>
+<dc:creator>Robin Redeker</dc:creator>
+<dc:date>2009-08-11T06:40+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~elmex/AnyEvent-HTTPD-0.82/">
+<title>AnyEvent-HTTPD-0.82</title>
+<link>http://search.cpan.org/~elmex/AnyEvent-HTTPD-0.82/</link>
+<description>A simple lightweight event based web (application) server </description>
+<dc:creator>Robin Redeker</dc:creator>
+<dc:date>2009-08-11T06:35+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~aayars/GlobalDBI-0.21/">
+<title>GlobalDBI-0.21</title>
+<link>http://search.cpan.org/~aayars/GlobalDBI-0.21/</link>
+<description>Simple DBI wrapper with support for multiple connections </description>
+<dc:creator>Alex Ayars</dc:creator>
+<dc:date>2009-08-11T05:06+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~chrisy/Net-Elexol-EtherIO24-0.22/">
+<title>Net-Elexol-EtherIO24-0.22</title>
+<link>http://search.cpan.org/~chrisy/Net-Elexol-EtherIO24-0.22/</link>
+<description>Threaded object interface for manipulating Elexol Ether I/O 24 units with Perl </description>
+<dc:creator>Chris Luke</dc:creator>
+<dc:date>2009-08-11T04:38+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~flora/CatalystX-REPL-0.04/">
+<title>CatalystX-REPL-0.04</title>
+<link>http://search.cpan.org/~flora/CatalystX-REPL-0.04/</link>
+<description>read-eval-print-loop for debugging your Catalyst application </description>
+<dc:creator>Florian Ragwitz</dc:creator>
+<dc:date>2009-08-11T04:10+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~blabos/Paginator-Lite-0.02/">
+<title>Paginator-Lite-0.02</title>
+<link>http://search.cpan.org/~blabos/Paginator-Lite-0.02/</link>
+<description>A simple paginator </description>
+<dc:creator>Blabos de Blebe</dc:creator>
+<dc:date>2009-08-11T03:41+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~zag/Perl6-Pod-0.05/">
+<title>Perl6-Pod-0.05</title>
+<link>http://search.cpan.org/~zag/Perl6-Pod-0.05/</link>
+<description>use Perl6&#x27;s pod in perl5 programms </description>
+<dc:creator>Zahatski Aliaksandr</dc:creator>
+<dc:date>2009-08-11T03:19+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mackenna/IPC-MMA-0.55/">
+<title>IPC-MMA-0.55</title>
+<link>http://search.cpan.org/~mackenna/IPC-MMA-0.55/</link>
+<description>Shared Memory using Ralf Engelschall&#x27;s mm library </description>
+<dc:creator>Craig MacKenna</dc:creator>
+<dc:date>2009-08-11T02:48+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~fayland/Book-Chinese-MasterPerlToday-0.01_08/">
+<title>Book-Chinese-MasterPerlToday-0.01_08</title>
+<link>http://search.cpan.org/~fayland/Book-Chinese-MasterPerlToday-0.01_08/</link>
+<description>free book in Chinese &#x3C;Master Perl Today&#x3E; </description>
+<dc:creator>Fayland &#x6797;</dc:creator>
+<dc:date>2009-08-11T02:40+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~rjbs/App-Cmd-Plugin-Prompt-1.002/">
+<title>App-Cmd-Plugin-Prompt-1.002</title>
+<link>http://search.cpan.org/~rjbs/App-Cmd-Plugin-Prompt-1.002/</link>
+<description>plug prompting routines into your commands </description>
+<dc:creator>Ricardo SIGNES</dc:creator>
+<dc:date>2009-08-11T02:21+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mikegrb/WebService-Linode-0.04/">
+<title>WebService-Linode-0.04</title>
+<link>http://search.cpan.org/~mikegrb/WebService-Linode-0.04/</link>
+<description>Perl Interface to the Linode.com API. </description>
+<dc:creator>Michael Greb</dc:creator>
+<dc:date>2009-08-11T02:01+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mthurn/WWW-Ebay-0.089/">
+<title>WWW-Ebay-0.089</title>
+<link>http://search.cpan.org/~mthurn/WWW-Ebay-0.089/</link>
+<description>Search and manage eBay auctions </description>
+<dc:creator>Martin &#x27;Kingpin&#x27; Thurn</dc:creator>
+<dc:date>2009-08-11T01:49+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mthurn/WWW-Search-Ebay-3.014/">
+<title>WWW-Search-Ebay-3.014</title>
+<link>http://search.cpan.org/~mthurn/WWW-Search-Ebay-3.014/</link>
+<description>backend for searching www.ebay.com </description>
+<dc:creator>Martin &#x27;Kingpin&#x27; Thurn</dc:creator>
+<dc:date>2009-08-11T01:46+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mthurn/WWW-Search-Ebay-3.013/">
+<title>WWW-Search-Ebay-3.013</title>
+<link>http://search.cpan.org/~mthurn/WWW-Search-Ebay-3.013/</link>
+<description>backend for searching www.ebay.com </description>
+<dc:creator>Martin &#x27;Kingpin&#x27; Thurn</dc:creator>
+<dc:date>2009-08-11T01:42+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mlehmann/AnyEvent-5.1/">
+<title>AnyEvent-5.1</title>
+<link>http://search.cpan.org/~mlehmann/AnyEvent-5.1/</link>
+<description>the DBI of event loop programming </description>
+<dc:creator>Marc Lehmann</dc:creator>
+<dc:date>2009-08-11T01:18+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~rjbs/Parse-IRCLog-1.103/">
+<title>Parse-IRCLog-1.103</title>
+<link>http://search.cpan.org/~rjbs/Parse-IRCLog-1.103/</link>
+<description>parse internet relay chat logs </description>
+<dc:creator>Ricardo SIGNES</dc:creator>
+<dc:date>2009-08-11T01:12+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~sartak/IM-Engine-0.04/">
+<title>IM-Engine-0.04</title>
+<link>http://search.cpan.org/~sartak/IM-Engine-0.04/</link>
+<description>The HTTP::Engine of instant messaging </description>
+<dc:creator>Shawn M Moore</dc:creator>
+<dc:date>2009-08-11T00:58+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~schwigon/Data-DPath-0.15/">
+<title>Data-DPath-0.15</title>
+<link>http://search.cpan.org/~schwigon/Data-DPath-0.15/</link>
+<description>DPath is not XPath! </description>
+<dc:creator>Steffen Schwigon</dc:creator>
+<dc:date>2009-08-11T00:07+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~flora/Test-TempDir-0.05/">
+<title>Test-TempDir-0.05</title>
+<link>http://search.cpan.org/~flora/Test-TempDir-0.05/</link>
+<description>Temporary files support for testing. </description>
+<dc:creator>Florian Ragwitz</dc:creator>
+<dc:date>2009-08-11T00:06+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~flora/Catalyst-Plugin-Browser-0.06/">
+<title>Catalyst-Plugin-Browser-0.06</title>
+<link>http://search.cpan.org/~flora/Catalyst-Plugin-Browser-0.06/</link>
+<description>Browser Detection </description>
+<dc:creator>Florian Ragwitz</dc:creator>
+<dc:date>2009-08-10T22:52+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mons/AnyEvent-Memcached-0.01_2/">
+<title>AnyEvent-Memcached-0.01_2</title>
+<link>http://search.cpan.org/~mons/AnyEvent-Memcached-0.01_2/</link>
+<description>AnyEvent memcached client </description>
+<dc:creator>Mons Anderson</dc:creator>
+<dc:date>2009-08-10T22:43+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mons/AnyEvent-SMTP-0.02/">
+<title>AnyEvent-SMTP-0.02</title>
+<link>http://search.cpan.org/~mons/AnyEvent-SMTP-0.02/</link>
+<description>SMTP client and server </description>
+<dc:creator>Mons Anderson</dc:creator>
+<dc:date>2009-08-10T22:35+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~aayars/OP-0.308/">
+<title>OP-0.308</title>
+<link>http://search.cpan.org/~aayars/OP-0.308/</link>
+<description>Compact prototyping of InnoDB-backed object classes </description>
+<dc:creator>Alex Ayars</dc:creator>
+<dc:date>2009-08-10T21:53+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~chrisy/Net-Elexol-EtherIO24-0.21/">
+<title>Net-Elexol-EtherIO24-0.21</title>
+<link>http://search.cpan.org/~chrisy/Net-Elexol-EtherIO24-0.21/</link>
+<description>Threaded object interface for manipulating Elexol Ether I/O 24 units with Perl </description>
+<dc:creator>Chris Luke</dc:creator>
+<dc:date>2009-08-10T21:51+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~limaone/LaTeX-Table-v0.99_2/">
+<title>LaTeX-Table-v0.99_2</title>
+<link>http://search.cpan.org/~limaone/LaTeX-Table-v0.99_2/</link>
+<description>Perl extension for the automatic generation of LaTeX tables. </description>
+<dc:creator>Markus Riester</dc:creator>
+<dc:date>2009-08-10T21:31+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~perler/DBIx-Class-BitField-0.11/">
+<title>DBIx-Class-BitField-0.11</title>
+<link>http://search.cpan.org/~perler/DBIx-Class-BitField-0.11/</link>
+<description>Store multiple boolean fields in one integer field </description>
+<dc:creator>Moritz Onken</dc:creator>
+<dc:date>2009-08-10T20:55+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~lembark/Parallel-Depend-4.10/">
+<title>Parallel-Depend-4.10</title>
+<link>http://search.cpan.org/~lembark/Parallel-Depend-4.10/</link>
+<description>: Parallel-dependent dispatch of perl or shell code. </description>
+<dc:creator>Steven Lembark</dc:creator>
+<dc:date>2009-08-10T20:41+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~barbie/CPAN-Testers-WWW-Reports-Mailer-0.20/">
+<title>CPAN-Testers-WWW-Reports-Mailer-0.20</title>
+<link>http://search.cpan.org/~barbie/CPAN-Testers-WWW-Reports-Mailer-0.20/</link>
+<description>CPAN Testers Reports Mailer </description>
+<dc:creator>Barbie</dc:creator>
+<dc:date>2009-08-10T20:12+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~stbey/Bit-Vector-6.8/">
+<title>Bit-Vector-6.8</title>
+<link>http://search.cpan.org/~stbey/Bit-Vector-6.8/</link>
+<description>Efficient bit vector, set of integers and &#x22;big int&#x22; math library </description>
+<dc:creator>Steffen Beyer</dc:creator>
+<dc:date>2009-08-10T19:45+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~rglaue/XML-TreePP-XMLPath-0.55/">
+<title>XML-TreePP-XMLPath-0.55</title>
+<link>http://search.cpan.org/~rglaue/XML-TreePP-XMLPath-0.55/</link>
+<description>Similar to XPath, defines a path as an accessor to nodes of an XML::TreePP parsed XML Document. </description>
+<dc:creator>Russell E Glaue</dc:creator>
+<dc:date>2009-08-10T19:25+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~damog/File-MimeInfo-Simple-0.1/">
+<title>File-MimeInfo-Simple-0.1</title>
+<link>http://search.cpan.org/~damog/File-MimeInfo-Simple-0.1/</link>
+<description>Simple implementation to determine file type </description>
+<dc:creator>David Moreno</dc:creator>
+<dc:date>2009-08-10T19:20+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~chrisy/Net-Elexol-EtherIO24-0.20/">
+<title>Net-Elexol-EtherIO24-0.20</title>
+<link>http://search.cpan.org/~chrisy/Net-Elexol-EtherIO24-0.20/</link>
+<description>Threaded object interface for manipulating Elexol Ether I/O 24 units with Perl </description>
+<dc:creator>Chris Luke</dc:creator>
+<dc:date>2009-08-10T19:16+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~rglaue/XML-TreePP-XMLPath-0.54/">
+<title>XML-TreePP-XMLPath-0.54</title>
+<link>http://search.cpan.org/~rglaue/XML-TreePP-XMLPath-0.54/</link>
+<description>Similar to XPath, defines a path as an accessor to nodes of an XML::TreePP parsed XML Document. </description>
+<dc:creator>Russell E Glaue</dc:creator>
+<dc:date>2009-08-10T18:51+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~smueller/Module-ScanDeps-0.94/">
+<title>Module-ScanDeps-0.94</title>
+<link>http://search.cpan.org/~smueller/Module-ScanDeps-0.94/</link>
+<description>Recursively scan Perl code for dependencies </description>
+<dc:creator>Steffen M&#xFC;ller</dc:creator>
+<dc:date>2009-08-10T18:32+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~jwied/BZ-Client-1.01/">
+<title>BZ-Client-1.01</title>
+<link>http://search.cpan.org/~jwied/BZ-Client-1.01/</link>
+<description>A client for the Bugzilla web services API. </description>
+<dc:creator>Jochen Wiedmann</dc:creator>
+<dc:date>2009-08-10T18:00+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~rglaue/XML-TreePP-XMLPath-0.53/">
+<title>XML-TreePP-XMLPath-0.53</title>
+<link>http://search.cpan.org/~rglaue/XML-TreePP-XMLPath-0.53/</link>
+<description>Similar to XPath, defines a path as an accessor to nodes of an XML::TreePP parsed XML Document. </description>
+<dc:creator>Russell E Glaue</dc:creator>
+<dc:date>2009-08-10T17:42+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~adamk/YAML-0.70/">
+<title>YAML-0.70</title>
+<link>http://search.cpan.org/~adamk/YAML-0.70/</link>
+<description>YAML Ain&#x27;t Markup Language (tm) </description>
+<dc:creator>Adam Kennedy</dc:creator>
+<dc:date>2009-08-10T17:23+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~anirvan/Business-LCCN-1.00/">
+<title>Business-LCCN-1.00</title>
+<link>http://search.cpan.org/~anirvan/Business-LCCN-1.00/</link>
+<description>Work with Library of Congress Control Number (LCCN) codes </description>
+<dc:creator>Anirvan Chatterjee</dc:creator>
+<dc:date>2009-08-10T17:12+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~rjray/App-Changelog2x-0.11/">
+<title>App-Changelog2x-0.11</title>
+<link>http://search.cpan.org/~rjray/App-Changelog2x-0.11/</link>
+<description>A wrapper-class for the functionality of changelog2x </description>
+<dc:creator>Randy J Ray</dc:creator>
+<dc:date>2009-08-10T17:11+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mons/AnyEvent-Memcached-0.01_1/">
+<title>AnyEvent-Memcached-0.01_1</title>
+<link>http://search.cpan.org/~mons/AnyEvent-Memcached-0.01_1/</link>
+<description>AnyEvent memcached client </description>
+<dc:creator>Mons Anderson</dc:creator>
+<dc:date>2009-08-10T17:01+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~vvelox/Text-Filter-Froggy-0.0.0/">
+<title>Text-Filter-Froggy-0.0.0</title>
+<link>http://search.cpan.org/~vvelox/Text-Filter-Froggy-0.0.0/</link>
+<description>the frog goes rabbit rabbit rabbit </description>
+<dc:creator>Zane C. Bowers</dc:creator>
+<dc:date>2009-08-10T16:48+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~cvicente/Net-IPTrie-0.5/">
+<title>Net-IPTrie-0.5</title>
+<link>http://search.cpan.org/~cvicente/Net-IPTrie-0.5/</link>
+<description>Perl module for building IPv4 and IPv6 address space hierarchies fast </description>
+<dc:creator>Carlos Vicente</dc:creator>
+<dc:date>2009-08-10T16:46+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~cvicente/Text-DHCPLeases-0.9/">
+<title>Text-DHCPLeases-0.9</title>
+<link>http://search.cpan.org/~cvicente/Text-DHCPLeases-0.9/</link>
+<description>Parse DHCP leases file from ISC dhcpd. </description>
+<dc:creator>Carlos Vicente</dc:creator>
+<dc:date>2009-08-10T16:40+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~darold/Apache2-ModProxyPerlHtml-2.6/">
+<title>Apache2-ModProxyPerlHtml-2.6</title>
+<link>http://search.cpan.org/~darold/Apache2-ModProxyPerlHtml-2.6/</link>
+<dc:creator>Darold Gilles</dc:creator>
+<dc:date>2009-08-10T16:08+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~crein/CGI-Session-Driver-layered-0.7/">
+<title>CGI-Session-Driver-layered-0.7</title>
+<link>http://search.cpan.org/~crein/CGI-Session-Driver-layered-0.7/</link>
+<description>Use multiple layered drivers </description>
+<dc:creator>Chris Reinhardt</dc:creator>
+<dc:date>2009-08-10T15:53+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~roland/jmx4perl-0.35_2/">
+<title>jmx4perl-0.35_2</title>
+<link>http://search.cpan.org/~roland/jmx4perl-0.35_2/</link>
+<description>JMX access tools and modules </description>
+<dc:creator>Roland Hu&#xDF;</dc:creator>
+<dc:date>2009-08-10T15:51+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~fdaly/Test-Deep-0.106/">
+<title>Test-Deep-0.106</title>
+<link>http://search.cpan.org/~fdaly/Test-Deep-0.106/</link>
+<description>Extremely flexible deep comparison </description>
+<dc:creator>Fergal Daly</dc:creator>
+<dc:date>2009-08-10T15:50+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~pshangov/Data-AsObject-0.01/">
+<title>Data-AsObject-0.01</title>
+<link>http://search.cpan.org/~pshangov/Data-AsObject-0.01/</link>
+<description>Easy OO access to complex perl data structures </description>
+<dc:creator>Petar Shangov</dc:creator>
+<dc:date>2009-08-10T15:50+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~dagolden/ExtUtils-ParseXS-2.20_04/">
+<title>ExtUtils-ParseXS-2.20_04</title>
+<link>http://search.cpan.org/~dagolden/ExtUtils-ParseXS-2.20_04/</link>
+<description>converts Perl XS code into C code </description>
+<dc:creator>David Golden</dc:creator>
+<dc:date>2009-08-10T15:44+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mmims/DBIx-Class-InflateColumn-FS-0.01005/">
+<title>DBIx-Class-InflateColumn-FS-0.01005</title>
+<link>http://search.cpan.org/~mmims/DBIx-Class-InflateColumn-FS-0.01005/</link>
+<description>Inflate/deflate columns to Path::Class::File objects </description>
+<dc:creator>Marc Mims</dc:creator>
+<dc:date>2009-08-10T13:55+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~pravus/Proc-Lite-0.02/">
+<title>Proc-Lite-0.02</title>
+<link>http://search.cpan.org/~pravus/Proc-Lite-0.02/</link>
+<description>A lightweight module for running processes synchronously </description>
+<dc:creator>jason hord</dc:creator>
+<dc:date>2009-08-10T13:53+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~barbie/Data-FormValidator-Filters-Demoroniser-0.01/">
+<title>Data-FormValidator-Filters-Demoroniser-0.01</title>
+<link>http://search.cpan.org/~barbie/Data-FormValidator-Filters-Demoroniser-0.01/</link>
+<description>Data::FormValidator filter that allows you to demoronise a string. </description>
+<dc:creator>Barbie</dc:creator>
+<dc:date>2009-08-10T13:08+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~cornelius/Vimana-0.073/">
+<title>Vimana-0.073</title>
+<link>http://search.cpan.org/~cornelius/Vimana-0.073/</link>
+<description>Vim script manager. </description>
+<dc:creator>Yo-An Lin (&#x6797;&#x4F51;&#x5B89;)</dc:creator>
+<dc:date>2009-08-10T12:50+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~bricas/Catalyst-Plugin-ConfigLoader-0.26/">
+<title>Catalyst-Plugin-ConfigLoader-0.26</title>
+<link>http://search.cpan.org/~bricas/Catalyst-Plugin-ConfigLoader-0.26/</link>
+<description>Load config files of various types </description>
+<dc:creator>Brian Cassidy</dc:creator>
+<dc:date>2009-08-10T12:44+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~adamk/YAML-0.69_02/">
+<title>YAML-0.69_02</title>
+<link>http://search.cpan.org/~adamk/YAML-0.69_02/</link>
+<description>YAML Ain&#x27;t Markup Language (tm) </description>
+<dc:creator>Adam Kennedy</dc:creator>
+<dc:date>2009-08-10T12:44+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~jettero/Term-ANSIColorx-ColorNicknames-2.7184/">
+<title>Term-ANSIColorx-ColorNicknames-2.7184</title>
+<link>http://search.cpan.org/~jettero/Term-ANSIColorx-ColorNicknames-2.7184/</link>
+<description>nicknames for the ANSI colors </description>
+<dc:creator>Paul Miller</dc:creator>
+<dc:date>2009-08-10T12:32+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~adamk/Graph-XGMML-0.01/">
+<title>Graph-XGMML-0.01</title>
+<link>http://search.cpan.org/~adamk/Graph-XGMML-0.01/</link>
+<description>Simple Graph.pm-like interface for generating XGMML graphs </description>
+<dc:creator>Adam Kennedy</dc:creator>
+<dc:date>2009-08-10T12:22+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mdom/Term-GnuScreen-0.03/">
+<title>Term-GnuScreen-0.03</title>
+<link>http://search.cpan.org/~mdom/Term-GnuScreen-0.03/</link>
+<description>Control GNU screen via perl </description>
+<dc:creator>Mario Domg&#xF6;rgen</dc:creator>
+<dc:date>2009-08-10T11:50+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~bingos/CPANPLUS-Config-BaseEnv-0.04/">
+<title>CPANPLUS-Config-BaseEnv-0.04</title>
+<link>http://search.cpan.org/~bingos/CPANPLUS-Config-BaseEnv-0.04/</link>
+<description>Set the environment for the CPANPLUS base dir </description>
+<dc:creator>Chris Williams</dc:creator>
+<dc:date>2009-08-10T11:47+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~bingos/CPANPLUS-Config-BaseEnv-0.02/">
+<title>CPANPLUS-Config-BaseEnv-0.02</title>
+<link>http://search.cpan.org/~bingos/CPANPLUS-Config-BaseEnv-0.02/</link>
+<description>Set the environment for the CPANPLUS base dir </description>
+<dc:creator>Chris Williams</dc:creator>
+<dc:date>2009-08-10T11:31+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~ajolma/Tree-R-0.06/">
+<title>Tree-R-0.06</title>
+<link>http://search.cpan.org/~ajolma/Tree-R-0.06/</link>
+<description>Perl extension for the Rtree data structure and algorithms </description>
+<dc:creator>Ari Jolma</dc:creator>
+<dc:date>2009-08-10T11:29+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~flora/Acme-CPANAuthors-German-0.03/">
+<title>Acme-CPANAuthors-German-0.03</title>
+<link>http://search.cpan.org/~flora/Acme-CPANAuthors-German-0.03/</link>
+<description>We are German CPAN authors </description>
+<dc:creator>Florian Ragwitz</dc:creator>
+<dc:date>2009-08-10T11:14+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~barbie/Data-FormValidator-Constraints-Words-0.04/">
+<title>Data-FormValidator-Constraints-Words-0.04</title>
+<link>http://search.cpan.org/~barbie/Data-FormValidator-Constraints-Words-0.04/</link>
+<description>Data constraints for word inputs. </description>
+<dc:creator>Barbie</dc:creator>
+<dc:date>2009-08-10T10:45+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mons/AnyEvent-SMTP-0.01/">
+<title>AnyEvent-SMTP-0.01</title>
+<link>http://search.cpan.org/~mons/AnyEvent-SMTP-0.01/</link>
+<description>SMTP client and server </description>
+<dc:creator>Mons Anderson</dc:creator>
+<dc:date>2009-08-10T10:41+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~mdom/Term-GnuScreen-0.02/">
+<title>Term-GnuScreen-0.02</title>
+<link>http://search.cpan.org/~mdom/Term-GnuScreen-0.02/</link>
+<description>Control GNU screen via perl </description>
+<dc:creator>Mario Domg&#xF6;rgen</dc:creator>
+<dc:date>2009-08-10T10:06+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~vvelox/Text-Thesaurus-Aiksaurus-0.0.0/">
+<title>Text-Thesaurus-Aiksaurus-0.0.0</title>
+<link>http://search.cpan.org/~vvelox/Text-Thesaurus-Aiksaurus-0.0.0/</link>
+<description>The great new Text::Thesaurus::Aiksaurus! </description>
+<dc:creator>Zane C. Bowers</dc:creator>
+<dc:date>2009-08-10T09:28+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~abeltje/Test-Smoke-1.40/">
+<title>Test-Smoke-1.40</title>
+<link>http://search.cpan.org/~abeltje/Test-Smoke-1.40/</link>
+<description>The Perl core test smoke suite </description>
+<dc:creator>Abe Timmerman</dc:creator>
+<dc:date>2009-08-10T09:09+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~dylan/Filter-BoxString-0.04/">
+<title>Filter-BoxString-0.04</title>
+<link>http://search.cpan.org/~dylan/Filter-BoxString-0.04/</link>
+<description>Describe your multiline strings as text boxes. </description>
+<dc:creator>Dylan Doxey</dc:creator>
+<dc:date>2009-08-10T08:50+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~dylan/Filter-Arguments-0.14/">
+<title>Filter-Arguments-0.14</title>
+<link>http://search.cpan.org/~dylan/Filter-Arguments-0.14/</link>
+<description>Configure and read your command line arguments from @ARGV. </description>
+<dc:creator>Dylan Doxey</dc:creator>
+<dc:date>2009-08-10T08:38+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~dylan/WebService-Rakuten-0.04/">
+<title>WebService-Rakuten-0.04</title>
+<link>http://search.cpan.org/~dylan/WebService-Rakuten-0.04/</link>
+<description>Object interface to Rakuten webservice </description>
+<dc:creator>Dylan Doxey</dc:creator>
+<dc:date>2009-08-10T08:25+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~elmex/AnyEvent-IRC-0.81/">
+<title>AnyEvent-IRC-0.81</title>
+<link>http://search.cpan.org/~elmex/AnyEvent-IRC-0.81/</link>
+<description>An event system independend IRC protocol module </description>
+<dc:creator>Robin Redeker</dc:creator>
+<dc:date>2009-08-10T08:24+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~elmex/AnyEvent-Twitter-0.2/">
+<title>AnyEvent-Twitter-0.2</title>
+<link>http://search.cpan.org/~elmex/AnyEvent-Twitter-0.2/</link>
+<description>Implementation of the Twitter API for AnyEvent </description>
+<dc:creator>Robin Redeker</dc:creator>
+<dc:date>2009-08-10T08:22+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~elmex/AnyEvent-HTTPD-0.81/">
+<title>AnyEvent-HTTPD-0.81</title>
+<link>http://search.cpan.org/~elmex/AnyEvent-HTTPD-0.81/</link>
+<description>A simple lightweight event based web (application) server </description>
+<dc:creator>Robin Redeker</dc:creator>
+<dc:date>2009-08-10T08:22+00:00</dc:date>
+</item>
+
+<item rdf:about="http://search.cpan.org/~dylan/Lingua-Translate-Google-0.08/">
+<title>Lingua-Translate-Google-0.08</title>
+<link>http://search.cpan.org/~dylan/Lingua-Translate-Google-0.08/</link>
+<description>Translation back-end for Google&#x27;s beta translation service. </description>
+<dc:creator>Dylan Doxey</dc:creator>
+<dc:date>2009-08-10T08:18+00:00</dc:date>
+</item>
+
+</rdf:RDF>
