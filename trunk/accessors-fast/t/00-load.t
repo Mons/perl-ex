@@ -1,13 +1,11 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl -w
 
-use utf8;
 use strict;
 use warnings;
-use Carp;
-use ex::lib qw(../../lib);
+use lib::abs qw(../lib);
+use Test::NoWarnings;
+use Test::More tests => 3;
 
-use Test::More qw(no_plan);
-use Data::Dumper;
 use_ok 'accessors::fast';
 use_ok 'accessors::fast::tie';
 

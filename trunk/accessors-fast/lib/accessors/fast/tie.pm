@@ -1,5 +1,5 @@
 package # no pause
- accessors::fast::tie;
+	accessors::fast::tie;
 
 use strict;
 use Carp ();

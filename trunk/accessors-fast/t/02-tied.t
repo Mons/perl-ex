@@ -2,6 +2,10 @@
 
 use strict;
 use warnings;
+use constant::abs {
+	'accessors::fast::TIE' => 1,
+#	'accessors::fast::DEBUG' => 1,
+};
 use lib::abs qw(../lib);
 
 package X;
@@ -48,7 +52,7 @@ isa_ok(Z->new(),'X');
 isa_ok(Z->new(),'Y');
 isa_ok(Y->new(),'X');
 
-ok !tied %$z, 'object is tied';
+ok tied %$z, 'object is tied';
 
 is_deeply [ X->field_list ], [ qw(a b) ], 'X.fields';
 is_deeply [ Y->field_list ], [ qw(a b c) ], 'Y.fields';
@@ -61,3 +65,4 @@ is_deeply [ Z->field_list ], [ qw(a b c z) ], 'Z.fields';
 }
 
 exit 0;
+
