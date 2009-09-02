@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/GD-Barcode-DataMatrix.t
+lib/GD/Barcode/DataMatrix.pm
