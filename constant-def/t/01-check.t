@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use ex::lib '../lib';
+use lib::abs '../lib';
 use Test::More;
 BEGIN { 
 	my $tests = 5;

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use ex::lib '../lib';
+use lib::abs '../lib';
 
 # redefine constant in tnodebug to see diagnostics warnings
 use constant::abs 'tnodebug::DEBUG' => 1;
