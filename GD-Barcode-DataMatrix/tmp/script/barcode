@@ -1,0 +1,15 @@
+#!/usr/bin/perl
+
+use strict;
+use lib::abs '../../lib';
+use GD::Barcode::DataMatrix;
+use R::Dump;
+$GD::Barcode::DataMatrix::DEBUG = 1;
+
+my ($text,$type,$size,$pt) = @ARGV;
+my $bc = GD::Barcode::DataMatrix->new( $text, Type => $type, Size => $size, ProcessTilde => $pt  )
+or die $GD::Barcode::DataMatrix::errStr;
+my $b = $bc->barcode( 1 => '*', 0 => ' ' );
+print $b;
+#$bc->{ngn}->ProcessTilde;
+#print Dump($bc->{ngn}{code}),"\n";
