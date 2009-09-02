@@ -1,5 +1,5 @@
 ---
-abstract: 'Wrap fastest Class::Accessor::* into pragma'
+abstract: 'Compiletime accessors using Class::Accessor::Fast'
 author:
   - 'Mons Anderson <mons@cpan.org>'
 build_requires:
