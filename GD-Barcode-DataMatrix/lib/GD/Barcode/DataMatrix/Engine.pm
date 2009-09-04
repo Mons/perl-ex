@@ -74,12 +74,12 @@ sub new {
 	$self->init();
 	warn "[CA] new(@_)\n" if $DEBUG{TRACE};
 	$self->{orig} = $self->{code} = shift;  # text
-	$self->setType(shift); # type of code
+	$self->setType(shift);                  # type of encoding
 	$self->{preferredFormat} = stringToFormat(shift) || -1; # type of format
-	$self->{as} = [  ];
-	$self->ProcessTilde if (shift);         # process tilde ???
+	$self->{as} = [  ]; # additional streams
+	$self->ProcessTilde if (shift);         # process tilde
 	return unless ( my $l = length($self->{code}) );        # no data to encode
-    $self->{ac} = [ split //,$self->{code} ]; # create an char array
+	$self->{ac} = [ split //,$self->{code} ]; # create an char array
 	$self->{ai} = [ map { +ord } @{ $self->{ac} } ]; # create an int array
 	$self->CreateBitmap();
 	return $self;
@@ -109,18 +109,11 @@ sub ProcessTilde {
 		for my $i (0,1,4,5) {
 			s{^(.{$i})~1}{ $as->[$-[0]+$i]=''; $1."\350"}ge;
 		}
-		#s{^~1}{\350}g;
-		#s{^.~1}{ $as->[$-[0]] "\350"}ge;
-		#s{^(.{4})~1}{$1."\350"}ge;
-		#s{^(.{5})~1}{$1."\350"}ge;
 		s{~1}{\035}g;
 		s{~2(.{3})}{ $as->[$-[0]] = $1; "\351".$2 }e;
 		s{^~3}{ $as->[0] = ''; "\352" }e;
 		s{^~5}{ $as->[0] = ''; "\354" }e;
 		s{^~6}{ $as->[0] = ''; "\355" }e;
-		#s{^~([56])}{ chr(oct(354)-5+$1) }e;
-		#while ((my $o = index( $_, '~7' )) > $ofs) {
-			
 			s{~7(.{6})}{do{
 				my $d = int $1;
 				#warn "There is $d got from $1\n";
@@ -142,109 +135,26 @@ sub ProcessTilde {
 				warn "PT affect as[$-[0]] = ".join('+', map ord, split //, $d) if $DEBUG{TRACE};
 				"\361"
 			}}ge;
-		#}
 		s{~(.)}{$1 eq '~' ? '~' : $1}ge;
-		
 		warn "[C9] ProcessTilde($self->{code}) => ".Dumper($_) if $DEBUG{TRACE};
 		return $self->{code} = $_;
 	}
-    my $flag = 0;
-    my $k = length($s);
-    
-    my $s1 = "";
-    my $flag1 = 0;
-    for (my $i = 0; $i < $k; $i++) {
-    	my $j = ord(substr($s,$i,1)); #char code at $i
-        if($j == 126) {
-            if($i < $k - 1) {
-        		my $c = substr($s,$i+1,1);
-                if($c ge '@' && $c le 'Z') {
-                    $i++;
-                    $s1 .= chr(ord($c) - 64);
-                }
-                if( $c eq '~' ) {
-                    $s1 .= '~';
-                    $i++;
-                }
-                if( $c eq '1' ) {
-                    if(length($s1) =~ /^(0|1|4|5)$/) {
-                        $as->[length($s1)] = "";
-                        $s1 = $s1 . chr(oct(350));
-                    } else {
-                        $s1 = $s1 . chr(oct(35));
-                    }
-                    $i++;
-                }
-                if( $c eq '2' and $i < $k - 4) {
-                    $as->[length($s1)] = substr($s,$i+2,3);
-                    $s1 .= chr(oct(351));
-                    $i += 4;
-                }
-                if( $c =~ /^(3|5|6)$/ and length($s1) == 0 ) {
-                    $as->[0] = "";
-                    $s1 .= chr(oct(349+$c));
-                    $i++;
-                }
-                if( $c eq '7' and $i < $k - 7) {
-                    my $s2 = substr($s,$i+2,$i+8);
-                    my $d = 0.0 + $s2;
-                    if($d <= 126) {
-                        $as->[ length($s1) ] = "" . chr(int($d + 1.0));
-                        $s1 .= chr(oct(361));
-                    }
-                    if($d >= 127 && $d <= 16382) {
-                        my $i1 = int(($d - 127) / 254) + 128;
-                        my $k1 = int(($d - 127) % 254) + 1;
-                        $as->[length($s1)] = chr($i1) . chr($k1);
-                        $s1 .= chr(oct(361));
-                    }
-                    if($d >= 16383) {
-                        my $j1 = int(($d - 16383) / 64516) + 192;
-                        my $l1 = int(($d - 16383) / 254);
-                        $l1 = $l1 % 254 + 1;
-                        my $i2 = int(($d - 16383) % 254) + 1;
-                        $as->[length($s1)] = chr($j1) . chr($l1) . chr($i2);
-                        $s1 .=  chr(oct(361));
-                    }
-                    $i += 7;
-                }
-                if($c eq 'd' and $i < $k - 3) {
-                    my $s3 = substr($s,$i+2,$i+5);
-                    my $l = 0 + $s3;
-                    $l = 255 if $l > 255;
-                    $s1 .= chr($l);
-                    $i += 4;
-                }
-            }
-        } else {
-            $s1 .= chr($j);
-        }
-    }
-	warn "[C9] ProcessTilde($s) => $s1\n" if $DEBUG{TRACE};
-    $self->{code} = $s1;
 }
 
 sub CalcReed { # (int ai[], int i, int j) : void
-	sub getpoly($) { # (int i) : void
-		my $i = shift;
-		return exists $POLY{$i} ? $POLY{$i} : $POLY{68};
-	}
 	sub mult($$) { # (int i, int j) : int
 		my ($i,$j) = @_;
 		my $k = 0;
-		return 0 unless 1* $i * $j;
+		return 0 unless 1 * $i * $j;
 		$k = $GFL[$i] + $GFL[$j];
 		$k -= $N if $k >= $N;
 		return $GFI[$k];
 	}
-	sub short($) {
-		my $s = shift;
-		return $s & 0xFF;
-	}
+	sub short($) { $_[0] & 0xFF; }
 		
 	my ($ai,$i,$j) = @_;
 	warn "CalcReed(ai {".join(" ",grep{+defined}@$ai)."},$i,$j)\n" if $DEBUG{CALC};
-	my $p = getpoly($j);
+	my $p = exists $POLY{$j} ? $POLY{$j} : $POLY{68};
 	warn "CalcReed: poly {".join(" ",@$p)."}\n" if $DEBUG{CALC};
     @$ai[ $i .. $i + $j - 1 ] = (0) x $j;
     for my $l(0 .. $i - 1) {
@@ -834,138 +744,6 @@ sub FillCharData { # (int ncol; int nrow; int array;) : void
 	my ($ncol,$nrow,$array) = @_;
 	GD::Barcode::DataMatrix::CharDataFiller->new($ncol,$nrow,$array);
 	return;
-}
-
-1;
-__END__
-package GD::Barcode::DataMatrix::Engine::CharDataFiller;
-
-use strict;
-
-sub new {
-	my $self = bless {}, shift;
-	@$self{qw( ncol nrow array )} = @_;
-	$self->fill();
-	return $self;
-}
-
-sub module {
-	my ($self,$i,$j,$k,$l) = @_;
-    if($i < 0) {
-    	$i += $self->{nrow};
-        $j += 4 - ($self->{nrow} + 4) % 8;
-    }
-    if($j < 0) {
-        $j += $self->{ncol};
-        $i += 4 - ($self->{ncol} + 4) % 8;
-    }
-    $self->{array}->[$i * $self->{ncol} + $j] = 10 * $k + $l;
-    return;
-}
-
-sub utah {
-	my ($self,$i,$j,$k) = @_;
-    $self->module($i - 2, $j - 2, $k, 1);
-    $self->module($i - 2, $j - 1, $k, 2);
-    $self->module($i - 1, $j - 2, $k, 3);
-    $self->module($i - 1, $j - 1, $k, 4);
-    $self->module($i - 1, $j, $k, 5);
-    $self->module($i, $j - 2, $k, 6);
-    $self->module($i, $j - 1, $k, 7);
-    $self->module($i, $j, $k, 8);
-    return;
-}
-
-sub corner1 {
-	my ($self,$i) = @_;
-	my ($ncol,$nrow) = @$self{qw( ncol nrow )};
-    $self->module($nrow - 1, 0, $i, 1);
-    $self->module($nrow - 1, 1, $i, 2);
-    $self->module($nrow - 1, 2, $i, 3);
-    $self->module(0, $ncol - 2, $i, 4);
-    $self->module(0, $ncol - 1, $i, 5);
-    $self->module(1, $ncol - 1, $i, 6);
-    $self->module(2, $ncol - 1, $i, 7);
-    $self->module(3, $ncol - 1, $i, 8);
-    return;
-}
-
-sub corner2($) { #(int i)
-	my ($self,$i) = @_;
-	my ($ncol,$nrow) = @$self{qw( ncol nrow )};
-    $self->module($nrow - 3, 0, $i, 1);
-    $self->module($nrow - 2, 0, $i, 2);
-    $self->module($nrow - 1, 0, $i, 3);
-    $self->module(0, $ncol - 4, $i, 4);
-    $self->module(0, $ncol - 3, $i, 5);
-    $self->module(0, $ncol - 2, $i, 6);
-    $self->module(0, $ncol - 1, $i, 7);
-    $self->module(1, $ncol - 1, $i, 8);
-    return;
-}
-
-sub corner3($) { #(int i)
-	my ($self,$i) = @_;
-	my ($ncol,$nrow) = @$self{qw( ncol nrow )};
-    $self->module($nrow - 3, 0, $i, 1);
-    $self->module($nrow - 2, 0, $i, 2);
-    $self->module($nrow - 1, 0, $i, 3);
-    $self->module(0, $ncol - 2, $i, 4);
-    $self->module(0, $ncol - 1, $i, 5);
-    $self->module(1, $ncol - 1, $i, 6);
-    $self->module(2, $ncol - 1, $i, 7);
-    $self->module(3, $ncol - 1, $i, 8);
-    return;
-}
-
-sub corner4($) { #(int i)
-	my ($self,$i) = @_;
-	my ($ncol,$nrow) = @$self{qw( ncol nrow )};
-    $self->module($nrow - 1, 0, $i, 1);
-    $self->module($nrow - 1, $ncol - 1, $i, 2);
-    $self->module(0, $ncol - 3, $i, 3);
-    $self->module(0, $ncol - 2, $i, 4);
-    $self->module(0, $ncol - 1, $i, 5);
-    $self->module(1, $ncol - 3, $i, 6);
-    $self->module(1, $ncol - 2, $i, 7);
-    $self->module(1, $ncol - 1, $i, 8);
-    return;
-}
-
-sub fill { # (int ncol; int nrow; int array;) : void
-	my $self = shift;
-	my ($ncol,$nrow,$array) = @$self{qw( ncol nrow array )};
-    my $i = 1;
-    my $j = 4;
-    my $k = 0;
-    for(my $l = 0; $l < $nrow; $l++) {
-        for(my $i1 = 0; $i1 < $ncol; $i1++) {
-            $array->[$l * $ncol + $i1] = 0;
-        }
-    }
-    do {
-        $self->corner1($i++) if $j == $nrow && $k == 0;
-        $self->corner2($i++) if $j == $nrow - 2 && $k == 0 && $ncol % 4 != 0;
-        $self->corner3($i++) if $j == $nrow - 2 && $k == 0 && $ncol % 8 == 4;
-        $self->corner4($i++) if $j == $nrow + 4 && $k == 2 && $ncol % 8 == 0;
-        do {
-            $self->utah($j, $k, $i++) if $j < $nrow && $k >= 0 && $array->[$j * $ncol + $k] == 0;
-            $j -= 2;
-            $k += 2;
-        } while($j >= 0 && $k < $ncol);
-        $j++;
-        $k += 3;
-        do {
-            $self->utah($j, $k, $i++) if $j >= 0 && $k < $ncol && $array->[$j * $ncol + $k] == 0;
-            $j += 2;
-            $k -= 2;
-        } while($j < $nrow && $k >= 0);
-        $j += 3;
-        $k++;
-    } while($j < $nrow || $k < $ncol);
-    $array->[$nrow * $ncol - 1] = $array->[($nrow - 1) * $ncol - 2] = 1
-    	if($array->[$nrow * $ncol - 1] == 0);
-    return;
 }
 
 1;
