@@ -4,9 +4,8 @@ use strict;
 use warnings;
 use lib::abs qw(../lib);
 use Test::NoWarnings;
-use Test::More tests => 2;
+use Test::More tests => 0;
 
 use_ok 'GD::Barcode::Datamatrix';
-use_ok 'accessors::fast::tie';
 
-diag( "Testing accessors::fast $accessors::fast::VERSION, Perl $], $^X" );
+diag( "Testing GD::Barcode::Datamatrix $GD::Barcode::Datamatrix::VERSION, Perl $], $^X" );

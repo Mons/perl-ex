@@ -26,7 +26,6 @@ sub init {
 	my($self, $txt,%params) =@_;
 	return 'Text required' if $txt eq '';
 	$self->{text} = $txt;
-	print "text($txt)\n";
 	$self->{Type} = $params{Type} || 'AUTO';
 	$self->{ngn} = eval {
 		my $type = $params{Type} || undef;

@@ -92,14 +92,14 @@ public class prog
 			String arg = args[3].toLowerCase();
 			Boolean pt = false;
 			if (arg.compareTo("1") == 0) {
-				System.out.println("PT = true");
+				//System.out.println("PT = true");
 				pt = true;
 			}else {
-				System.err.println("PT = false");
+				//System.err.println("PT = false");
 			}
 			BC.setProcessTilde(pt);
 		} else {
-			System.err.println("PT = false");
+			//System.err.println("PT = false");
 			BC.setProcessTilde(false);
 		}
 		
