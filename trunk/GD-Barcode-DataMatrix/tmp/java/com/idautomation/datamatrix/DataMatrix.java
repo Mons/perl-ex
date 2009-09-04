@@ -741,7 +741,7 @@ public class DataMatrix extends Canvas
 					{
 						if(s1.length() == 0 || s1.length() == 1 || s1.length() == 4 || s1.length() == 5)
 						{
-							System.out.println("PT affect as["+s1.length()+"] = ''");
+							if (DEBUG) System.out.println("PT affect as["+s1.length()+"] = ''");
 							as[s1.length()] = "";
 							s1 = s1 + '\350';
 						} else
@@ -752,14 +752,14 @@ public class DataMatrix extends Canvas
 					}
 					if(c == '2' && i < k - 4)
 					{
-						System.out.println("PT affect as["+s1.length()+"] += '"+s.charAt(i + 2) + s.charAt(i + 3) + s.charAt(i + 4)+"'");
+						if (DEBUG) System.out.println("PT affect as["+s1.length()+"] += '"+s.charAt(i + 2) + s.charAt(i + 3) + s.charAt(i + 4)+"'");
 						as[s1.length()] = "" + s.charAt(i + 2) + s.charAt(i + 3) + s.charAt(i + 4);
 						s1 = s1 + '\351';
 						i += 4;
 					}
 					if(c == '3' && s1.length() == 0)
 					{
-						System.out.println("PT affect as["+s1.length()+"] = ''");
+						if (DEBUG) System.out.println("PT affect as["+s1.length()+"] = ''");
 						as[s1.length()] = "";
 						s1 = s1 + '\352';
 						i++;
@@ -788,18 +788,18 @@ public class DataMatrix extends Canvas
 						{
 							d = 0.0D;
 						}
-						System.out.println("There is "+d+" got from " + s2);
+						if (DEBUG) System.out.println("There is "+d+" got from " + s2);
 						if(d <= 126D)
 						{
 							as[s1.length()] = "" + (char)(int)(d + 1.0D);
-							System.out.println("PT affect as["+s1.length()+"] = '"+ (int)(d + 1.0D) +"'");
+							if (DEBUG) System.out.println("PT affect as["+s1.length()+"] = '"+ (int)(d + 1.0D) +"'");
 							s1 = s1 + '\361';
 						}
 						if(d >= 127D && d <= 16382D)
 						{
 							int i1 = (int)((d - 127D) / 254D) + 128;
 							int k1 = (int)((d - 127D) % 254D) + 1;
-							System.out.println("PT affect as["+s1.length()+"] = '"+ i1 +"+"+ k1+ "'");
+							if (DEBUG) System.out.println("PT affect as["+s1.length()+"] = '"+ i1 +"+"+ k1+ "'");
 							as[s1.length()] = "" + (char)i1 + (char)k1;
 							s1 = s1 + '\361';
 						}
@@ -809,7 +809,7 @@ public class DataMatrix extends Canvas
 							int l1 = (int)((d - 16383D) / 254D);
 							l1 = l1 % 254 + 1;
 							int i2 = (int)((d - 16383D) % 254D) + 1;
-							System.out.println("PT affect as["+s1.length()+"] = '"+j1 +"+"+ l1 +"+" + i2+"'");
+							if (DEBUG) System.out.println("PT affect as["+s1.length()+"] = '"+j1 +"+"+ l1 +"+" + i2+"'");
 							as[s1.length()] = "" + (char)j1 + (char)l1 + (char)i2;
 							s1 = s1 + '\361';
 						}
@@ -839,20 +839,21 @@ public class DataMatrix extends Canvas
 			}
 		}
 
-		System.out.println("ProcessTilde(s["+s+"],as["+as.length+"] => s1["+s1+"])");
+		if (DEBUG) System.out.println("ProcessTilde(s["+s+"],as["+as.length+"] => s1["+s1+"])");
 		return s1;
 	}
 
 	public void CA(String text)
 	{
-		System.out.println("text("+text+")");
-		String as[] = new String[5000];
+		if (DEBUG) System.out.println("text("+text+")");
+		String as[] = new String[500];
 		reBuild = false;
 		internalCode = code = text;
 		if(processTilde)
 			internalCode = C9(code, as);
 		if(internalCode.length() == 0)
 			return;
+		//System.out.println("text("+internalCode+")");
 		int ai[] = new int[internalCode.length()];
 		for(int i = 0; i < internalCode.length(); i++)
 			ai[i] = internalCode.charAt(i);
@@ -864,8 +865,8 @@ public class DataMatrix extends Canvas
 	{
 		String tmp[] = new String[5];
 		C2(as,tmp,0,0,5);
-		//System.out.println("CB(ai["+join(",",ai)+"],as["+as.length+"]{"+join(",",tmp)+" ...})");
-		int ai1[] = new int[5000];
+		if (DEBUG) System.out.println("[CB] CreateBitmap(ai["+join(",",ai)+"]");
+		int ai1[] = new int[500];
 		int ai2[] = new int[1];
 		int ai3[] = new int[1];
 		int i = 0;
@@ -888,6 +889,7 @@ public class DataMatrix extends Canvas
 				ai1[j] = ai[j];
 
 		}
+		if (DEBUG) System.out.println("[CB] selected (ai1["+join(",",ai1)+"]");
 		//System.out.println("[CB]: enc: " + encName[encoding] + "; " + encName[currentEncoding]);
 		System.out.println("Use Encoding: " + encName[currentEncoding] + "(" + encName[encoding] + ")");
 		int k = 0;
@@ -932,7 +934,7 @@ public class DataMatrix extends Canvas
 		reederr = C0[l][10];
 		reedblocks = C0[l][11];
 		//System.out.println("[CB]: Selected "+rows+"x"+cols+" ["+totaldata+"]; " + i);
-		System.out.println("Format: "+rows+"x"+cols+"; Data: "+totaldata+"; i=" + i);
+		System.out.println("Format: "+rows+"x"+cols+"; Data: "+totaldata+"; i=" + i + "; blocks = "+reedblocks);
 		if((currentEncoding == E_C40 || currentEncoding == E_TEXT) && C49rest == 0 && i == totaldata && ai1[i - 1] == 254)
 			ai1[i - 1] = 129;
 		int ai4[][] = new int[10][255];
@@ -945,7 +947,7 @@ public class DataMatrix extends Canvas
 				ai1[i1] = C8(129, i1 + 1);
 			flag = false;
 		}
-		//System.out.println("[CB]: ai1:{ "+join(",",ai1) + " }");
+		if (DEBUG) System.out.println("[CB]: ai1:{ "+join(",",ai1) + " }");
 		
 
 		int j1 = 0;
@@ -973,7 +975,7 @@ public class DataMatrix extends Canvas
 				ai5[j2] = (reeddata + reederr) - 1;
 				k2 = 155;
 			}
-		//System.out.println("[CB]: ai4["+j2+"]:{ "+join(",",ai4[j2]) + " }");
+		if (DEBUG) System.out.println("[CB] ("+k2+", "+ reederr +") ai4["+j2+"]:{ "+join(",",ai4[j2]) + " }");
 		//System.out.println("[CB]: calc " + k2 + ", " + reederr);
 			reed1.calcRS(ai4[j2], k2, reederr);
 		//System.out.println("[CB]: ai4["+j2+"]:{ "+join(",",ai4[j2]) + " }");
@@ -1001,7 +1003,7 @@ public class DataMatrix extends Canvas
 
 	private int[][] CC(int ai[])
 	{
-		System.out.println("[CC] GenData: "+join(",",ai)+" ["+cols+"x"+rows+" : "+regions+"]");
+		if (DEBUG) System.out.println("[CC] GenData: "+join(",",ai)+" ["+cols+"x"+rows+" : "+regions+"]");
 		int ai1[][] = new int[cols][rows];
 		int i = 0;
 		int j = 0;
@@ -1107,7 +1109,8 @@ public class DataMatrix extends Canvas
 
 	private int CE(int i, int ai[], int ai1[], String as[])
 	{
-		//System.out.println("CE(ai:{"+join(" ",ai)+"})");
+		if (DEBUG) System.out.println("[CE] DetectASCII()");
+		if (DEBUG) System.out.println("[CE] ai:{"+join(" ",ai)+"}");
 		int j = 0;
 		boolean flag = false;
 		for(int k = 0; k < i; k++)
@@ -1115,6 +1118,7 @@ public class DataMatrix extends Canvas
 			boolean flag1 = false;
 			if(k < i - 1 && ai[k] >= 48 && ai[k] <= 57 && ai[k + 1] >= 48 && ai[k + 1] <= 57 && k < i)
 			{
+				if (DEBUG) System.out.println("[CE] "+flag+"/"+flag1+" "+k+" "+ai[k]+" is type 1");
 				int l = (ai[k] - 48) * 10 + (ai[k + 1] - 48);
 				ai1[j++] = 130 + l;
 				k++;
@@ -1122,15 +1126,17 @@ public class DataMatrix extends Canvas
 			}
 			if(!flag1 && as[k] != null)
 			{
+				if (DEBUG) System.out.println("[CE] "+flag+"/"+flag1+" "+k+" "+ai[k]+" is subtype");
 				if(ai[k] == 234 || ai[k] == 237 || ai[k] == 236 || ai[k] == 232)
 				{
+					if (DEBUG) System.out.println("[CE] "+flag+"/"+flag1+" "+k+" "+ai[k]+" is type 2");
 					ai1[j++] = ai[k];
 					flag1 = true;
 				}
 				if(ai[k] == 233 || ai[k] == 241)
 				{
 					ai1[j++] = ai[k];
-					System.out.println("Additional data by 233/241 for "+k+": "+as[k]+"");
+					if (DEBUG) System.out.println("Additional data by 233/241 for "+k+": "+as[k]+"");
 					for(int i1 = 0; i1 < as[k].length(); i1++)
 						ai1[j++] = as[k].charAt(i1);
 
@@ -1140,14 +1146,17 @@ public class DataMatrix extends Canvas
 			if(!flag1)
 				if(ai[k] < 128)
 				{
+					if (DEBUG) System.out.println("[CE] "+flag+"/"+flag1+" "+k+" "+ai[k]+" is type 3");
 					ai1[j++] = ai[k] + 1;
 				} else
 				{
+					if (DEBUG) System.out.println("[CE] "+flag+"/"+flag1+" "+k+" "+ai[k]+" is type 4");
 					ai1[j++] = 235;
 					ai1[j++] = (ai[k] - 128) + 1;
 				}
 		}
 
+		if (DEBUG) System.out.println("[CE] end "+j+" ai1:{"+join(" ",ai1)+"};");
 		return j;
 	}
 
@@ -1297,6 +1306,8 @@ public class DataMatrix extends Canvas
 		}
 	}
 
+	public boolean DEBUG = false;
+	//public boolean DEBUG = true;
 	public String code;
 	protected static final int d1 = 3;
 	public double marginCM;

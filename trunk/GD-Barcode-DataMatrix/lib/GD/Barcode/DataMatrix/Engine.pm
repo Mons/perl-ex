@@ -4,13 +4,13 @@ use strict;
 no warnings qw(uninitialized);
 use GD::Barcode::DataMatrix::Constants ();
 use GD::Barcode::DataMatrix::CharDataFiller ();
-use Data::Dumper;
+use Data::Dumper;$Data::Dumper::Useqq = 1;
 use constant DEBUG => 1;
 
 our %DEBUG = (
-	ENC    => 1,
+	ENC    => 0,
 	CALC   => 0,
-	TRACE  => 1,
+	TRACE  => 0,
 	B256   => 0
 );
 
@@ -106,16 +106,24 @@ sub ProcessTilde {
 	for ($s) {
 		s{~d(\d{3})}{ chr($1) }ge;
 		s{~d.{3}}{}g;
-		s{~1}{\350}g;
-		#s{^~2}{ \350 };
-		s{^~3}{\352};
-		s{^~([56])}{ chr(231+$1) }e;
-		my $ofs = -1;
+		for my $i (0,1,4,5) {
+			s{^(.{$i})~1}{ $as->[$-[0]+$i]=''; $1."\350"}ge;
+		}
+		#s{^~1}{\350}g;
+		#s{^.~1}{ $as->[$-[0]] "\350"}ge;
+		#s{^(.{4})~1}{$1."\350"}ge;
+		#s{^(.{5})~1}{$1."\350"}ge;
+		s{~1}{\035}g;
+		s{~2(.{3})}{ $as->[$-[0]] = $1; "\351".$2 }e;
+		s{^~3}{ $as->[0] = ''; "\352" }e;
+		s{^~5}{ $as->[0] = ''; "\354" }e;
+		s{^~6}{ $as->[0] = ''; "\355" }e;
+		#s{^~([56])}{ chr(oct(354)-5+$1) }e;
 		#while ((my $o = index( $_, '~7' )) > $ofs) {
 			
 			s{~7(.{6})}{do{
 				my $d = int $1;
-				warn "There is $d got from $1\n";
+				#warn "There is $d got from $1\n";
 				if ($d < 127) {
 					$d = chr($d+1);
 				}
@@ -131,13 +139,13 @@ sub ProcessTilde {
 						chr( int+ ( $d - 16383 ) % 254 + 1 );
 				}
 				$as->[$-[0]] = $d;
-				warn "PT affect as[$-[0]] = ".join('+', map ord, split //, $d);
+				warn "PT affect as[$-[0]] = ".join('+', map ord, split //, $d) if $DEBUG{TRACE};
 				"\361"
 			}}ge;
 		#}
-		s{~}{}g;
+		s{~(.)}{$1 eq '~' ? '~' : $1}ge;
 		
-		warn "[C9] ProcessTilde($self->{code}) => $_\n" if $DEBUG{TRACE};
+		warn "[C9] ProcessTilde($self->{code}) => ".Dumper($_) if $DEBUG{TRACE};
 		return $self->{code} = $_;
 	}
     my $flag = 0;
@@ -275,6 +283,7 @@ sub CreateBitmap() #CB (int ai[], String as[]) : int[][]
 		};
 		
 	}
+	warn "[CB] selected (ai1[" .join(',',@$ai1).'], as[' . scalar(@$as) .  "])\n" if $DEBUG{TRACE};
 	DEBUG and print "Use Encoding: " .typeToString($self->{currentEncoding}). "(".typeToString($self->{encoding}).")\n";
 	#warn "AI1 After enc: ".join(" ",@$ai1)."\n";
 	warn "[CB]: enc res: ".typeToString($self->{encoding}).", " .typeToString($self->{currentEncoding}). "\n" if $DEBUG{ENC};
@@ -316,7 +325,7 @@ sub CreateBitmap() #CB (int ai[], String as[]) : int[][]
 		reederr   
 		reedblocks
 	)} = @{$FORMATS->[$l]}[0..11];
-	DEBUG and print "Format: $self->{rows}x$self->{cols}; Data: $self->{totaldata}; i=$i\n";
+	DEBUG and print "Format: $self->{rows}x$self->{cols}; Data: $self->{totaldata}; i=$i; blocks = $self->{reedblocks}\n";
 	#warn "[CB]: Selected $self->{rows}x$self->{cols} [$self->{totaldata}]; $i\n";
 	$ai1->[$i - 1] = 129 if (
 		($self->{currentEncoding} == E_C40 || $self->{currentEncoding} == E_TEXT )
@@ -330,7 +339,7 @@ sub CreateBitmap() #CB (int ai[], String as[]) : int[][]
         $ai1->[$i1] = $flag ? 129 : A253(129, $i1 + 1);
         $flag = 0;
     }
-	#warn "[CB]: ".Dumper($ai1);
+	#warn "[CB]: ai1 = {".join(',',@$ai1)."}\n";
     my $j1 = my $k1 = 0;
     for(my $l1 = 1; $l1 <= $self->{totaldata}; $l1++) {
         $ai4->[$j1][$k1] = $ai1->[$l1 - 1];
@@ -352,7 +361,7 @@ sub CreateBitmap() #CB (int ai[], String as[]) : int[][]
     		$ai5->[$j2] = $self->{reeddata} + $self->{reederr} - 1;
             $k2 = 155;
         }
-	#warn "[CB] ($k2, $self->{reederr}) ai4[$j2]{".join(",",grep { +defined } @{ $ai4->[$j2] })."}\n";
+		#warn "[CB] ($k2, $self->{reederr}) ai4[$j2]{".join(",",grep { +defined } @{ $ai4->[$j2] })."}\n";
     	CalcReed($ai4->[$j2], $k2, $self->{reederr});
 	#warn "[CB] ai4[$j2]{".join(",",grep { +defined } @{ $ai4->[$j2] })."}\n";
         $i2 += $ai5->[$j2];
@@ -488,7 +497,7 @@ sub DetectASCII { #CE (int i; int ai[], int ai1[], String as[]) : int
 	my $self = shift;
 	warn "[CE] DetectASCII(@_)\n" if $DEBUG{TRACE};
 	my ($i,$ai,$ai1,$as) = @_;
-	warn "ai:{".join(" ",grep{+defined}@$ai)."}; ai1:{".join(" ",grep{+defined}@$ai1)."}; as:{".join(" ",grep{+defined}@$as)."}\n" if $DEBUG{ENC};
+	warn "[CE] ai:{".join(" ",grep{+defined}@$ai)."}; ai1:{".join(" ",grep{+defined}@$ai1)."}; as:{".join(" ",grep{+defined}@$as)."}\n" if $DEBUG{ENC};
     my $j = 0;
     my $flag = 0;
     for(my $k = 0; $k < $i; $k++) {
@@ -498,24 +507,27 @@ sub DetectASCII { #CE (int i; int ai[], int ai1[], String as[]) : int
         	and isIDigit($ai->[$k])
         	and isIDigit($ai->[$k+1])
         ) {
+        	#warn "[CE] $flag $flag1 $k $ai->[$k] is type 1";
             my $l = ($ai->[$k] - 48) * 10 + ($ai->[$k + 1] - 48);
             $ai1->[$j++] = 130 + $l;
             $k++;
             $flag1 = 1;
         }
         if(!$flag1 and defined $as->[$k]) {
+        	#warn "[CE] $flag $flag1 $k $ai->[$k] is subtype !flag";
             if(
             	   $ai->[$k] == 234
-            	|| $ai->[$k] == 237
-            	|| $ai->[$k] == 236
-            	|| $ai->[$k] == 232
+            	or $ai->[$k] == 237
+            	or $ai->[$k] == 236
+            	or $ai->[$k] == 232
             ) {
+	        	#warn "[CE] $flag $flag1 $k $ai->[$k] is type 2";
                 $ai1->[$j++] = $ai->[$k];
                 $flag1 = 1;
             }
             if($ai->[$k] == 233 || $ai->[$k] == 241) {
                 $ai1->[$j++] = $ai->[$k];
-                warn("Additional data by 233/241 for $k: $as->[$k]");
+                #warn("Additional data by 233/241 for $k: $as->[$k]");
                 for(my $i1 = 0; $i1 < length $as->[$k]; $i1++){
                     $ai1->[$j++] = ord substr($as->[$k],$i1,1);
                 }
@@ -524,14 +536,17 @@ sub DetectASCII { #CE (int i; int ai[], int ai1[], String as[]) : int
         }
         if(!$flag1){
             if($ai->[$k] < 128) {
+	        	#warn "[CE] $flag $flag1 $k $ai->[$k] is type 3";
                 $ai1->[$j++] = $ai->[$k] + 1;
             } else {
+	        	#warn "[CE] $flag $flag1 $k $ai->[$k] is type 4";
                 $ai1->[$j++] = 235;
                 $ai1->[$j++] = ($ai->[$k] - 128) + 1;
             }
         }
     }
-    warn R::Dump( \@_ );
+    #warn Dumper( \@_ );
+    warn "[CE] end $j ai1:{".join(" ",@$ai1)."};\n" if $DEBUG{ENC};
     return $j;
 }
 
