@@ -5,20 +5,22 @@ no warnings qw(uninitialized);
 use GD::Barcode::DataMatrix::Constants ();
 use GD::Barcode::DataMatrix::CharDataFiller ();
 use Data::Dumper;$Data::Dumper::Useqq = 1;
-use constant DEBUG => 1;
+use constant DEBUG => 0;
 
 our %DEBUG = (
 	ENC    => 0,
+	EAUTO  => 0,
 	CALC   => 0,
 	TRACE  => 0,
 	B256   => 0
 );
+our (@GFI,@GFL,%POLY,@FORMATS,@C1);
 
-our @GFI     = GD::Barcode::DataMatrix::Constants::GFI();
-our @GFL     = GD::Barcode::DataMatrix::Constants::GFL();
-our %POLY    = GD::Barcode::DataMatrix::Constants::POLY();
-our $FORMATS = GD::Barcode::DataMatrix::Constants::FORMATS();
-our $C1      = GD::Barcode::DataMatrix::Constants::C1();
+*GFI     = \@GD::Barcode::DataMatrix::Constants::GFI;
+*GFL     = \@GD::Barcode::DataMatrix::Constants::GFL;
+*POLY    = \%GD::Barcode::DataMatrix::Constants::POLY;
+*FORMATS = \@GD::Barcode::DataMatrix::Constants::FORMATS;
+*C1      = \@GD::Barcode::DataMatrix::Constants::C1;
 
 sub E_ASCII  () { 0 }
 sub E_C40    () { 1 }
@@ -35,7 +37,7 @@ sub Types {
 
 sub stringToType($) {
 	my $m = 'E_'.shift;
-	return  eval { __PACKAGE__->$m(); };
+	return eval { __PACKAGE__->$m(); };
 }
 sub typeToString($) {
 	my $i = shift;
@@ -45,13 +47,15 @@ sub typeToString($) {
 	return 'UNK';
 }
 
+our @encName = map { typeToString $_ } 0..5;
+
 sub stringToFormat($) {
 	my $sz = shift;
 	return unless $sz;
 	my ($w,$h) = map { +int } split /\s*x\s*/,$sz,2;
 	my $r;
-	for my $i (0..$#$FORMATS) {
-		$r = $i,last if $FORMATS->[$i][0] == $w and $FORMATS->[$i][1] == $h;
+	for my $i (0..$#FORMATS) {
+		$r = $i,last if $FORMATS[$i][0] == $w and $FORMATS[$i][1] == $h;
 	}
 	die "Format not supported ($sz)\n" unless defined $r;
 	return $r;
@@ -152,7 +156,8 @@ sub CalcReed { # (int ai[], int i, int j) : void
 	}
 	sub short($) { $_[0] & 0xFF; }
 		
-	my ($ai,$i,$j) = @_;
+	my ($ai,$j) = @_;
+	my $i = @$ai;
 	warn "CalcReed(ai {".join(" ",grep{+defined}@$ai)."},$i,$j)\n" if $DEBUG{CALC};
 	my $p = exists $POLY{$j} ? $POLY{$j} : $POLY{68};
 	warn "CalcReed: poly {".join(" ",@$p)."}\n" if $DEBUG{CALC};
@@ -166,24 +171,29 @@ sub CalcReed { # (int ai[], int i, int j) : void
     }
 }
 
+sub A253($$) # C8 (int i, int j) : int 
+{
+	my ($i,$j) = @_;
+    my $l = $i + (149 * $j) % 253 + 1;
+    return $l <= 254 ? $l : $l - 254;
+}
+
 sub CreateBitmap() #CB (int ai[], String as[]) : int[][]
 {
 	my $self = shift;
 	my ($ai,$as) = @$self{qw(ai as)};
 	warn "[CB] CreateBitmap(ai[" .join(',',@$ai).'], as[' . scalar(@$as) .  "])\n" if $DEBUG{TRACE};
     my $ai1 = [];
-    my $ai2 = [ 0 ];
-    my $ai3 = [ 0 ];
     my $i = 0;
 	$self->{currentEncoding} = $self->{encoding} if $self->{encoding} != E_AUTO;
 	#warn "AI Before enc: ".join(" ",@$ai)."\n";
 	for ($self->{encoding}){
 		warn "[CB] Select method for $self->{encoding}, ".typeToString($self->{encoding})."\n" if $DEBUG{ENC};
 		$_ == E_AUTO    && do { $i = $self->DetectEncoding($ai1); last;};
-		$_ == E_ASCII   && do { $i = $self->DetectASCII(scalar(@$ai), $ai, $ai1, $as); last;};
-		$_ == E_C40     && do { $i = $self->Check6(scalar(@$ai), $ai2, $ai, $ai1, 0, 1, 0); last;};
-		$_ == E_TEXT    && do { $i = $self->Check6(scalar(@$ai), $ai2, $ai, $ai1, 1, 1, 0); last;};
-		$_ == E_BASE256 && do { $i = $self->CheckBase256(scalar(@$ai), $ai2, $ai, $ai3, $ai1, 0, $as); last;};
+		$_ == E_ASCII   && do { $i = $self->EncodeASCII(scalar(@$ai), $ai, $ai1, $as); last;};
+		$_ == E_C40     && do { $i = $self->EncodeC40TEXT(scalar(@$ai), [0], $ai, $ai1, 0, 1, 0); last;};
+		$_ == E_TEXT    && do { $i = $self->EncodeC40TEXT(scalar(@$ai), [0], $ai, $ai1, 1, 1, 0); last;};
+		$_ == E_BASE256 && do { $i = $self->EncodeBASE256(scalar(@$ai), [0], $ai, [0], $ai1, 0, $as); last;};
 		$_ == E_NONE    && do {
 	        for my $j (0 .. ( $i = $#$ai )) {
 	        	$ai1->[$j] = $ai->[$j];
@@ -200,20 +210,20 @@ sub CreateBitmap() #CB (int ai[], String as[]) : int[][]
     my $k = 0;
 	if($self->{preferredFormat} != -1) {
     	$k = $self->{preferredFormat};
-        $k = 0 if $i > $FORMATS->[$k][7];
+        $k = 0 if $i > $FORMATS[$k][7];
     }
 	#warn "[CB]: format: $k\n";
-    for(; $i > $FORMATS->[$k][7] && $k < 30; $k++)
+    for(; $i > $FORMATS[$k][7] && $k < 30; $k++)
     {
     	next if $self->{currentEncoding} != E_C40 && $self->{currentEncoding} != E_TEXT;
     	#warn "[CB]: enc: E_C40/E_TEXT\n";
-        if($self->{C49rest} == 1 && $ai1->[$i - 2] == 254 && $FORMATS->[$k][7] == $i - 1) {
+        if($self->{C49rest} == 1 && $ai1->[$i - 2] == 254 && $FORMATS[$k][7] == $i - 1) {
             $ai1->[$i - 2] = $ai1->[$i - 1];
             $ai1->[$i - 1] = 0;
             $i--;
             last;
         }
-    	next if($self->{C49rest} != 0 || $ai1->[$i - 1] != 254 || $FORMATS->[$k][7] != $i - 1);
+    	next if($self->{C49rest} != 0 || $ai1->[$i - 1] != 254 || $FORMATS[$k][7] != $i - 1);
         $ai1->[$i - 1] = 0;
         $i--;
         last;
@@ -234,7 +244,7 @@ sub CreateBitmap() #CB (int ai[], String as[]) : int[][]
 		reeddata  
 		reederr   
 		reedblocks
-	)} = @{$FORMATS->[$l]}[0..11];
+	)} = @{$FORMATS[$l]}[0..11];
 	DEBUG and print "Format: $self->{rows}x$self->{cols}; Data: $self->{totaldata}; i=$i; blocks = $self->{reedblocks}\n";
 	#warn "[CB]: Selected $self->{rows}x$self->{cols} [$self->{totaldata}]; $i\n";
 	$ai1->[$i - 1] = 129 if (
@@ -242,53 +252,54 @@ sub CreateBitmap() #CB (int ai[], String as[]) : int[][]
 		and
 		$self->{C49rest} == 0 && $i == $self->{totaldata} && $ai1->[$i - 1] == 254
     );
-    my $ai4 = [];
     my $flag = 1;
+    warn "Calc begin from $i..$self->{totaldata} ai1=[@{$ai1}]\n" if $DEBUG{CALC};
 	for(my $i1 = $i; $i1 < $self->{totaldata}; $i1++) {
 		#warn "   CB: $i <= $i1 < $self->{totaldata}\n";
         $ai1->[$i1] = $flag ? 129 : A253(129, $i1 + 1);
         $flag = 0;
     }
-	#warn "[CB]: ai1 = {".join(',',@$ai1)."}\n";
-    my $j1 = my $k1 = 0;
-    for(my $l1 = 1; $l1 <= $self->{totaldata}; $l1++) {
-        $ai4->[$j1][$k1] = $ai1->[$l1 - 1];
-		#warn "\$a->[$j1][$k1] = $ai1->[$l1 - 1];\n";
-        if(++$j1 == $self->{reedblocks}) {
-            $j1 = 0;
-            $k1++;
-        }
+    return $self->{bitmap} = $self->GenData($self->ecc($l,$ai1));
+}
+
+sub ecc {
+	my $self = shift;
+	my $format = shift;
+	my $ai = shift;
+	my ($data,$err,$blocks) = @{$FORMATS[$format]}[9..11];
+	$blocks--;$data--;
+    warn "ECC: ai=[@{$ai}], blocks=$blocks\n" if $DEBUG{CALC};
+    my @blocks = map {[]} 0..$blocks;
+    my $block = 0;
+    for (@$ai) {
+    	push @{$blocks[$block++]}, $_;
+    	$block = 0 if $block > $blocks;
     }
-	#warn "***[CB]*** AI1 = {".join(" ",@{ $ai1 }[0 .. $self->{totaldata} ])."}\n";
-	#warn "***[CB]*** AI4[0] = {".join(" ",@{ $ai4->[0] })."}\n";
-	#warn "***[CB]*** AI4[1] = {".join(" ",@{ $ai4->[1] })."}\n";
-    my $ai5 = [ ];
-    my $i2 = 0;
-	for(my $j2 = 0; $j2 < $self->{reedblocks}; $j2++) {
-		$ai5->[$j2] = $self->{reeddata} + $self->{reederr};
-    	my $k2 = $self->{reeddata};
-        if($self->{rows} == 144 && $j2 > 7) {
-    		$ai5->[$j2] = $self->{reeddata} + $self->{reederr} - 1;
-            $k2 = 155;
+    #$#{ $blocks[-1] } = $#{ $blocks[0] };
+    warn "Calc blocks=".Dumper \@blocks if $DEBUG{CALC};
+	for (0..$#blocks) {
+        $#{ $blocks[$_] } = $data; # correct padding
+        if($self->{rows} == 144 and $_ > 7) {
+			#warn "144 fix: decrease block $_ to size 155 from @{[ 0+@{$blocks[$_]} ]}";
+        	$#{$blocks[$_]} -= 1;
         }
-		#warn "[CB] ($k2, $self->{reederr}) ai4[$j2]{".join(",",grep { +defined } @{ $ai4->[$j2] })."}\n";
-    	CalcReed($ai4->[$j2], $k2, $self->{reederr});
-	#warn "[CB] ai4[$j2]{".join(",",grep { +defined } @{ $ai4->[$j2] })."}\n";
-        $i2 += $ai5->[$j2];
-    }
-    my $ai6 = [ (undef) x $i2 ];
-    my $l2 = my $i3 = 0;
-    for(my $j3 = 0; $j3 < $ai5->[0]; $j3++) {
-    	for(my $k3 = 0; $k3 < $self->{reedblocks}; $k3++){
-    		#warn sprintf "$j3:$k3 => %s\n",$j3 < $ai5->[$k3] ? $ai4->[$k3][$j3] : "-";
-            if($j3 < $ai5->[$k3]) {
-                $ai6->[$i3++] = $ai4->[$k3][$j3];
-                $l2++;
-            }
+		
+		CalcReed($blocks[$_], $err);
+	}
+    warn "Calc reed=\n".
+    	join "\n", map { '['.join(',',@$_).']' } @blocks if $DEBUG{CALC};
+    my @rv;
+	for my $n (0..$data+$err) {
+		for my $b (0..$#blocks) {
+			#warn "Calc $n, block $b";
+			if ( $n < @{$blocks[$b]} ) { # 144 fix
+				push @rv, $blocks[$b][$n];
+			} else {
+				#warn "skip $n from $b: 144 fix";
+			}
 		}
-    }
-    #warn "ai6{".join(",",@{ $ai6 }[0..40])."}\n";
-	$self->{bitmap} = $self->GenData($ai6);
+	}
+	return \@rv;
 }
 
 sub isCDigit { # C1*
@@ -320,24 +331,27 @@ sub DetectEncoding() #C4 (int i, int ai[], int ai1[], String as[]) : int
     my $flag = 0;
     my $j1 = 0;
     my $k1 = E_ASCII;
-    my $ai4 = [ undef ];
-    my $ai5 = [ undef ];
+    my $ai4 = [ 0 ];
     my $l2 = E_ASCII;
     my $as1 = [  ];
     my $iterator = 0;
 	$self->{currentEncoding} = E_ASCII;
+	warn("DetectENC: starting from ".$encName[$self->{currentEncoding}]."\n") if $DEBUG{EAUTO};
     while($iterator < $i) { # while iterator less than length of data
-    	while($self->{currentEncoding} == E_ASCII && $iterator < $i) {
+		warn("DetectENC: at $iterator ce=$encName[$self->{currentEncoding}] k1=$encName[$k1] l2=$encName[$l2]\n") if $DEBUG{EAUTO};
+    	while($self->{currentEncoding} == E_ASCII and $iterator < $i) {
+			warn("DetectENC: while at $iterator ce=$encName[$self->{currentEncoding}] k1=$encName[$k1] l2=$encName[$l2]\n") if $DEBUG{EAUTO};
             my $flag1 = 0;
             if(
             	$iterator + 1 < $i 
             	and isIDigit($ai->[$iterator])
             	and isIDigit($ai->[$iterator + 1])
             ){
+				warn("DetectENC: 2dig $ai->[$iterator]+$ai->[$iterator+1] at $iterator ce=$encName[$self->{currentEncoding}] k1=$encName[$k1] l2=$encName[$l2]\n") if $DEBUG{EAUTO};
                 $ai1->[$j1++] = 254 if($l2 != E_ASCII);
                 $ai2->[0]     = $ai->[$iterator];
                 $ai2->[1]     = $ai->[$iterator + 1];
-                my $j = $self->DetectASCII(2, $ai2, $ai3, $as1);
+                my $j = $self->EncodeASCII(2, $ai2, $ai3, $as1);
 				splice(@$ai1,$j1,$j, @$ai3[0 .. $j-1 ]);
                 $j1 += $j;
                 $iterator++;
@@ -346,18 +360,20 @@ sub DetectEncoding() #C4 (int i, int ai[], int ai1[], String as[]) : int
                 $l2 = E_ASCII;
             }
             if(!$flag1) {
+				warn("DetectENC: !dig !flag1 at $iterator ce=$encName[$self->{currentEncoding}] k1=$encName[$k1] l2=$encName[$l2]\n") if $DEBUG{EAUTO};
             	#my $l1 = C3(@$ai, $self->{currentEncoding}, $iterator, @$as);
             	my $l1 = $self->SelectEncoding( $iterator );
                 if( $l1 != E_ASCII) {
+					warn("DetectENC: $encName[$self->{currentEncoding}] => $encName[$l1]\n") if $DEBUG{EAUTO};
                 	$l2 = $self->{currentEncoding};
                 	$self->{currentEncoding} = $l1;
                 }
             }
-        	if(!$flag1 && $self->{currentEncoding} == E_ASCII){
+        	if(!$flag1 and $self->{currentEncoding} == E_ASCII){
                 $ai1->[$j1++] = 254 if($l2 != E_ASCII);
                 $ai2->[0] = $ai->[$iterator];
                 $as1->[0] = $as->[$iterator];
-                my $k = $self->DetectASCII(1, $ai2, $ai3, $as1);
+                my $k = $self->EncodeASCII(1, $ai2, $ai3, $as1);
                 $as1->[0] = undef;
 				splice(@$ai1,$j1,$k, @$ai3[0 .. $k-1 ]);
                 $j1 += $k;
@@ -365,47 +381,49 @@ sub DetectEncoding() #C4 (int i, int ai[], int ai1[], String as[]) : int
                 $l2 = E_ASCII;
             }
         }
+		warn("DetectENC: after while at $iterator ce=$encName[$self->{currentEncoding}] k1=$encName[$k1] l2=$encName[$l2]\n") if $DEBUG{EAUTO};
         my $i2;
         #warn "DetectEncoding < $iterator < $i > : i2: [$i2] ".typeToString($i2)."\n";
-    	for(; $self->{currentEncoding} == E_C40 && $iterator < $i; $self->{currentEncoding} = $i2) {
+    	for(; $self->{currentEncoding} == E_C40 and $iterator < $i; $self->{currentEncoding} = $i2) {
             $ai4->[0] = $iterator;
-            my $l = $self->Check6($i, $ai4, $ai, $ai3, 0, $l2 != E_C40, 1);
+            my $l = $self->EncodeC40TEXT($i, $ai4, $ai, $ai3, 0, $l2 != E_C40, 1);
             $iterator = $ai4->[0];
 			splice(@$ai1,$j1,$l, @$ai3[0 .. $l-1 ]);
             $j1 += $l;
         	$i2 = $self->SelectEncoding($iterator);
         	$l2 = $self->{currentEncoding};
         }
+		warn("DetectENC: after C40 at $iterator ce=$encName[$self->{currentEncoding}] k1=$encName[$k1] l2=$encName[$l2]\n") if $DEBUG{EAUTO};
 
         my $j2;
-    	for(; $self->{currentEncoding} == E_TEXT && $iterator < $i; $self->{currentEncoding} = $j2) {
+    	for(; $self->{currentEncoding} == E_TEXT and $iterator < $i; $self->{currentEncoding} = $j2) {
             $ai4->[0] = $iterator;
-            my $i1 = $self->Check6($i, $ai4, $ai, $ai3, 1, $l2 != E_TEXT, 1);
+            my $i1 = $self->EncodeC40TEXT($i, $ai4, $ai, $ai3, 1, $l2 != E_TEXT, 1);
             $iterator = $ai4->[0];
 			splice(@$ai1,$j1,$i1, @$ai3[0 .. $i1-1 ]);
             $j1 += $i1;
         	$j2 = $self->SelectEncoding($iterator);
         	$l2 = $self->{currentEncoding};
         }
+		warn("DetectENC: after TEXT at $iterator ce=$encName[$self->{currentEncoding}] k1=$encName[$k1] l2=$encName[$l2]\n") if $DEBUG{EAUTO};
 
     	if($self->{currentEncoding} == E_BASE256) {
             $ai4->[0] = $iterator;
-            $ai5->[0] = $j1;
-            $self->CheckBase256($i, $ai4, $ai, $ai5, $ai1, 1, $as);
+            $j1 = $self->EncodeBASE256($i, $ai4, $ai, [$j1], $ai1, 1);
             $iterator = $ai4->[0];
-            $j1 = $ai5->[0];
         	my $k2 = $self->SelectEncoding($iterator);
         	$l2 = $self->{currentEncoding};
         	$self->{currentEncoding} = $k2;
         }
+		warn("DetectENC: after B256 at $iterator ce=$encName[$self->{currentEncoding}] k1=$encName[$k1] l2=$encName[$l2]\n") if $DEBUG{EAUTO};
     }
     return $j1;
 }
 
 
-sub DetectASCII { #CE (int i; int ai[], int ai1[], String as[]) : int 
+sub EncodeASCII { #CE (int i; int ai[], int ai1[], String as[]) : int 
 	my $self = shift;
-	warn "[CE] DetectASCII(@_)\n" if $DEBUG{TRACE};
+	warn "[CE] EncodeASCII(@_)\n" if $DEBUG{TRACE};
 	my ($i,$ai,$ai1,$as) = @_;
 	warn "[CE] ai:{".join(" ",grep{+defined}@$ai)."}; ai1:{".join(" ",grep{+defined}@$ai1)."}; as:{".join(" ",grep{+defined}@$as)."}\n" if $DEBUG{ENC};
     my $j = 0;
@@ -477,7 +495,6 @@ sub SelectEncoding #C3 (int ai[], int i, int j, String as[]) : int # DefineEncod
 	$i = $self->{currentEncoding} unless defined $i;
 	
 	my $as = $self->{as};
-	my ($j) = @_;
     my $d  = 0.0;
     my $d2 = 1.0;
     my $d3 = 1.0;
@@ -495,6 +512,7 @@ sub SelectEncoding #C3 (int ai[], int i, int j, String as[]) : int # DefineEncod
     $d4 = 0.0 if $i == E_BASE256;
     for(; $j < @$ai; $j++)
     {
+    	warn "SelectEncoding: have as[$j]: $as->[$j]\n" if defined $as->[$j] and $DEBUG{EAUTO};
         my $c = $ai->[$j];
         return E_ASCII if defined $as->[$j];
         
@@ -502,25 +520,26 @@ sub SelectEncoding #C3 (int ai[], int i, int j, String as[]) : int # DefineEncod
         elsif ( $c > 127 )            { $d = int( $d + 0.5 ) + 2; }
         else                          { $d = int( $d + 0.5 ) + 1; }
         
-        if    ( @{ $C1->[$c] } == 1 ) { $d2 += 0.66000000000000003; }
-        elsif ( $c > 127 )            { $d2 += 2.6600000000000001; }
-        else                          { $d2 += 1.3300000000000001; }
+        if    ( @{ $C1[$c] } == 1 )   { $d2 += 0.66000000000000003; }
+        elsif ( $c > 127 )            { $d2 += 2.6600000000000001;  }
+        else                          { $d2 += 1.3300000000000001;  }
         my $c1 = $c;
-        my $s = "" . chr($c);
-        if( isIUpper($c) )            { $c1 = lc(chr($c)); }
-        if( isILower($c) )            { $c1 = uc(chr($c)); }
+        if( isIUpper($c) )            { $c1 = ord lc chr $c; }
+        if( isILower($c) )            { $c1 = ord uc chr $c; }
         
-        if    ( @{ $C1->[$c1] } == 1) { $d3 += 0.66000000000000003; }
-        elsif ( $c1 > 127 )           { $d3 += 2.6600000000000001; }
-        else                          { $d3 += 1.3300000000000001; }
+        if    ( @{ $C1[$c1] } == 1)   { $d3 += 0.66000000000000003; }
+        elsif ( $c1 > 127 )           { $d3 += 2.6600000000000001;  }
+        else                          { $d3 += 1.3300000000000001;  }
+
         $d4++;
         
         if($j - $k >= 4) {
-            return E_ASCII   if $d  + 1.0 <= $d2 && $d + 1.0 <= $d3 && $d + 1.0 <= $d4;
+        	#warn "$j-$k >= 4: $d $d2 $d3 $d4\n";
+            return E_ASCII   if $d  + 1.0 <= $d2 and $d + 1.0 <= $d3 and $d + 1.0 <= $d4;
             return E_BASE256 if $d4 + 1.0 <= $d;
-            return E_BASE256 if $d4 + 1.0 < $d3 && $d4 + 1.0 < $d2;
-            return E_TEXT    if $d3 + 1.0 < $d && $d3 + 1.0 < $d2 && $d3 + 1.0 < $d4;
-            return E_C40     if $d2 + 1.0 < $d && $d2 + 1.0 < $d3 && $d2 + 1.0 < $d4;
+            return E_BASE256 if $d4 + 1.0 < $d3 and $d4 + 1.0 < $d2;
+            return E_TEXT    if $d3 + 1.0 < $d and $d3 + 1.0 < $d2 and $d3 + 1.0 < $d4;
+            return E_C40     if $d2 + 1.0 < $d and $d2 + 1.0 < $d3 and $d2 + 1.0 < $d4;
         }
     }
 
@@ -528,14 +547,14 @@ sub SelectEncoding #C3 (int ai[], int i, int j, String as[]) : int # DefineEncod
     $d2 = int( $d2 + 0.5 );
     $d3 = int( $d3 + 0.5 );
     $d4 = int( $d4 + 0.5 );
-    return E_ASCII   if $d <= $d2 && $d <= $d3 && $d <= $d4;
-    return E_TEXT    if $d3 < $d && $d3 < $d2 && $d3 < $d4;
-    return E_BASE256 if $d4 < $d && $d4 < $d3 && $d4 < $d2;
+    return E_ASCII   if $d <= $d2 and $d <= $d3 and $d <= $d4;
+    return E_TEXT    if $d3 < $d and $d3 < $d2 and $d3 < $d4;
+    return E_BASE256 if $d4 < $d and $d4 < $d3 and $d4 < $d2;
     return E_C40;
 }
 
-sub Check6 { # C6 #(int i, int ai[], int ai1[], int ai2[], boolean flag, boolean flag1, boolean flag2) : int
-	#warn "[C6] Check6\n";
+sub EncodeC40TEXT { # C6 #(int i, int ai[], int ai1[], int ai2[], boolean flag, boolean flag1, boolean flag2) : int
+	#warn "[C6] EncodeC40TEXT\n";
 	my $self = shift;
 	my ($i,$ai,$ai1,$ai2,$flag,$flag1,$flag2) = @_;
     my $j = my $k = 0;
@@ -553,12 +572,12 @@ sub Check6 { # C6 #(int i, int ai[], int ai1[], int ai2[], boolean flag, boolean
             $s = lc($s) if($l >= 65 && $l <= 90);
             $l  = ord(substr($s,0,1));
         }
-        my $ai4 = $C1->[$l];
+        my $ai4 = $C1[$l];
         for my $l1 (0 .. $#$ai4) {
             $ai3->[$k++] = $ai4->[$l1];
             if($k == 3) {
                 my $i2 = $ai3->[0] * 1600 + $ai3->[1] * 40 + $ai3->[2] + 1;
-                $ai2->[$j++] = $i2 / 256;
+                $ai2->[$j++] = int $i2 / 256;
                 $ai2->[$j++] = $i2 % 256;
                 $k = 0;
             }
@@ -582,7 +601,7 @@ sub Check6 { # C6 #(int i, int ai[], int ai1[], int ai2[], boolean flag, boolean
         if($k == 2) {
             $ai3->[2] = 0;
             my $k1 = $ai3->[0] * 1600 + $ai3->[1] * 40 + $ai3->[2] + 1;
-            $ai2->[$j++] = $k1 / 256;
+            $ai2->[$j++] = int $k1 / 256;
             $ai2->[$j++] = $k1 % 256;
             $ai2->[$j++] = 254;
         	$self->{C49rest} = $k;
@@ -595,12 +614,6 @@ sub Check6 { # C6 #(int i, int ai[], int ai1[], int ai2[], boolean flag, boolean
     return $j;
 }
 
-sub A253($$) # C8 (int i, int j) : int 
-{
-	my ($i,$j) = @_;
-    my $l = $i + (149 * $j) % 253 + 1;
-    return $l <= 254 ? $l : $l - 254;
-}
 
 sub state255($$) # (int V, int P) : int
 {
@@ -622,47 +635,34 @@ sub decary {
 	join(" ",map{ sprintf '%3d',$_} @{ shift() } )
 }
 
-sub CheckBase256 # C5 (int i, int ai[], int ai1[], int ai2[], int ai3[], boolean flag, String as[]) : int
-{
-	#warn "[C5] CheckBase256\n";
+sub EncodeBASE256 {
 	my $self = shift;
-	my ($i,$ai,$ai1,$ai2,$ai3,$flag) = @_;
+	my ($i,$hint,$src,$stat,$res,$flag) = @_;
     my $j = 0;
-    my $ai4 = [];
+    my $xv = [];
     my $k = 
-    my $l = $ai2->[0];
+    my $l = $stat->[0];
     my $flag1 = 0;
     my $j1 = 0;
-    warn "AI1{".hexary($ai1)."}\n" if $DEBUG{B256};
-    warn "AI4{".hexary($ai4)."}\n" if $DEBUG{B256};
-    for($j1 = $ai->[0]; $j1 < $i; $j1++){
-        $ai4->[$j] = $ai1->[$j1];
-        $j++;
-        my $i1 = $j1 + 1;
-        last if($flag && $self->SelectEncoding($i1,$ai1,E_BASE256) != E_BASE256);
+    warn "AI1{".hexary($src)."}\n" if $DEBUG{B256};
+    warn "AI4{".hexary($xv)."}\n" if $DEBUG{B256};
+    for( $j1 = $hint->[0]; $j1 < $i; $j1++){
+        $xv->[$j++] = $src->[$j1];
+        last if $flag and $self->SelectEncoding($j1 + 1,$src,E_BASE256) != E_BASE256;
     }
-    warn "AI1{".hexary($ai1)."}\n" if $DEBUG{B256};
-    warn "AI4{".hexary($ai4)."}\n" if $DEBUG{B256};
+    warn "AI1{".hexary($src)."}\n" if $DEBUG{B256};
+    warn "AI4{".hexary($xv)."}\n" if $DEBUG{B256};
 	#warn "$j1 : $l\n";
-    $ai->[0] = $j1;
-    $ai3->[$l++] = 231;
+    $hint->[0] = $j1;
+    $res->[$l++] = 231;
     if($j < 250) {
-    	#warn "ai3[$l] = state255($j, $l + 1);\n";
-        $ai3->[$l] = state255($j, $l + 1);
-        $l++;
+        $res->[$l++] = state255($j, $l + 1);
     } else {
-    	#warn "ai3[$l] = state255($j, $l + 1);\n";
-        $ai3->[$l] = state255(249 + ($i - $i % 250) / 250, $l + 1);
-        $l++;
-        $ai3->[$l] = state255($i % 250, $l + 1);
-        $l++;
+        $res->[$l++] = state255(249 + ($i - $i % 250) / 250, $l + 1);
+        $res->[$l++] = state255($i % 250, $l + 1);
     }
-    for(my $k1 = 0; $k1 < $j; $k1++) {
-        $ai3->[$l] = state255($ai4->[$k1], $l + 1);
-        #warn "Base256: $ai4->[$k1] at $l => $ai3->[$l]\n";
-        $l++;
-    }
-    $ai2->[0] = $l;
+    $res->[$l++] = state255($xv->[$_], $l + 1) for 0..$j-1;
+    $stat->[0] = $l;
     return $l;
 }
 
