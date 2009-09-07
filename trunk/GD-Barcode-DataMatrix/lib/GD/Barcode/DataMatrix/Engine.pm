@@ -145,11 +145,11 @@ sub ProcessTilde {
 	}
 }
 
-use Algorithm::Reed;
+use Algorithm::DataMatrix::Reed;
 
 sub CalcReed { # (int ai[], int i, int j) : void
 	my ($ai,$err) = @_;
-	my $rv = Algorithm::Reed::encode($ai,$err);
+	my $rv = Algorithm::DataMatrix::Reed::encode($ai,$err);
 	@$ai = @$rv;
 	return $ai;
 	sub mult($$) { # (int i, int j) : int

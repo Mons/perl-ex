@@ -205,8 +205,17 @@ public class DataMatrix extends Canvas
 	}
 	public static String join(String d, int a[]){
 		String r = "";
+		String rs = "";
 		for (int i=0; i < a.length; i++){
-			r += ( r != "" ? d : "" ) + a[i];
+			if (a[i] == 0) {
+				rs += ( r != "" ? d : "" ) + a[i];
+			} else {
+				if (rs != "") {
+					r += ( r != "" ? d : "" ) + rs;
+					rs = "";
+				}
+				r += ( r != "" ? d : "" ) + a[i];
+			}
 		}
 		return r;
 	}
@@ -455,6 +464,7 @@ public class DataMatrix extends Canvas
 				return E_ASCII;
 			if(j - k >= 4)
 			{
+				if (DEBUGEAUTO) System.out.println(""+j+"-"+k+" >= 4: "+d+" "+d2+" "+d3+" "+d4);
 				if(d + 1.0D <= d2 && d + 1.0D <= d3 && d + 1.0D <= d4)
 					return E_ASCII;
 				if(d4 + 1.0D <= d)
@@ -499,13 +509,17 @@ public class DataMatrix extends Canvas
 
 		int j3 = 0;
 		currentEncoding = E_ASCII;
+		if (DEBUGEAUTO) System.out.println("DetectENC: starting from "+encName[currentEncoding]);
 		while(j3 < i) 
 		{
+			if (DEBUGEAUTO) System.out.println("DetectENC: at "+j3+" ce="+encName[currentEncoding]+" k1="+encName[k1]+" l2="+encName[l2]);
 			while(currentEncoding == E_ASCII && j3 < i) 
 			{
+				if (DEBUGEAUTO) System.out.println("DetectENC: while at "+j3+" ce="+encName[currentEncoding]+" k1="+encName[k1]+" l2="+encName[l2]);
 				boolean flag1 = false;
 				if(j3 + 1 < i && C1(ai[j3]) && C1(ai[j3 + 1]))
 				{
+					if (DEBUGEAUTO) System.out.println("DetectENC: 2 dig "+ai[j3]+"+"+ai[j3+1]+" at "+j3+" ce="+encName[currentEncoding]+" k1="+encName[k1]+" l2="+encName[l2]);
 					if(l2 != E_ASCII)
 						ai1[j1++] = 254;
 					ai2[0] = ai[j3];
@@ -520,9 +534,11 @@ public class DataMatrix extends Canvas
 				}
 				if(!flag1)
 				{
+					if (DEBUGEAUTO) System.out.println("DetectENC: !dig !flag1 at "+j3+" ce="+encName[currentEncoding]+" k1="+encName[k1]+" l2="+encName[l2]);
 					int l1 = C3(ai, currentEncoding, j3, as);
 					if(l1 != E_ASCII)
 					{
+						if (DEBUGEAUTO) System.out.println("DetectENC: "+encName[currentEncoding]+" => "+encName[l1]);
 						l2 = currentEncoding;
 						currentEncoding = l1;
 					}
@@ -541,6 +557,7 @@ public class DataMatrix extends Canvas
 					l2 = E_ASCII;
 				}
 			}
+			if (DEBUGEAUTO) System.out.println("DetectENC: after while at "+j3+" ce="+encName[currentEncoding]+" k1="+encName[k1]+" l2="+encName[l2]);
 			int i2;
 			for(; currentEncoding == E_C40 && j3 < i; currentEncoding = i2)
 			{
@@ -552,6 +569,7 @@ public class DataMatrix extends Canvas
 				i2 = C3(ai, currentEncoding, j3, as);
 				l2 = currentEncoding;
 			}
+			if (DEBUGEAUTO) System.out.println("DetectENC: after C40 at "+j3+" ce="+encName[currentEncoding]+" k1="+encName[k1]+" l2="+encName[l2]);
 
 			int j2;
 			for(; currentEncoding == E_TEXT && j3 < i; currentEncoding = j2)
@@ -564,6 +582,7 @@ public class DataMatrix extends Canvas
 				j2 = C3(ai, currentEncoding, j3, as);
 				l2 = currentEncoding;
 			}
+			if (DEBUGEAUTO) System.out.println("DetectENC: after TEXT at "+j3+" ce="+encName[currentEncoding]+" k1="+encName[k1]+" l2="+encName[l2]);
 
 			if(currentEncoding == E_BASE256)
 			{
@@ -576,6 +595,7 @@ public class DataMatrix extends Canvas
 				l2 = currentEncoding;
 				currentEncoding = k2;
 			}
+			if (DEBUGEAUTO) System.out.println("DetectENC: after B256 at "+j3+" ce="+encName[currentEncoding]+" k1="+encName[k1]+" l2="+encName[l2]);
 		}
 		return j1;
 	}
@@ -846,7 +866,7 @@ public class DataMatrix extends Canvas
 	public void CA(String text)
 	{
 		if (DEBUG) System.out.println("text("+text+")");
-		String as[] = new String[500];
+		String as[] = new String[5000];
 		reBuild = false;
 		internalCode = code = text;
 		if(processTilde)
@@ -866,7 +886,7 @@ public class DataMatrix extends Canvas
 		String tmp[] = new String[5];
 		C2(as,tmp,0,0,5);
 		if (DEBUG) System.out.println("[CB] CreateBitmap(ai["+join(",",ai)+"]");
-		int ai1[] = new int[500];
+		int ai1[] = new int[5000];
 		int ai2[] = new int[1];
 		int ai3[] = new int[1];
 		int i = 0;
@@ -891,7 +911,7 @@ public class DataMatrix extends Canvas
 		}
 		if (DEBUG) System.out.println("[CB] selected (ai1["+join(",",ai1)+"]");
 		//System.out.println("[CB]: enc: " + encName[encoding] + "; " + encName[currentEncoding]);
-		System.out.println("Use Encoding: " + encName[currentEncoding] + "(" + encName[encoding] + ")");
+		if (MDEBUG) System.out.println("Use Encoding: " + encName[currentEncoding] + "(" + encName[encoding] + ")");
 		int k = 0;
 		if(preferredFormat != -1)
 		{
@@ -934,7 +954,7 @@ public class DataMatrix extends Canvas
 		reederr = C0[l][10];
 		reedblocks = C0[l][11];
 		//System.out.println("[CB]: Selected "+rows+"x"+cols+" ["+totaldata+"]; " + i);
-		System.out.println("Format: "+rows+"x"+cols+"; Data: "+totaldata+"; i=" + i + "; blocks = "+reedblocks);
+		if (MDEBUG) System.out.println("Format: "+rows+"x"+cols+"; Data: "+totaldata+"; i=" + i + "; blocks = "+reedblocks);
 		if((currentEncoding == E_C40 || currentEncoding == E_TEXT) && C49rest == 0 && i == totaldata && ai1[i - 1] == 254)
 			ai1[i - 1] = 129;
 		int ai4[][] = new int[10][255];
@@ -1307,7 +1327,9 @@ public class DataMatrix extends Canvas
 	}
 
 	public boolean DEBUG = false;
+	public boolean MDEBUG = false;
 	//public boolean DEBUG = true;
+	public boolean DEBUGEAUTO = true;
 	public String code;
 	protected static final int d1 = 3;
 	public double marginCM;

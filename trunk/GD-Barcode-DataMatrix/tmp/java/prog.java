@@ -45,6 +45,8 @@ public class prog
     public static void main(String args[])
     {
 		DataMatrix BC = new DataMatrix();
+		BC.DEBUG = false;
+		BC.DEBUGEAUTO = false;
 		//Integer.parseInt(args[0]);
 		String text;
 		if (args.length > 0) {

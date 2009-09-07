@@ -1,4 +1,4 @@
-package Algorithm::Reed;
+package Algorithm::DataMatrix::Reed;
 
 use strict;
 use warnings;
