@@ -145,7 +145,13 @@ sub ProcessTilde {
 	}
 }
 
+use Algorithm::Reed;
+
 sub CalcReed { # (int ai[], int i, int j) : void
+	my ($ai,$err) = @_;
+	my $rv = Algorithm::Reed::encode($ai,$err);
+	@$ai = @$rv;
+	return $ai;
 	sub mult($$) { # (int i, int j) : int
 		my ($i,$j) = @_;
 		my $k = 0;
@@ -169,6 +175,7 @@ sub CalcReed { # (int ai[], int i, int j) : void
         }
         $ai->[$i+$j-1] = mult($word0, $p->[$j - 1]);
     }
+    return $ai;
 }
 
 sub A253($$) # C8 (int i, int j) : int 
@@ -194,14 +201,7 @@ sub CreateBitmap() #CB (int ai[], String as[]) : int[][]
 		$_ == E_C40     && do { $i = $self->EncodeC40TEXT(scalar(@$ai), [0], $ai, $ai1, 0, 1, 0); last;};
 		$_ == E_TEXT    && do { $i = $self->EncodeC40TEXT(scalar(@$ai), [0], $ai, $ai1, 1, 1, 0); last;};
 		$_ == E_BASE256 && do { $i = $self->EncodeBASE256(scalar(@$ai), [0], $ai, [0], $ai1, 0, $as); last;};
-		$_ == E_NONE    && do {
-	        for my $j (0 .. ( $i = $#$ai )) {
-	        	$ai1->[$j] = $ai->[$j];
-	    	}
-	    	$i++;
-			last;
-		};
-		
+		$_ == E_NONE    && do { $ai1 = [ @$ai ]; $i = @$ai; last };
 	}
 	warn "[CB] selected (ai1[" .join(',',@$ai1).'], as[' . scalar(@$as) .  "])\n" if $DEBUG{TRACE};
 	DEBUG and print "Use Encoding: " .typeToString($self->{currentEncoding}). "(".typeToString($self->{encoding}).")\n";
