@@ -1,5 +1,10 @@
 Revision history for Acme-CPANAuthors-AnyEvent
 
-0.01    Date/time
-        First version, released on an unsuspecting world.
+0.03    2009-08-14
+        Added Tokuhiro Matsuno
 
+0.02    2009-08-14
+        Some rewrite
+
+0.01    2009-08-11
+        First version

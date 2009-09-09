@@ -26,9 +26,11 @@ for my $mod ( $cb->search( type => 'name', allow => [ qr/AnyEvent/ ], verbose =>
     $author{ $aut } = $mod->author->author;
     push @{ $authors{ $aut }{$distname} }, $mod->name;
 }
+push @{ $authors{ 'MART' }{'Danga-Socket-AnyEvent'} },'xx';
 
 for my $aut (keys %authors) {
 	if (exists $current{$aut}) {
+		$author{$aut} ||= $current{$aut};
 		delete $current{$aut};
 	} else {
 		push @{ $changes{'+'} }, $aut;
@@ -62,7 +64,7 @@ for ( sort keys %authors ) {
     $pod .= sprintf "    %-11s=> '%s',\n",$_, $author{$_};
 }
 
-$pod .= sprintf "\nAnd we written B<%d> distros", 0+keys %dist;
+$pod .= sprintf "\nAnd we've written B<%d> distros", 0+keys %dist;
 
 $file =~ s{ %REGISTER% }{use Acme::CPANAuthors::Register(\n$reg);}sx;
 $file =~ s{ %VERSION%  }{$ver}sgx;

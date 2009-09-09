@@ -12,11 +12,11 @@ Acme::CPANAuthors::AnyEvent - We are CPAN Authors of AnyEvent!
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use Acme::CPANAuthors::Register(
 	MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;)
@@ -30,6 +30,7 @@ use Acme::CPANAuthors::Register(
 	MIYAGAWA   => 'Tatsuhiko Miyagawa',
 	MONS       => 'Mons Anderson',
 	SEKIMURA   => 'Masayoshi Sekimura',
+	TOKUHIROM  => 'Tokuhiro Matsuno',
 	TYPESTER   => 'Daisuke Murase',
 	VTI        => 'Viacheslav Tykhanovskyi',
 	YANNK      => 'Yann Kerherve',
@@ -62,7 +63,7 @@ And if you aren't a AnyEvent CPAN author listed here, please send us your ID/nam
 
 =head1 CONTAINED AUTHORS
 
-Now B<14> AnyEvent CPAN authors:
+Now B<15> AnyEvent CPAN authors:
 
     MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;) 
 
@@ -76,11 +77,12 @@ Now B<14> AnyEvent CPAN authors:
     MIYAGAWA   => 'Tatsuhiko Miyagawa',
     MONS       => 'Mons Anderson',
     SEKIMURA   => 'Masayoshi Sekimura',
+    TOKUHIROM  => 'Tokuhiro Matsuno',
     TYPESTER   => 'Daisuke Murase',
     VTI        => 'Viacheslav Tykhanovskyi',
     YANNK      => 'Yann Kerherve',
 
-And we written B<37> distros
+And we've written B<39> distros
 
 =head1 SEE ALSO
 
