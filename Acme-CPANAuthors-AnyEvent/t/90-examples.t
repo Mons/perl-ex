@@ -18,3 +18,5 @@ while (defined ( $_ = readdir $dir )) {
 }
 ok($found, 'have example'.($found ? ': '.$found.':'.$_ : ''));
 closedir $dir;
+exit 0;
+require Test::NoWarnings;

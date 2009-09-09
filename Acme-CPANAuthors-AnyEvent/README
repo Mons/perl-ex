@@ -2,7 +2,7 @@ NAME
     Acme::CPANAuthors::AnyEvent - We are CPAN Authors of AnyEvent!
 
 VERSION
-    Version 0.02
+    Version 0.03
 
 SYNOPSIS
         use Acme::CPANAuthors;
@@ -31,7 +31,7 @@ MAINTENANCE
     your ID/name via email or RT and we will remove your name.
 
 CONTAINED AUTHORS
-    Now 14 AnyEvent CPAN authors:
+    Now 15 AnyEvent CPAN authors:
 
         MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;) 
 
@@ -45,11 +45,12 @@ CONTAINED AUTHORS
         MIYAGAWA   => 'Tatsuhiko Miyagawa',
         MONS       => 'Mons Anderson',
         SEKIMURA   => 'Masayoshi Sekimura',
+        TOKUHIROM  => 'Tokuhiro Matsuno',
         TYPESTER   => 'Daisuke Murase',
         VTI        => 'Viacheslav Tykhanovskyi',
         YANNK      => 'Yann Kerherve',
 
-    And we written 37 distros
+    And we've written 39 distros
 
 SEE ALSO
   The base

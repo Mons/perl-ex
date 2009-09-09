@@ -1,6 +1,7 @@
 #!/usr/bin/env perl -w
 
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::NoWarnings;
 use lib::abs "../lib";
 
 BEGIN {
