@@ -1,5 +1,6 @@
 package Acme::CPANAuthors::AnyEvent;
 
+use 5.005;
 use utf8;
 use strict;
 use warnings;
