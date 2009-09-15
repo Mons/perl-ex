@@ -1,6 +1,5 @@
 .cvsignore
 Changes
-cpants.pl
 ex/benchmark.pl
 ex/profile.pl
 ex/test.pl

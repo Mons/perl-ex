@@ -29,11 +29,11 @@ XML::Hash::LX - Convert hash to xml and xml to hash using LibXML
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 SYNOPSIS
 
