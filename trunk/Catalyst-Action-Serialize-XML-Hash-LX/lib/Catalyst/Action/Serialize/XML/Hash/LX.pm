@@ -37,7 +37,7 @@ use warnings;
 use base 'Catalyst::Action';
 use XML::Hash::LX 'hash2xml';
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 sub execute {
 	my $self = shift;

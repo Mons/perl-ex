@@ -1,6 +1,5 @@
 .cvsignore
 Changes
-cpants.pl
 ex/TestApp/Controller/API/REST.pm
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
