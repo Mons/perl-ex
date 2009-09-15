@@ -2,7 +2,7 @@ use inc::Module::Install 0.79;
 
 name     'XML-Hash-LX';
 all_from 'lib/XML/Hash/LX.pm';
-version   my $v = '0.05';
+version   my $v = '0.06';
 author   'Mons Anderson <mons@cpan.org>';
 license  'perl';
 
