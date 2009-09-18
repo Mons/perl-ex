@@ -67,6 +67,8 @@ for my $f (@FORMATS[1]) {
 	#last;
 	my $x = Algorithm::DataMatrix::Fill->new(@$f[5,6],$ai2);
 	print join ", ",@$ai2,"\n";
+	my $x = Algorithm::DataMatrix::Fill->new(@$f[5,6],$ai2);
+	print join ", ",@$ai2,"\n";
 	print "\033[s";
 	for(my $i2 = 0; $i2 < $self->{maprows}; $i2++) {
         my $j2 = 1;
