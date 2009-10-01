@@ -13,7 +13,7 @@ requires 'Acme::CPANAuthors::Register';
 requires 'Acme::CPANAuthors';
 
 provides 'Acme::CPANAuthors::AnyEvent' => {
-	version => '0.03',
+	version => '0.04',
 	file    => 'lib/Acme/CPANAuthors/AnyEvent.pm',
 };
 

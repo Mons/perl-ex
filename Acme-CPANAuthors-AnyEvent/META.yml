@@ -23,11 +23,11 @@ no_index:
 provides:
   Acme::CPANAuthors::AnyEvent:
     file: lib/Acme/CPANAuthors/AnyEvent.pm
-    version: 0.03
+    version: 0.04
 requires:
   Acme::CPANAuthors: 0
   Acme::CPANAuthors::Register: 0
   perl: 5.005
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.03
+version: 0.04

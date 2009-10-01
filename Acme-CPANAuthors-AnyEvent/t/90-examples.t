@@ -6,7 +6,6 @@ use lib::abs "../lib";
 
 $ENV{TEST_AUTHOR} or plan skip_all => '$ENV{TEST_AUTHOR} not set';
 our $dist = lib::abs::path('..');
-eval "use File::Find; 1" or plan skip_all => "File::Find required";
 
 plan tests => 1;
 
