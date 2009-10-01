@@ -1,4 +1,3 @@
-[MSG] No '/home/mons/.cpanplus/custom-sources' dir, skipping custom sources
 package Acme::CPANAuthors::AnyEvent;
 
 use 5.005;
