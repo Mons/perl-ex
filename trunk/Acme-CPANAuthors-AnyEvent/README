@@ -2,7 +2,7 @@ NAME
     Acme::CPANAuthors::AnyEvent - We are CPAN Authors of AnyEvent!
 
 VERSION
-    Version 0.03
+    Version 0.04
 
 SYNOPSIS
         use Acme::CPANAuthors;
@@ -31,7 +31,7 @@ MAINTENANCE
     your ID/name via email or RT and we will remove your name.
 
 CONTAINED AUTHORS
-    Now 15 AnyEvent CPAN authors:
+    Now 17 AnyEvent CPAN authors:
 
         MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;) 
 
@@ -40,17 +40,19 @@ CONTAINED AUTHORS
         BLUET      => 'BlueT - Matthew Lien - Che-Ming Lien',
         ELMEX      => 'Robin Redeker',
         KARASIK    => 'Dmitry Karasik',
+        KEVINJ     => 'Kevin Jones',
         MART       => 'Martin Atkins',
         MELO       => 'Pedro Melo',
         MIYAGAWA   => 'Tatsuhiko Miyagawa',
         MONS       => 'Mons Anderson',
+        NUFFIN     => 'Yuval Kogman',
         SEKIMURA   => 'Masayoshi Sekimura',
         TOKUHIROM  => 'Tokuhiro Matsuno',
         TYPESTER   => 'Daisuke Murase',
         VTI        => 'Viacheslav Tykhanovskyi',
         YANNK      => 'Yann Kerherve',
 
-    And we've written 39 distros
+    And we've written 41 distros
 
 SEE ALSO
   The base
