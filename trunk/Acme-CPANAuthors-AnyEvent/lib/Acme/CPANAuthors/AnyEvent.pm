@@ -1,3 +1,4 @@
+[MSG] No '/home/mons/.cpanplus/custom-sources' dir, skipping custom sources
 package Acme::CPANAuthors::AnyEvent;
 
 use 5.005;
@@ -13,11 +14,11 @@ Acme::CPANAuthors::AnyEvent - We are CPAN Authors of AnyEvent!
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 use Acme::CPANAuthors::Register(
 	MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;)
@@ -26,10 +27,12 @@ use Acme::CPANAuthors::Register(
 	BLUET      => 'BlueT - Matthew Lien - Che-Ming Lien',
 	ELMEX      => 'Robin Redeker',
 	KARASIK    => 'Dmitry Karasik',
+	KEVINJ     => 'Kevin Jones',
 	MART       => 'Martin Atkins',
 	MELO       => 'Pedro Melo',
 	MIYAGAWA   => 'Tatsuhiko Miyagawa',
 	MONS       => 'Mons Anderson',
+	NUFFIN     => 'Yuval Kogman',
 	SEKIMURA   => 'Masayoshi Sekimura',
 	TOKUHIROM  => 'Tokuhiro Matsuno',
 	TYPESTER   => 'Daisuke Murase',
@@ -64,7 +67,7 @@ And if you aren't a AnyEvent CPAN author listed here, please send us your ID/nam
 
 =head1 CONTAINED AUTHORS
 
-Now B<15> AnyEvent CPAN authors:
+Now B<17> AnyEvent CPAN authors:
 
     MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;) 
 
@@ -73,17 +76,19 @@ Now B<15> AnyEvent CPAN authors:
     BLUET      => 'BlueT - Matthew Lien - Che-Ming Lien',
     ELMEX      => 'Robin Redeker',
     KARASIK    => 'Dmitry Karasik',
+    KEVINJ     => 'Kevin Jones',
     MART       => 'Martin Atkins',
     MELO       => 'Pedro Melo',
     MIYAGAWA   => 'Tatsuhiko Miyagawa',
     MONS       => 'Mons Anderson',
+    NUFFIN     => 'Yuval Kogman',
     SEKIMURA   => 'Masayoshi Sekimura',
     TOKUHIROM  => 'Tokuhiro Matsuno',
     TYPESTER   => 'Daisuke Murase',
     VTI        => 'Viacheslav Tykhanovskyi',
     YANNK      => 'Yann Kerherve',
 
-And we've written B<39> distros
+And we've written B<41> distros
 
 =head1 SEE ALSO
 
