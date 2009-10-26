@@ -9,11 +9,11 @@ Captcha::Easy - The great new Captcha::Easy!
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
@@ -43,17 +43,21 @@ BEGIN {
 	( my $f = __FILE__ ) =~ s/\.pm$//i;
 	$FONT_PATH = $f;
 	$FONT = 'font';
-	$TMP  = '/opt/tmp/captcha';
 	$EXP  = 60 * 15; # 15 min
 	$USE_EXP = 1;
 }
+
+=head2 new
+
+Args: font, temp, reuse, expire
+
+=cut
 
 sub new {
 	my $pkg = shift;
 	my $self = bless {
 		font   => $FONT_PATH.'/'.$FONT.'.ttf',
 		$USE_EXP ? (expire => $EXP) : (),
-		temp   => $TMP,
 		reuse => 1,
 		@_
 	}, $pkg;
@@ -80,7 +84,7 @@ sub d {
 	s{\r?\n$}{}sg;
 	s{\r?\n}{\\n}sg;
 	no warnings;
-	warn sprintf "%s [%s] %s (%s)\n", scalar(localtime),$ENV{REMOTE_ADDR},$_,$ENV{REQUEST_URI};
+#	warn sprintf "%s [%s] %s (%s)\n", scalar(localtime),$ENV{REMOTE_ADDR},$_,$ENV{REQUEST_URI};
 	printf { $self->{logfh} } "%s [%s] %s (%s)\n",scalar(localtime),$ENV{REMOTE_ADDR},$_,$ENV{REQUEST_URI};
 }
 
@@ -189,7 +193,7 @@ sub sanity {
 
 sub generate {
 	my $self = shift;
-	my $word = $self->word(6);
+	my $word = shift||$self->word(6);#only for testing
 	my $img  = $self->image($word);
 	my $sha  = sha1_hex( $self->sanity( $word ) );
 	$self->d("captcha($word)=$sha");
@@ -211,6 +215,14 @@ sub save_file {
 	die $@ if $@;
 	umask($um);
 }
+
+=head2 check
+
+Args: $code, $hash
+
+Returns 1 if $code is a valid text for $hash 
+
+=cut
 
 sub check {
 	my $self = shift;
@@ -266,7 +278,8 @@ sub get_old_unused() {
 			wanted => sub {
 				return if !-f || length $_ < 40 || (stat)[9] > $t;
 				$found = $_;
-				last SEARCH;
+                ( $File::Find::prune = 1 )
+
 			},
 			no_chdir => 1,
 		},$self->{temp});
@@ -281,6 +294,12 @@ sub get_old_unused() {
 	$self->d("Found existing captcha `$found'");
 	return $found;
 }
+
+=head2 make
+
+Creates CAPTCHA and returns hash code for this CAPTCHA
+
+=cut
 
 sub make {
 	my $self = shift;

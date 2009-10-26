@@ -6,6 +6,8 @@ author   'Mons Anderson <mons@cpan.org>';
 license  'perl';
 
 build_requires 'Test::More';
+requires 'Imager';
+requires 'lib::abs';
 
 auto_install;
 
