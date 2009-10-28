@@ -1,30 +1,18 @@
-#
-#===============================================================================
-#
-#         FILE:  01-create.t
-#
-#  DESCRIPTION:  
-#
-#        FILES:  ---
-#         BUGS:  ---
-#        NOTES:  ---
-#       AUTHOR:  Andrey Kostenko (), <andrey@kostenko.name>
-#      COMPANY:  Rambler Internet Holding
-#      VERSION:  1.0
-#      CREATED:  26.10.2009 19:19:17 MSK
-#     REVISION:  ---
-#===============================================================================
+#!/usr/bin/env perl
 
 use strict;
 use warnings;
-
-use Test::More tests => 3;                      # last test to print
+use lib::abs '../lib';
+use Test::More tests => 4;
 
 use Captcha::Easy;
 
-my $captcha = Captcha::Easy->new( temp => 't/tmp');
-my ($hash) = $captcha->generate( 'test11' );;
-ok $hash;
-ok $captcha->check( 'test11', $hash );
-ok !$captcha->check( 'test12', $hash );
+my $hash;
+my $captcha = Captcha::Easy->new( temp => lib::abs::path( 'tmp' ), salt => 'test', debug => 0 );
+$hash = $captcha->make( 'test11' );
+ok $hash, 'have hash';
+ok $captcha->check( 'test11', $hash ), 'firsh check correct';
+ok $captcha->check( 'test11', $hash ), 'second check fails';
 
+$hash = $captcha->make( 'test11' );
+ok !$captcha->check( 'test12', $hash ), 'wrong check fails';
