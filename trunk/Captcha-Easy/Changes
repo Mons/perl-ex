@@ -1,5 +1,11 @@
 Revision history for Captcha-Easy
 
-0.01    Date/time
-        First version, released on an unsuspecting world.
+0.03    2009-10-28
+        Add salt, fix tests, some enhancements
+
+0.02    2009-10-26
+        Fixes by Andrey Kostenko
+
+0.01    2009-10-24
+        First public version
 

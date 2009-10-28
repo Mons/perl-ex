@@ -1,52 +1,52 @@
-Captcha-Easy
+NAME
+    Captcha::Easy - Simple and fast captcha
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+VERSION
+    Version 0.03
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it to get an idea of the module's uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+SYNOPSIS
+        use Captcha::Easy;
 
+        my $captcha = Captcha::Easy->new(
+        temp   => '/path/to/storage',
+        reuse  => 1, # reuse expired files
+        salt   => 'your secret',
+        font   => '/path/to/font.ttf',
+        expire => 60*30, # 30 min
+        );
+        my $hash = $captcha->make;
+        my ($w1,$w2,$rest) = split //,$hash,3;
+        print qq{<img src="http://path.to.temp/$w1/$w2/$rest.png" />};
 
-INSTALLATION
+    ...
 
-To install this module, run the following commands:
+    my $code = $captcha->check($word,$hash);
+        if    ($code ==  1) { valid }
+        elsif ($code ==  0) { wrong word }
+        elsif ($code == -1) { word correct, but captcha was already used (i.e. file removed) }
+        elsif ($code == -2) { word correct, but captcha was expired (i.e. file mtime < time - $captcha->{epire} ) }
+        else                { something strange happens }
 
-	perl Makefile.PL
-	make
-	make test
-	make install
+  new (%args)
+    Args: font, temp, reuse, expire, salt, debug, length
 
-SUPPORT AND DOCUMENTATION
+  word([$length])
+        Generate captcha word
 
-After installing, you can find documentation for this module with the
-perldoc command.
+  check
+    Args: $code, $hash
 
-    perldoc Captcha::Easy
+    Returns 1 if $code is a valid text for $hash
 
-You can also look for information at:
+  make
+    Creates CAPTCHA and returns hash code for this CAPTCHA
 
-    RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Captcha-Easy
+AUTHOR
+    Mons Anderson, "<mons at cpan.org>"
 
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Captcha-Easy
+COPYRIGHT & LICENSE
+    Copyright 2009 Mons Anderson, all rights reserved.
 
-    CPAN Ratings
-        http://cpanratings.perl.org/d/Captcha-Easy
-
-    Search CPAN
-        http://search.cpan.org/dist/Captcha-Easy/
-
-
-COPYRIGHT AND LICENCE
-
-Copyright (C) 2009 Mons Anderson
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
 

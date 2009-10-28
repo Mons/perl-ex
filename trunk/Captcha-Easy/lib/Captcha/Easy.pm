@@ -1,41 +1,52 @@
 package Captcha::Easy;
 
+use 5.008008;
 use strict;
 use warnings;
 
 =head1 NAME
 
-Captcha::Easy - The great new Captcha::Easy!
+Captcha::Easy - Simple and fast captcha
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
-
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
     use Captcha::Easy;
 
-    my $foo = Captcha::Easy->new();
+    my $captcha = Captcha::Easy->new(
+        temp   => '/path/to/storage',
+        reuse  => 1, # reuse expired files
+        salt   => 'your secret',
+        font   => '/path/to/font.ttf',
+        expire => 60*30, # 30 min
+    );
+    my $hash = $captcha->make;
+    my ($w1,$w2,$rest) = split //,$hash,3;
+    print qq{<img src="http://path.to.temp/$w1/$w2/$rest.png" />};
+    
     ...
+    
+    my $code = $captcha->check($word,$hash);
+    if    ($code ==  1) { valid }
+    elsif ($code ==  0) { wrong word }
+    elsif ($code == -1) { word correct, but captcha was already used (i.e. file removed) }
+    elsif ($code == -2) { word correct, but captcha was expired (i.e. file mtime < time - $captcha->{epire} ) }
+    else                { something strange happens }
 
 =cut
 
-use strict;
 use Imager;
 use Imager::Fill;
 use Digest::SHA1 qw(sha1_hex);
 use Carp qw(croak carp);
 use File::Find qw(find);
-use IO::Handle;
 our ($FONT_PATH,$FONT,$TMP,$EXP,$USE_EXP);
 
 use constant pi => 3.141592;
@@ -47,9 +58,9 @@ BEGIN {
 	$USE_EXP = 1;
 }
 
-=head2 new
+=head2 new (%args)
 
-Args: font, temp, reuse, expire
+Args: font, temp, reuse, expire, salt, debug, length
 
 =cut
 
@@ -59,8 +70,13 @@ sub new {
 		font   => $FONT_PATH.'/'.$FONT.'.ttf',
 		$USE_EXP ? (expire => $EXP) : (),
 		reuse => 1,
+		salt  => '',
+		debug => 0,
+		length => 7,
 		@_
 	}, $pkg;
+	length $self->{salt}
+		or carp "It's unsecure to use captcha without salt";
 	-d $self->{temp} and -w $self->{temp}
 		or croak "CAPTCHA: Please, create temp dir ($self->{temp}) for images or set temp option";
 	-f $self->{font}
@@ -70,27 +86,39 @@ sub new {
 	$self;
 }
 
-sub d {
+sub _d { # debug routine
 	my $self = shift;
+	$self->{debug} or return;
 	ref $self or warn("bad args for d(): $self @_ at @{[ (caller)[1,2] ]}"),return;
+	local $_=shift;
+	s{\r?\n$}{}sg;
+	s{\r?\n}{\\n}sg;
+	my $msg = do {
+		no warnings;
+		sprintf "%s [%s] %s (%s)\n", scalar(localtime),$ENV{REMOTE_ADDR},$_,$ENV{REQUEST_URI};
+	};
+	warn "$msg";
+	$self->{debug} > 1 or return;
 	local ($@,$!);
 	unless (exists $self->{logfh}) {
 		open $self->{logfh},'>>',"$self->{temp}/log" or do { warn "CAPTCHA: log error: $!";return };
 		chmod oct(664),"$self->{temp}/log";
+		require IO::Handle;
 		$self->{logfh}->autoflush(1);
 	}
 	$self->{logfh} or return;
-	local $_=shift;
-	s{\r?\n$}{}sg;
-	s{\r?\n}{\\n}sg;
-	no warnings;
-#	warn sprintf "%s [%s] %s (%s)\n", scalar(localtime),$ENV{REMOTE_ADDR},$_,$ENV{REQUEST_URI};
-	printf { $self->{logfh} } "%s [%s] %s (%s)\n",scalar(localtime),$ENV{REMOTE_ADDR},$_,$ENV{REQUEST_URI};
+	print { $self->{logfh} } $msg;
 }
+
+=head2 word([$length])
+
+    Generate captcha word
+
+=cut
 
 sub word {
 	my $self = shift;
-	my $size = shift || 7;
+	my $size = shift || $self->{length};
 	$size > 0 or croak "Word needs size";
 	my %c;
 	#$c{0} = [qw(e u i o a oo ae)];
@@ -121,10 +149,10 @@ sub word {
 		$nc = -1 if length($char) > 1;
 	}
 	if ( $loops >= 100 ) {
-		$self->d("Word terminated abnormally with $s");
+		$self->_d("Word terminated abnormally with $s");
 		$s = substr($s,0,7);
 	} else {
-		#$self->d("Loop exit val: $loops");
+		#$self->_d("Loop exit val: $loops");
 	}
 	return uc($s);
 }
@@ -191,12 +219,18 @@ sub sanity {
 	$_;
 }
 
+sub encrypt {
+	my $self = shift;
+	my $word = shift;
+	return sha1_hex( $self->sanity( $word ).$self->{salt} );
+}
+
 sub generate {
 	my $self = shift;
-	my $word = shift||$self->word(6);#only for testing
+	my $word = shift || $self->word($self->{length});#only for testing
 	my $img  = $self->image($word);
-	my $sha  = sha1_hex( $self->sanity( $word ) );
-	$self->d("captcha($word)=$sha");
+	my $sha  = $self->encrypt($word);
+	$self->_d("captcha($word)=$sha");
 	return ($sha,$img);
 }
 
@@ -227,42 +261,52 @@ Returns 1 if $code is a valid text for $hash
 sub check {
 	my $self = shift;
 	local $!;
-	my $s = $self->sanity( shift );
+	my $w = $self->encrypt( my $s = shift );
+	#$self->sanity( shift );
 	my $hash = shift;
-	my $w = sha1_hex($s);
 	my ($w1,$w2,$rest) = split //,$w,3;
 	if ($hash ne $w) {
-		$self->d("Wrong hash: $w <=> $hash");
+		$self->_d("Wrong hash: $w <=> $hash");
+		$self->remove($hash);
 		return 0;
 	};
 	my $f = "$self->{temp}/$w1/$w2/$rest.png";
 	my $r;
 	if ( ! -e $f ){
-		$self->d("($s) Non-existing file $f");
+		$self->_d("($s) Non-existing file $f");
 		return -1;
 	}
 	elsif (defined $self->{expire} and time - (stat($f))[9] > $self->{expire}) {
-		$self->d("($s) Expired file $f");
+		$self->_d("($s) Expired file $f");
 		$r = -2; # expired
 	}
 	else {
-		$self->d("($s) OK $f");
+		$self->_d("($s) OK $f");
 		$r = 1;
 	}
-	unlink $f or do {
-		$self->d("($s) Can't delete used file $f: $!");
-		$r = -1;
-	};
-	rmdir "$self->{temp}/$w1/$w2" and rmdir "$self->{temp}/$w1";
+	$self->remove($w);
 	return $r;
 }
 
+sub remove {
+	my $self = shift;
+	my $hash = shift;
+	my ($w1,$w2,$rest) = split //,$hash,3;
+	my $f = "$self->{temp}/$w1/$w2/$rest.png";
+	local $!;
+	unlink $f or do {
+		$self->_d("Can't delete file $f: $!");
+	};
+	rmdir "$self->{temp}/$w1/$w2" and rmdir "$self->{temp}/$w1";
+	return;
+}
+
 sub data {
-	my $png = shift;
-	my $w = shift;
-	return unless $w =~ /^[\da-f]{40}$/;
-	my ($w1,$w2,$rest) = split //,$w,3;
-	open my $f, '<',"$TMP/$w1/$w2/$rest.png" or return;
+	my $self = shift;
+	my $hash = shift;
+	return unless $hash =~ /^[\da-f]{40}$/;
+	my ($w1,$w2,$rest) = split //,$hash,3;
+	open my $f, '<',"$self->{temp}/$w1/$w2/$rest.png" or return;
 	my $data = do { local $/; <$f> };
 	close $f;
 	return $data;
@@ -291,7 +335,7 @@ sub get_old_unused() {
 		s{\.png$}{};
 		s{/}{}g;
 	}
-	$self->d("Found existing captcha `$found'");
+	$self->_d("Found existing captcha `$found'");
 	return $found;
 }
 
@@ -303,10 +347,11 @@ Creates CAPTCHA and returns hash code for this CAPTCHA
 
 sub make {
 	my $self = shift;
-	if ($self->{reuse} and my $ex = $self->get_old_unused()) {
+	
+	if (!@_ and $self->{reuse} and my $ex = $self->get_old_unused()) {
 		return $ex;
 	} else {
-		my ($w,$i) = $self->generate();
+		my ($w,$i) = $self->generate(@_);
 		$self->save_file($w,$i);
 		return $w;
 	}
