@@ -13,28 +13,35 @@ Acme::CPANAuthors::AnyEvent - We are CPAN Authors of AnyEvent!
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use Acme::CPANAuthors::Register(
 	MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;)
 	AGRUNDMA   => 'Andy Grundman',
 	BEPPU      => 'John Beppu',
 	BLUET      => 'BlueT - Matthew Lien - Che-Ming Lien',
+	DMAKI      => 'Daisuke Maki',
 	ELMEX      => 'Robin Redeker',
+	FRANCKC    => 'Franck Cuny',
+	GUGOD      => 'Liu Kang Min',
 	KARASIK    => 'Dmitry Karasik',
 	KEVINJ     => 'Kevin Jones',
 	MART       => 'Martin Atkins',
 	MELO       => 'Pedro Melo',
+	MGRIMES    => 'Mark Grimes',
+	MIKI       => 'Takeshi Miki',
 	MIYAGAWA   => 'Tatsuhiko Miyagawa',
 	MONS       => 'Mons Anderson',
 	NUFFIN     => 'Yuval Kogman',
+	PMAKHOLM   => 'Peter Makholm',
 	SEKIMURA   => 'Masayoshi Sekimura',
 	TOKUHIROM  => 'Tokuhiro Matsuno',
 	TYPESTER   => 'Daisuke Murase',
+	VKRAMSKIH  => 'Vitaly Kramskikh',
 	VTI        => 'Viacheslav Tykhanovskyi',
 	YANNK      => 'Yann Kerherve',
 );
@@ -66,28 +73,35 @@ And if you aren't a AnyEvent CPAN author listed here, please send us your ID/nam
 
 =head1 CONTAINED AUTHORS
 
-Now B<17> AnyEvent CPAN authors:
+Now B<24> AnyEvent CPAN authors:
 
     MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;) 
 
     AGRUNDMA   => 'Andy Grundman',
     BEPPU      => 'John Beppu',
     BLUET      => 'BlueT - Matthew Lien - Che-Ming Lien',
+    DMAKI      => 'Daisuke Maki',
     ELMEX      => 'Robin Redeker',
+    FRANCKC    => 'Franck Cuny',
+    GUGOD      => 'Liu Kang Min',
     KARASIK    => 'Dmitry Karasik',
     KEVINJ     => 'Kevin Jones',
     MART       => 'Martin Atkins',
     MELO       => 'Pedro Melo',
+    MGRIMES    => 'Mark Grimes',
+    MIKI       => 'Takeshi Miki',
     MIYAGAWA   => 'Tatsuhiko Miyagawa',
     MONS       => 'Mons Anderson',
     NUFFIN     => 'Yuval Kogman',
+    PMAKHOLM   => 'Peter Makholm',
     SEKIMURA   => 'Masayoshi Sekimura',
     TOKUHIROM  => 'Tokuhiro Matsuno',
     TYPESTER   => 'Daisuke Murase',
+    VKRAMSKIH  => 'Vitaly Kramskikh',
     VTI        => 'Viacheslav Tykhanovskyi',
     YANNK      => 'Yann Kerherve',
 
-And we've written B<41> distros
+And we've written B<56> distros
 
 =head1 SEE ALSO
 
