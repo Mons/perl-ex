@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-package AE::HTTPD::Request;
+package AE::HTTPD::Req;
 
 sub new {
 	my $pk = shift;
@@ -110,6 +110,7 @@ sub _parse_headers {
       # remove folding:
       $hdr->{$_} =~ s/\012([\011\040])/$1/sgo;
    }
+   $hdr->{cookie} = CGI::Cookie::XS->parse($hdr->{cookie});
 
    $hdr
 }
@@ -143,6 +144,7 @@ sub read_headers {
 }
 
 use Sys::Sendfile;
+use CGI::Cookie::XS;
 
 sub handle_request {
 	my ($self,$id) = @_;
@@ -184,44 +186,44 @@ sub response {
 	$res .= "\015\012";
 
 =for rem
-   if (ref ($content) eq 'CODE') {
-      weaken $self;
-
-      my $chunk_cb = sub {
-         my ($chunk) = @_;
-
-         return 0 unless defined ($self) && defined ($self->{hdl});
-
-         delete $self->{transport_polled};
-
-         if (defined ($chunk) && length ($chunk) > 0) {
-            $self->{hdl}->push_write ($chunk);
-
-         } else {
-            $self->response_done;
-         }
-
-         return 1;
-      };
-
-      $self->{transfer_cb} = $content;
-
-      $self->{hdl}->on_drain (sub {
-         return unless $self;
-
-         if (length $res) {
-            my $r = $res;
-            undef $res;
-            $chunk_cb->($r);
-
-         } elsif (not $self->{transport_polled}) {
-            $self->{transport_polled} = 1;
-            $self->{transfer_cb}->($chunk_cb) if $self;
-         }
-      });
-
-   }
-   else {
+	if (ref ($content) eq 'CODE') {
+		weaken $self;
+	
+		my $chunk_cb = sub {
+			my ($chunk) = @_;
+	
+			return 0 unless defined ($self) && defined ($self->{hdl});
+	
+			delete $self->{transport_polled};
+	
+			if (defined ($chunk) && length ($chunk) > 0) {
+				$self->{hdl}->push_write ($chunk);
+	
+			} else {
+				$self->response_done;
+			}
+	
+			return 1;
+		};
+	
+		$self->{transfer_cb} = $content;
+	
+		$self->{hdl}->on_drain (sub {
+			return unless $self;
+	
+			if (length $res) {
+				my $r = $res;
+				undef $res;
+				$chunk_cb->($r);
+	
+			} elsif (not $self->{transport_polled}) {
+				$self->{transport_polled} = 1;
+				$self->{transfer_cb}->($chunk_cb) if $self;
+			}
+		});
+	
+	}
+	else {
 =cut
 		$res .= $content unless ref $content;
 		warn "Send response $res";
@@ -235,9 +237,9 @@ sub response {
 				close $f;
 			}
 		}
-      #$con->{h}->destroy;
-      #$self->response_done;
-#   }
+		#$con->{h}->destroy;
+		#$self->response_done;
+	#   }
 }
 
 
