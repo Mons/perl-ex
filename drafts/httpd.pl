@@ -1,13 +1,43 @@
 #!/usr/bin/env perl
 
-package AE::HTTPD::Req;
+package AE::HTTP::Req;
 
 sub new {
 	my $pk = shift;
+	warn "new @_";
 	my $self = bless {@_},$pk;
+	
+	$self;
 }
 
-package AE::HTTPDX;
+sub response {
+	my $self = shift;
+	warn "Response @_";
+	$self->{server} or return %$self = ();
+	$self->{server}->response($self, @_);
+	$self->dispose;
+}
+
+sub error {
+	my $self = shift;
+	$self->{server} or return %$self = ();
+	$self->{server}->error($self, @_);
+	$self->dispose;
+}
+
+sub dispose {
+	my $self = shift;
+	return %$self = ();
+}
+
+sub DESTROY {
+	my $self = shift;
+	$self->{server} or return %$self = ();
+	$self->{server}->error($self, 500, "No response", {}, "No response");
+	#$self->{end} and $self->{end}->($self);
+}
+
+package AE::HTTP;
 use uni::perl ':dumper';
 use AE;
 use AnyEvent::Socket;
@@ -15,7 +45,11 @@ use AnyEvent::Handle;
 use Scalar::Util qw(weaken);
 
 sub new {
-	my $self = bless {@_},shift;
+	my $pk = shift;
+	my $self = bless {
+		keep_alive => 1,
+		@_,
+	},$pk;
 	$self->{host} //= '0.0.0.0';
 	$self->{port} //= 8080;
 	return $self;
@@ -36,134 +70,172 @@ sub start {
 sub accept :method {
 	my ($self,$fh,$host,$port) = @_;
 	my $id = int $fh;
+	warn "accept";
 	my $h = AnyEvent::Handle->new(
-		fh       => $fh,
-		on_eof   => sub { warn "EOF"; delete $self->{con}{$id} },
+		fh         => $fh,
+		on_eof     => sub { warn "EOF";      delete $self->{con}{$id} },
 		on_error   => sub { warn "ERROR @_"; delete $self->{con}{$id} },
 	);
-	$self->{con}{$id} = {
-		id => $id,
-		fh => $fh,
-		h  => $h,
-	};
-	$self->read_header($id);
+	{
+		weaken $self;
+		$self->{con}{$id} = {
+			fh  => $fh,
+			h   => $h,
+			r   => [],
+			ka  => AE::timer 300,0,sub {
+				$self or return;
+				delete $self->{con}{$id};
+			},
+		};
+		$self->read_header($id);
+	}
+	return;
 }
-
-sub error {
-   my ($self, $id, $code, $msg, $hdr, $content) = @_;
-
-   if ($code !~ /^(1\d\d|204|304)$/o) {
-      unless (defined $content) { $content = "$code $msg" }
-      $hdr->{'Content-Type'} = 'text/plain';
-   }
-
-   $self->response ($id, $code, $msg, $hdr, $content);
-}
-
-
 
 sub read_header {
 	my ($self,$id) = @_;
 	my $con = $self->{con}{$id};
+	return warn "no connection for $id" unless $con;
 	weaken $self;
-	warn "Want headers";
+	#warn dumper $con;
 	$con->{h}->push_read(line => sub {
 		$self or return;
 		shift;
 		my $line = shift;
 		if ($line =~ /(\S+) \040 (\S+) \040 HTTP\/(\d+)\.(\d+)/xso) {
 			my ($meth, $url, $vm, $vi) = ($1, $2, $3, $4);
-			warn "$meth $url $vm.$vi";
-			$con->{head} = [$meth,$url];
+			$con->{method} = $meth;
+			$con->{uri} = $url;
 			$self->read_headers($id);
 		}
 		elsif ($line eq '') {
-			$self->push_header($id);
+			$self->read_header($id);
 		}
 		else {
-			$self->error($id, 400, "Bad Request");
+			$self->error($id, 400, "Bad Request", {}, undef, 'fatal');
 		}
 	});
 }
 
 # loosely adopted from AnyEvent::HTTP:
 sub _parse_headers {
-   my ($header) = @_;
-   my $hdr;
+	my ($header) = @_;
+	my $hdr;
 
-   $header =~ y/\015//d;
+	$header =~ y/\015//d;
 
-   while ($header =~ /\G
-      ([^:\000-\037]+):
-      [\011\040]*
-      ( (?: [^\012]+ | \012 [\011\040] )* )
-      \012
-   /sgcxo) {
+	while ($header =~ /\G
+		([^:\000-\037]+):
+		[\011\040]*
+		( (?: [^\012]+ | \012 [\011\040] )* )
+		\012
+	/sgcxo) {
 
-      $hdr->{lc $1} .= ",$2"
-   }
+		$hdr->{$1} .= ",$2"
+	}
 
-   return undef unless $header =~ /\G$/sgxo;
+	return undef unless $header =~ /\G$/sgxo;
 
-   for (keys %$hdr) {
-      substr $hdr->{$_}, 0, 1, '';
-      # remove folding:
-      $hdr->{$_} =~ s/\012([\011\040])/$1/sgo;
-   }
-   $hdr->{cookie} = CGI::Cookie::XS->parse($hdr->{cookie});
+	for (keys %$hdr) {
+		substr $hdr->{$_}, 0, 1, '';
+		# remove folding:
+		$hdr->{$_} =~ s/\012([\011\040])/$1/sgo;
+	}
 
-   $hdr
+	$hdr
 }
-
 
 sub read_headers {
 	my ($self,$id) = @_;
 	my $con = $self->{con}{$id};
-	$con->{h}->unshift_read (line =>
-      qr{(?<![^\012])\015?\012}o,
-      sub {
-         my ($hdl, $data) = @_;
-         my $hdr = _parse_headers ($data);
+	$con->{h}->unshift_read (
+		line => qr{(?<![^\012])\015?\012}o,
+		sub {
+			my ($hdl, $data) = @_;
+			my $htxs = HTTP::HeaderParser::XS->new( \("GET / HTTP/1.0\r\n".$data."\r\n") );
+			my $hdr;
+			if ($htxs) {
+				$hdr = $htxs->getHeaders;
+			} else {
+				$hdr = _parse_headers ($data);
+			}
 
-         unless (defined $hdr) {
-            $self->error ($id, 599 => "garbled headers");
-         }
+			unless (defined $hdr) {
+				$self->error ($id, 599 => "garbled headers");
+			}
+			$hdr->{Cookie} = CGI::Cookie::XS->parse($hdr->{Cookie}) if exists $hdr->{Cookie};
+			push @{ $self->{con}{$id}{r} }, AE::HTTP::Req->new(
+				id      => $id,
+				server  => $self,
+				method  => delete $con->{method},
+				uri     => delete $con->{uri},
+				host    => $hdr->{Host},
+				headers => $hdr,
+			);
+			my $r = $con->{r}[-1];
+			weaken($con->{r}[-1]);
 
-         $con->{hdr} = $hdr;
-
-         if (defined $hdr->{'content-length'}) {
-            $self->{hdl}->unshift_read (chunk => $hdr->{'content-length'}, sub {
-               my ($hdl, $data) = @_;
-               $self->handle_request ($id, $data);
-            });
-         } else {
-            $self->handle_request ($id);
-         }
-      }
-   );
+			if (defined $hdr->{'content-length'}) {
+				$con->{h}->unshift_read (chunk => $hdr->{'content-length'}, sub {
+					my ($hdl, $data) = @_;
+					$self->handle_request($r, $data);
+					$self->read_header($id);
+				});
+			} else {
+				$self->handle_request($r);
+				$self->read_header($id);
+			}
+		}
+	);
 }
 
 use Sys::Sendfile;
+use HTTP::HeaderParser::XS;
 use CGI::Cookie::XS;
 
 sub handle_request {
-	my ($self,$id) = @_;
-	my $con = $self->{con}{$id};
-	warn dumper $con;
-	
-	$self->response($id, 200, "OK", {}, { sendfile => __FILE__ });
+	my ($self,$r,$data) = @_;
+	warn "$r->{method} $r->{uri}\n";
+	weaken(my $x = $r);
+	$r->{t} = AE::timer 2,0,sub {
+		$x or return;
+		warn "Fire timeout timer";
+		$x->error(504, "Gateway timeout");
+	};
+	$self->{request}->($r,$data);
+}
+
+sub error {
+	my ($self, $r, $code, $msg, $hdr, $content, $fatal) = @_;
+	warn "Send error $code to $r->{id}";
+	if ($code !~ /^(1\d\d|204|304)$/o) {
+		unless (defined $content) { $content = "$code $msg" }
+		$hdr->{'Content-Type'} = 'text/plain';
+	}
+
+	$self->response( $r, $code, $msg, $hdr, $content );
+	if ($fatal) {
+		delete $self->{con}{$r->{id}};
+	}
 }
 
 sub response {
-	my ($self, $id, $code, $msg, $hdr, $content) = @_;
-	my $con = $self->{con}{$id} or return;
+	my ($self, $r, $code, $msg, $hdr, $content) = @_;
+	my $id = $r->{id};
+	my $con = exists $self->{con}{$id} ? $self->{con}{$id} : undef;
+	#warn "Send response $code $msg to $id ($con)";
+	$con or return;
+	if (@{$con->{r}} and $con->{r}[0] == $r) {
+		shift @{ $con->{r} };
+	} else {
+		$r->{ready} = [ $code, $msg, $hdr, $content ];
+		return;
+	}
 
 	my $res = "HTTP/1.0 $code $msg\015\012";
 	if (ref $content eq 'HASH') {
 		if ($content->{sendfile}) {
-			my $file = $content->{sendfile};
-			$hdr->{'Content-Length'} = -s $file;
-			#$content = '';
+			$hdr->{'Content-Length'} = -s $content->{sendfile};
 		}
 	}
 	#$hdr->{'Expires'}        = $hdr->{'Date'}
@@ -240,6 +312,9 @@ sub response {
 		#$con->{h}->destroy;
 		#$self->response_done;
 	#   }
+	if ( @{$con->{r}} and $con->{r}[0]{ready}) {
+		$self->response($con->{r}[0],@{$con->{r}[0]{ready}});
+	}
 }
 
 
@@ -249,6 +324,11 @@ use uni::perl ':dumper';
 use AE;
 use AnyEvent::Socket;
 
-my $srv = AE::HTTPDX->new();
+my $srv = AE::HTTP->new(request => sub {
+	my $r = shift;
+	warn "$r->{method} $r->{host} $r->{uri}";
+	$r->response(200,"OK", {}, "Yep, it works\n");
+	#$r->response(200,"OK", {}, { sendfile => __FILE__ });
+});
 $srv->start;
 AE::cv->recv;
