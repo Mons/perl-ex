@@ -3,13 +3,14 @@
 use uni::perl ':dumper';
 use AE;
 use AnyEvent::HTTP;
-use Test::More tests => 28;
+use Test::More tests => 22;
 
 my $cv = AE::cv;
 #my $uri = test.gif';
 sub rq (%) {
 	my ($method,$file,%args) = @_;
-	my $host = 'http://localhost:6789/';
+	#my $host = 'http://localhost:8080/';
+	my $host = 'http://127.0.0.1/';
 	$cv->begin;
 	http_request
 		$method => $host.$file,
@@ -20,8 +21,8 @@ sub rq (%) {
 		},
 		body => $args{body},
 		cb => sub {
-			shift;
-			$args{cb}(shift);
+			my $x = shift;
+			$args{cb}(shift,$x);
 			$cv->end;
 		}
 	;
@@ -31,15 +32,109 @@ my $time = time-120;
 my $time2 = time-60;
 my $time3 = time-60*3;
 
-rq MKCOL => 'something/', acl => '0755', cb => sub {
+rq MKCOL => 'something', cb => sub {
 	my $h = shift;
-	is $h->{Status},'201', 'mkcol ok';
-	is $h->{'x-acl'}, '0755', 'acl mkcol';
-	rq DELETE => 'something/', cb => sub {
-		like $h->{Status},qr/^20[14]$/, 'rmdir ok';
+	is $h->{Status},'409', 'mkcol fail';
+	rq MKCOL => 'something/', body => 'xxx', cb => sub {
+		my $h = shift;
+		is $h->{Status},'415', 'mkcol with data fail';
+		rq MKCOL => 'something/', cb => sub {
+			my $h = shift;
+			is $h->{Status},'201', 'mkcol ok';
+			rq MKCOL => 'something/', cb => sub {
+				my $h = shift;
+				is $h->{Status},'405', 'mkcol dup';
+				rq DELETE => 'something', cb => sub {
+					my $h = shift;
+					is $h->{Status}, 409, 'rmdir fail';
+					rq DELETE => 'something/', cb => sub {
+						my $h = shift;
+						is $h->{Status}, 204, 'rmdir ok';
+					};
+				};
+			};
+		};
 	};
 };
 
+{
+my $file = 'test1.gif';
+rq PUT => $file, body => 'x'x1000, cb => sub {
+	is $_[0]{Status}, 201, 'put ok';
+	rq GET => $file, cb => sub {
+		is $_[0]{Status},'200', 'get ok';
+		is $_[1], 'x'x1000, 'content ok';
+	
+	rq PUT => $file, body => 'y'x1000, cb => sub {
+		is $_[0]{Status}, 204, 'put 2 ok';
+		rq GET => $file, cb => sub {
+			is $_[0]{Status},'200', 'get ok';
+			is $_[1], 'y'x1000, 'content ok';
+		rq DELETE => $file, cb => sub {
+			is $_[0]{Status}, 204, 'delete ok';
+			rq DELETE => $file, cb => sub {
+				is $_[0]{Status}, 404, 'delete 2 ok'
+			};
+		};
+		};
+	};
+	
+	};
+};
+}
+
+{
+my $file = 'test2.gif';
+rq DELETE => $file, cb => sub {
+	rq PUT => $file, body => 'x'x1000, cb => sub {
+		is $_[0]{Status}, 201, 'put ok';
+		rq GET => $file, cb => sub {
+			is $_[0]{Status},'200', 'get ok';
+			is $_[1], 'x'x1000, 'content ok';
+		rq COPY => $file, to => $file.1, cb => sub {
+			is $_[0]{Status},'204', 'copy ok';
+			rq DELETE => $file.1, cb => sub {
+				is $_[0]{Status},'204', 'delete copy ok';
+			};
+			rq COPY => $file, to => $file.2, cb => sub {
+				is $_[0]{Status},'204', 'copy ok';
+				rq MOVE => $file, to => $file.3, cb => sub {
+					is $_[0]{Status},'204', 'move ok';
+					rq DELETE => $file.3, cb => sub {
+						is $_[0]{Status},'204', 'delete moved ok';
+					};
+				};
+			};
+		};
+		}
+	};
+};
+}
+
+rq DELETE => 'col/', cb => sub {
+	rq MKCOL => 'col/', cb => sub {
+		is $_[0]{Status}, 201, 'mkcol ok';
+		rq COPY => 'col/', to => 'col1/', cb => sub {
+			is $_[0]{Status},'201', 'copy col ok';
+			rq DELETE => 'col1/', cb => sub {
+				is $_[0]{Status},'204', 'delete copy col ok';
+			};
+			rq COPY => 'col/', to => 'col2/', cb => sub {
+				is $_[0]{Status},'201', 'copy col ok';
+				rq MOVE => 'col/', to => 'col3/', cb => sub {
+					is $_[0]{Status},'201', 'move col ok';
+					rq DELETE => 'col3/', cb => sub {
+						is $_[0]{Status},'204', 'delete moved col ok';
+					};
+				};
+			};
+		};
+	};
+};
+
+
+$cv->recv;
+__END__
 rq PUT => 'test.gif', body => 'x'x1000, acl => '0751', time => $time, cb => sub {
 	my $h = shift;
 	like $h->{Status},qr/^20[14]$/, 'put ok';
