@@ -385,8 +385,7 @@ __END__
 http {
 	server {
 		listen 8080;
-		print 1;
-		root '/xxx';
+		root '/var/www';
 		error_page 404, 405, '=500', '@errors';
 		location '@errors', sub {
 			
