@@ -13,11 +13,11 @@ Acme::CPANAuthors::AnyEvent - We are CPAN Authors of AnyEvent!
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use Acme::CPANAuthors::Register(
 	MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;)
@@ -27,7 +27,10 @@ use Acme::CPANAuthors::Register(
 	DMAKI      => 'Daisuke Maki',
 	ELMEX      => 'Robin Redeker',
 	FRANCKC    => 'Franck Cuny',
+	GBARR      => 'Graham Barr',
 	GUGOD      => 'Liu Kang Min',
+	IKUTA      => 'Masahito Ikuta',
+	JROCKWAY   => 'Jonathan Rockway',
 	KARASIK    => 'Dmitry Karasik',
 	KEVINJ     => 'Kevin Jones',
 	MART       => 'Martin Atkins',
@@ -36,6 +39,7 @@ use Acme::CPANAuthors::Register(
 	MIKI       => 'Takeshi Miki',
 	MIYAGAWA   => 'Tatsuhiko Miyagawa',
 	MONS       => 'Mons Anderson',
+	MSTPLBG    => 'Michael Stapelberg',
 	NUFFIN     => 'Yuval Kogman',
 	PMAKHOLM   => 'Peter Makholm',
 	SEKIMURA   => 'Masayoshi Sekimura',
@@ -73,7 +77,7 @@ And if you aren't a AnyEvent CPAN author listed here, please send us your ID/nam
 
 =head1 CONTAINED AUTHORS
 
-Now B<24> AnyEvent CPAN authors:
+Now B<28> AnyEvent CPAN authors:
 
     MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;) 
 
@@ -83,7 +87,10 @@ Now B<24> AnyEvent CPAN authors:
     DMAKI      => 'Daisuke Maki',
     ELMEX      => 'Robin Redeker',
     FRANCKC    => 'Franck Cuny',
+    GBARR      => 'Graham Barr',
     GUGOD      => 'Liu Kang Min',
+    IKUTA      => 'Masahito Ikuta',
+    JROCKWAY   => 'Jonathan Rockway',
     KARASIK    => 'Dmitry Karasik',
     KEVINJ     => 'Kevin Jones',
     MART       => 'Martin Atkins',
@@ -92,6 +99,7 @@ Now B<24> AnyEvent CPAN authors:
     MIKI       => 'Takeshi Miki',
     MIYAGAWA   => 'Tatsuhiko Miyagawa',
     MONS       => 'Mons Anderson',
+    MSTPLBG    => 'Michael Stapelberg',
     NUFFIN     => 'Yuval Kogman',
     PMAKHOLM   => 'Peter Makholm',
     SEKIMURA   => 'Masayoshi Sekimura',
@@ -101,7 +109,7 @@ Now B<24> AnyEvent CPAN authors:
     VTI        => 'Viacheslav Tykhanovskyi',
     YANNK      => 'Yann Kerherve',
 
-And we've written B<56> distros
+And we've written B<68> distros
 
 =head1 SEE ALSO
 
@@ -153,7 +161,7 @@ L<http://search.cpan.org/search?query=AnyEvent&mode=all>
 
 =head1 AUTHOR
 
-Mons Anderson, C<< <mons at cpan.org> >>
+Mons Anderson, <mons@cpan.org>
 
 =head1 COPYRIGHT & LICENSE
 
