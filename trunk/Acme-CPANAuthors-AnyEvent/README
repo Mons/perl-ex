@@ -2,7 +2,7 @@ NAME
     Acme::CPANAuthors::AnyEvent - We are CPAN Authors of AnyEvent!
 
 VERSION
-    Version 0.05
+    Version 0.06
 
 SYNOPSIS
         use Acme::CPANAuthors;
@@ -31,7 +31,7 @@ MAINTENANCE
     your ID/name via email or RT and we will remove your name.
 
 CONTAINED AUTHORS
-    Now 24 AnyEvent CPAN authors:
+    Now 28 AnyEvent CPAN authors:
 
         MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;) 
 
@@ -41,7 +41,10 @@ CONTAINED AUTHORS
         DMAKI      => 'Daisuke Maki',
         ELMEX      => 'Robin Redeker',
         FRANCKC    => 'Franck Cuny',
+        GBARR      => 'Graham Barr',
         GUGOD      => 'Liu Kang Min',
+        IKUTA      => 'Masahito Ikuta',
+        JROCKWAY   => 'Jonathan Rockway',
         KARASIK    => 'Dmitry Karasik',
         KEVINJ     => 'Kevin Jones',
         MART       => 'Martin Atkins',
@@ -50,6 +53,7 @@ CONTAINED AUTHORS
         MIKI       => 'Takeshi Miki',
         MIYAGAWA   => 'Tatsuhiko Miyagawa',
         MONS       => 'Mons Anderson',
+        MSTPLBG    => 'Michael Stapelberg',
         NUFFIN     => 'Yuval Kogman',
         PMAKHOLM   => 'Peter Makholm',
         SEKIMURA   => 'Masayoshi Sekimura',
@@ -59,7 +63,7 @@ CONTAINED AUTHORS
         VTI        => 'Viacheslav Tykhanovskyi',
         YANNK      => 'Yann Kerherve',
 
-    And we've written 56 distros
+    And we've written 68 distros
 
 SEE ALSO
   The base
@@ -94,7 +98,7 @@ SEE ALSO
     <http://search.cpan.org/search?query=AnyEvent&mode=all>
 
 AUTHOR
-    Mons Anderson, "<mons at cpan.org>"
+    Mons Anderson, <mons@cpan.org>
 
 COPYRIGHT & LICENSE
     Copyright 2009 Mons Anderson, all rights reserved.
