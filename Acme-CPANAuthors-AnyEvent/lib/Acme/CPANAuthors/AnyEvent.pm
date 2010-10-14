@@ -13,25 +13,30 @@ Acme::CPANAuthors::AnyEvent - We are CPAN Authors of AnyEvent!
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 use Acme::CPANAuthors::Register(
 	MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;)
 	AGRUNDMA   => 'Andy Grundman',
 	BEPPU      => 'John Beppu',
 	BLUET      => 'BlueT - Matthew Lien - Che-Ming Lien',
+	CLKAO      => 'Chia-liang Kao',
+	CORNELIUS  => 'Lin You An',
 	DMAKI      => 'Daisuke Maki',
+	DMITRYNOD  => 'Dmitrii Konstantinov',
 	ELMEX      => 'Robin Redeker',
 	FRANCKC    => 'Franck Cuny',
 	GBARR      => 'Graham Barr',
 	GUGOD      => 'Liu Kang Min',
 	IKUTA      => 'Masahito Ikuta',
+	JHTHORSEN  => 'Jan Henning Thorsen',
 	JROCKWAY   => 'Jonathan Rockway',
 	KARASIK    => 'Dmitry Karasik',
+	KEROYON    => 'keroyonn',
 	KEVINJ     => 'Kevin Jones',
 	MART       => 'Martin Atkins',
 	MELO       => 'Pedro Melo',
@@ -40,13 +45,15 @@ use Acme::CPANAuthors::Register(
 	MIYAGAWA   => 'Tatsuhiko Miyagawa',
 	MONS       => 'Mons Anderson',
 	MSTPLBG    => 'Michael Stapelberg',
+	NAIM       => 'Naim Shafiev',
 	NUFFIN     => 'Yuval Kogman',
 	PMAKHOLM   => 'Peter Makholm',
+	PUNYTAN    => 'punipuni',
+	SANKO      => 'Sanko Robinson',
 	SEKIMURA   => 'Masayoshi Sekimura',
 	TOKUHIROM  => 'Tokuhiro Matsuno',
 	TYPESTER   => 'Daisuke Murase',
 	VKRAMSKIH  => 'Vitaly Kramskikh',
-	VTI        => 'Viacheslav Tykhanovskyi',
 	YANNK      => 'Yann Kerherve',
 );
 
@@ -77,21 +84,26 @@ And if you aren't a AnyEvent CPAN author listed here, please send us your ID/nam
 
 =head1 CONTAINED AUTHORS
 
-Now B<28> AnyEvent CPAN authors:
+Now B<35> AnyEvent CPAN authors:
 
     MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;) 
 
     AGRUNDMA   => 'Andy Grundman',
     BEPPU      => 'John Beppu',
     BLUET      => 'BlueT - Matthew Lien - Che-Ming Lien',
+    CLKAO      => 'Chia-liang Kao',
+    CORNELIUS  => 'Lin You An',
     DMAKI      => 'Daisuke Maki',
+    DMITRYNOD  => 'Dmitrii Konstantinov',
     ELMEX      => 'Robin Redeker',
     FRANCKC    => 'Franck Cuny',
     GBARR      => 'Graham Barr',
     GUGOD      => 'Liu Kang Min',
     IKUTA      => 'Masahito Ikuta',
+    JHTHORSEN  => 'Jan Henning Thorsen',
     JROCKWAY   => 'Jonathan Rockway',
     KARASIK    => 'Dmitry Karasik',
+    KEROYON    => 'keroyonn',
     KEVINJ     => 'Kevin Jones',
     MART       => 'Martin Atkins',
     MELO       => 'Pedro Melo',
@@ -100,16 +112,18 @@ Now B<28> AnyEvent CPAN authors:
     MIYAGAWA   => 'Tatsuhiko Miyagawa',
     MONS       => 'Mons Anderson',
     MSTPLBG    => 'Michael Stapelberg',
+    NAIM       => 'Naim Shafiev',
     NUFFIN     => 'Yuval Kogman',
     PMAKHOLM   => 'Peter Makholm',
+    PUNYTAN    => 'punipuni',
+    SANKO      => 'Sanko Robinson',
     SEKIMURA   => 'Masayoshi Sekimura',
     TOKUHIROM  => 'Tokuhiro Matsuno',
     TYPESTER   => 'Daisuke Murase',
     VKRAMSKIH  => 'Vitaly Kramskikh',
-    VTI        => 'Viacheslav Tykhanovskyi',
     YANNK      => 'Yann Kerherve',
 
-And we've written B<68> distros
+And we've written B<83> distros
 
 =head1 SEE ALSO
 
@@ -161,7 +175,7 @@ L<http://search.cpan.org/search?query=AnyEvent&mode=all>
 
 =head1 AUTHOR
 
-Mons Anderson, <mons@cpan.org>
+Mons Anderson, C<< <mons at cpan.org> >>
 
 =head1 COPYRIGHT & LICENSE
 

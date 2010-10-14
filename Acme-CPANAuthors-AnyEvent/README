@@ -2,7 +2,7 @@ NAME
     Acme::CPANAuthors::AnyEvent - We are CPAN Authors of AnyEvent!
 
 VERSION
-    Version 0.06
+    Version 0.07
 
 SYNOPSIS
         use Acme::CPANAuthors;
@@ -31,21 +31,26 @@ MAINTENANCE
     your ID/name via email or RT and we will remove your name.
 
 CONTAINED AUTHORS
-    Now 28 AnyEvent CPAN authors:
+    Now 35 AnyEvent CPAN authors:
 
         MLEHMANN   => 'Marc Lehmann', # Main AnyEvent author ;) 
 
         AGRUNDMA   => 'Andy Grundman',
         BEPPU      => 'John Beppu',
         BLUET      => 'BlueT - Matthew Lien - Che-Ming Lien',
+        CLKAO      => 'Chia-liang Kao',
+        CORNELIUS  => 'Lin You An',
         DMAKI      => 'Daisuke Maki',
+        DMITRYNOD  => 'Dmitrii Konstantinov',
         ELMEX      => 'Robin Redeker',
         FRANCKC    => 'Franck Cuny',
         GBARR      => 'Graham Barr',
         GUGOD      => 'Liu Kang Min',
         IKUTA      => 'Masahito Ikuta',
+        JHTHORSEN  => 'Jan Henning Thorsen',
         JROCKWAY   => 'Jonathan Rockway',
         KARASIK    => 'Dmitry Karasik',
+        KEROYON    => 'keroyonn',
         KEVINJ     => 'Kevin Jones',
         MART       => 'Martin Atkins',
         MELO       => 'Pedro Melo',
@@ -54,16 +59,18 @@ CONTAINED AUTHORS
         MIYAGAWA   => 'Tatsuhiko Miyagawa',
         MONS       => 'Mons Anderson',
         MSTPLBG    => 'Michael Stapelberg',
+        NAIM       => 'Naim Shafiev',
         NUFFIN     => 'Yuval Kogman',
         PMAKHOLM   => 'Peter Makholm',
+        PUNYTAN    => 'punipuni',
+        SANKO      => 'Sanko Robinson',
         SEKIMURA   => 'Masayoshi Sekimura',
         TOKUHIROM  => 'Tokuhiro Matsuno',
         TYPESTER   => 'Daisuke Murase',
         VKRAMSKIH  => 'Vitaly Kramskikh',
-        VTI        => 'Viacheslav Tykhanovskyi',
         YANNK      => 'Yann Kerherve',
 
-    And we've written 68 distros
+    And we've written 83 distros
 
 SEE ALSO
   The base
@@ -98,7 +105,7 @@ SEE ALSO
     <http://search.cpan.org/search?query=AnyEvent&mode=all>
 
 AUTHOR
-    Mons Anderson, <mons@cpan.org>
+    Mons Anderson, "<mons at cpan.org>"
 
 COPYRIGHT & LICENSE
     Copyright 2009 Mons Anderson, all rights reserved.
