@@ -1,0 +1,39 @@
+
+---
+
+# NAME #
+
+ex::provide - Simple replacement of Exporter.
+
+
+
+---
+
+# SYNOPSIS #
+
+> use ex::provide
+> > ':all'      => [METHODS\_LIST ](.md);
+
+
+> use ex::provide
+> > ':all'      => [METHODS\_LIST ](.md),
+> > ':explicit' => [METHODS\_LIST ](.md);
+
+
+
+---
+
+# DESCRIPTION #
+
+[=ex::provide] makes exporting functions easier.
+
+; :all ; The default exporting functions. Also may be imported by tag [=:all]
+; :**; Functions for specified tag. There is no need to duplicate names in [=:all]**
+
+
+
+---
+
+# AUTHOR #
+
+Mons Anderson <inthrax@gmail.com>

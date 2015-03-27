@@ -1,0 +1,122 @@
+## NAME ##
+
+ex::debugging - Simple debugging in your code with compile-time constants
+
+
+## SYNOPSIS ##
+
+
+```
+        use ex::debugging +DEBUGLEVEL;
+        use ex::debugging -DEBUGLEVEL;
+        use ex::debugging; # defaults to DEBUGLEVEL +1;
+        no ex::debugging;
+        
+```
+Please, note, this will not work (because of explicit empty list doesn't call `import`):
+
+
+```
+        use ex::debugging ();
+        no ex::debugging ();
+```
+
+## DESCRIPTION ##
+
+`ex::debugging` was designed to replace commonly used `warn sprintf ... if $DEBUG` There are two interfaces the same time: functional and OO;
+
+
+### Functional style ###
+
+Have some unclear restriction: There MUST be a `+` or `-` sign after the debug function. Otherwise, you'll get syntax error, when debugging will be disabled.
+
+> debug + LEVEL, EXPR, LIST;::
+Writes message to debug log (default - STDERR). Message will be created using `sprintf EXPR,LIST`. LIST will be remapped, so you'll see the undef as "
+
+&lt;undef&gt;
+
+" and empty string as "''" Examples:
+
+
+```
+        debug+0 => 'my test: %s',$var;
+        # Produces to STDERR something like:
+        # [main:10:] my test: <undef>
+```
+Current default output format is:
+
+
+```
+        [ PACKAGE, LINE, SUB ] MESSAGE
+```
+The sub will be get from stack, untill it differs from ANON. So you'll se (if not called from main::) the first named sub.
+
+
+### OO style ###
+
+Uses autocreated function `d` to access the debugging object. It defines 5 methods: `debug`, `info`, `log`, `warn`, `error` with the levels 2..-2 respective. Also there are a definition of `assert`
+
+
+```
+        d->debug('my test: %s',$var); # equivalent to debug+2 => 'my test: %s', $var;
+        d->warn('something wrong with me'); # equivalent to debug-1 => '...';
+```
+Also, methods `warn` and `error` will work, even if `no ex::debugging` in effect.
+
+
+### Old style ###
+
+Also this module provides well known constant DEBUG, which will work even at compile time
+
+
+```
+        warn "Something" if DEBUG;
+        # will be threated as C<warn "Something"> when DEBUG in effect
+        # and as nothing when DEBUG is not in effect
+```
+
+## PERFOMANCE ##
+
+Default routines give very small overhead, much smaller than call to empty subroutine, but the fastest way with no overhead at all is the old well known if DEBUG. Sad but true
+
+
+```
+        debug+0 => 'fastest debug' if DEBUG;
+        assert+0 => 1==2, 'fastest assert' if DEBUG;
+        d->assert(1==2,'fastest assert') if DEBUG;
+```
+
+## EXPORTS ##
+
+This package implicitly exports to the caller's namespace next subroutines: `DEBUG`, `debug`, `d`
+
+
+## CAVEATS ##
+
+
+### NOT SCOPED ###
+
+The pragma is a per script, not a per block lexical. Only the last `use ex::debugging` or `no ex::debugging` matters, and it affects '''the whole script'''. The multiple use of this pragma is discouraged.
+
+
+### REQUIREMENTS OF SIGN ###
+
+Functional style uses compile-time hack, and when `no debugging` in effect, function `debug` replaced with 0;
+
+So the statement `debug+0 =` ...> converts to `0+0, ...` (May be checked using `B::Deparse`)
+
+When `use debugging` is in effect `debug+0 =` ...> converts to `debug( +0, ... )`
+
+Without a sign '''the syntax is erroneous''' when no debugging: `0 0, ...`
+
+If somebody knows, how to hack this (without source filters ;), let me know.
+
+
+### COLLISIONS ###
+
+This package can't be used together with Carp::Assert.
+
+
+## AUTHOR ##
+
+Mons Anderson <inthrax@gmail.com>
