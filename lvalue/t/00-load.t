@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 
 use strict;
-use ex::lib '../lib';
+#use ex::lib '../lib';
 use Test::More tests => 1;
 
 BEGIN {
-	use_ok( 'lvalue' );
+	use_ok( 'Sub::Lvalue' );
 }
 
-diag( "Testing lvalue $lvalue::VERSION, Perl $], $^X" );
+diag( "Testing Sub::Lvalue $Sub::Lvalue::VERSION, Perl $], $^X" );

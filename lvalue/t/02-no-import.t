@@ -1,19 +1,19 @@
 #!/usr/bin/perl -w
 
 use strict;
-use ex::lib '../lib';
+#use ex::lib '../lib';
 use Test::More tests => 4;
-use lvalue ();
+use Sub::Lvalue ();
 
 my ($set);
 ok !defined &set, '!imported set';
 ok !defined &get, '!imported get';
 
 sub both : lvalue {
-	lvalue::get {
+	Sub::Lvalue::get {
 		'ok';
 	}
-	lvalue::set {
+	Sub::Lvalue::set {
 		$set = shift;
 	}
 }

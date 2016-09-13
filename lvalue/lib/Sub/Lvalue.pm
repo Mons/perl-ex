@@ -1,4 +1,4 @@
-package lvalue;
+package Sub::Lvalue;
 
 use warnings;
 use strict;
@@ -16,7 +16,7 @@ sub import {
 }
 =head1 NAME
 
-lvalue - use lvalue subroutines with ease
+Sub::Lvalue - use lvalue subroutines with ease
 
 =head1 VERSION
 
@@ -26,13 +26,12 @@ Version 0.01
 
 our $VERSION = '0.01';
 
-
 =head1 SYNOPSIS
 
 Simply put get and set blocks at the end of your lvalue sub.
 Please note, no comma or semicolon between statements are allowed (in case of semicolon only last statement will be take an action)
 
-	use lvalue;
+	use Sub::Lvalue;
 
 	sub mysub : lvalue {
 		get {
@@ -71,10 +70,10 @@ Please note, no comma or semicolon between statements are allowed (in case of se
 There are 2 export functions: C<set> and C<get>. If you don't want to use export, you may use full names
 
 	sub mysub : lvalue {
-		lvalue::get {
+		Sub::Lvalue::get {
 			return 'something';
 		}
-		lvalue::set {
+		Sub::Lvalue::set {
 			my $set_value = shift;
 		}
 	}
@@ -92,7 +91,7 @@ sub set (&;@) : lvalue {
 	if (@_) {
 		tied($_[0])->set($code);
 	}else{
-		tie $_[0], 'lvalue::tiecallback', undef, $code;
+		tie $_[0], 'Sub::Lvalue::tiecallback', undef, $code;
 	}
 	$_[0];
 }
@@ -108,10 +107,22 @@ sub get (&;@) : lvalue {
 	if (@_) {
 		tied($_[0])->get($code);
 	}else{
-		tie $_[0], 'lvalue::tiecallback', $code, undef;
+		tie $_[0], 'Sub::Lvalue::tiecallback', $code, undef;
 	}
 	$_[0];
 }
+
+=head1 RENAMING
+
+From it's creation in 2009 till 2016 this module has name L<lvalue>.
+In 2010 there were appeared module L<Lvalue>.
+
+During years, there were semantic conflict between Lvalue and lvalue.
+But this days PAUSE threats CPAN module names case insensitive that leads us to name conflict.
+
+After all, there is another great module L<LV>. As stated by its author, some part of it was inspired by C<lvalue>.
+
+I decided to eliminame original name L<lvalue> and to keep original source code if someone needs it under the name L<Sub::Lvalue>
 
 =head1 AUTHOR
 
@@ -130,7 +141,7 @@ under the same terms as Perl itself.
 
 =cut
 
-package lvalue::tiecallback;
+package Sub::Lvalue::tiecallback;
 
 use strict;
 use Sub::Name;

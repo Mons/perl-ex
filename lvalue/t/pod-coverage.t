@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::More;
-use ex::lib qw(../lib);
+#use ex::lib qw(../lib);
 
 # Ensure a recent version of Test::Pod::Coverage
 my $min_tpc = 1.08;
@@ -17,4 +17,4 @@ plan skip_all => "Pod::Coverage $min_pc required for testing POD coverage"
     if $@;
 
 plan tests => 1;
-pod_coverage_ok( 'lvalue' );
+pod_coverage_ok( 'Sub::Lvalue' );

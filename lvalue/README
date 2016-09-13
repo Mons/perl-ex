@@ -1,5 +1,5 @@
 NAME
-    lvalue - use lvalue subroutines with ease
+    Sub::Lvalue - use lvalue subroutines with ease
 
 VERSION
     Version 0.01
@@ -9,7 +9,7 @@ SYNOPSIS
     note, no comma or semicolon between statements are allowed (in case of
     semicolon only last statement will be take an action)
 
-        use lvalue;
+        use Sub::Lvalue;
 
         sub mysub : lvalue {
             get {
@@ -48,10 +48,10 @@ EXPORT
     export, you may use full names
 
         sub mysub : lvalue {
-            lvalue::get {
+            Sub::Lvalue::get {
                 return 'something';
             }
-            lvalue::set {
+            Sub::Lvalue::set {
                 my $set_value = shift;
             }
         }
@@ -62,6 +62,20 @@ FUNCTIONS
 
   get
     invoked without arguments. the returned value passed out
+
+RENAMING
+    From it's creation in 2009 till 2016 this module has name lvalue. In
+    2010 there were appeared module Lvalue.
+
+    During years, there were semantic conflict between Lvalue and lvalue.
+    But this days PAUSE threats CPAN module names case insensitive that
+    leads us to name conflict.
+
+    After all, there is another great module LV. As stated by its author,
+    some part of it was inspired by "lvalue".
+
+    I decided to eliminame original name lvalue and to keep original source
+    code if someone needs it under the name Sub::Lvalue
 
 AUTHOR
     Mons Anderson, <mons@cpan.org>

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 rm -rf MANIFEST.bak MANIFEST Makefile.old && \
-pod2text lib/lvalue.pm > README && \
+pod2text lib/Sub/Lvalue.pm > README && \
 perl -i -lpne 's{^\s+$}{};s{^    ((?: {8})+)}{" "x(4+length($1)/2)}se;' README && \
 perl Makefile.PL && \
-rm *.tar.gz && \
+rm *.tar.gz ; \
 make manifest && \
 perl -i -lne 'print unless /(?:\.tar\.gz$|^dist)/' MANIFEST && \
 make clean && \
