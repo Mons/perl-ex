@@ -6,6 +6,7 @@ build_requires:
   ExtUtils::MakeMaker: 6.42
   Test::If: 0
   Test::More: 0
+  Test::NoWarnings: 0
   lib::abs: 0.90
 configure_requires:
   ExtUtils::MakeMaker: 6.42
